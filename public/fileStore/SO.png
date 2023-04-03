@@ -1,0 +1,400 @@
+<!doctype html> 
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Operating System OS Tutorial - Operating System Tutorial</title>
+<link rel="icon" href="../files/icon.png" type="image/png">
+<meta name="keywords" content="Operating System tutorial"/>
+<meta name="description" content="Operating System Tutorial - An Operating System (OS) is a software that acts as an interface between the end-user and computer hardware."/>
+<meta content="index, follow" name="Robots"/>
+<meta name="author" content="Sitesbay.com">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes"/>
+<meta name="theme-color" content="#00b8e4">
+
+<script data-ad-client="ca-pub-8711073088012951" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8711073088012951"
+     crossorigin="anonymous"></script>
+
+<link rel="stylesheet" type="text/css" href="/files/style.css"><link rel="stylesheet" type="text/css" href="../files/style.css">
+</head>
+<body style="margin-bottom: 90px; margin-left: 0px;" onload="prettyPrint()">
+<!-- header fields -->
+<!-- header pages fields -->
+<div id="topmenu">
+<div class="wrapper">
+<div id="left">
+<a href="/index" target="_top">HOME</a>
+<a href="/cprogramming/index" target="_top">C</a>
+<a href="/cpp/index" target="_top">C++</a>
+<a href="/data-structure/index" target="_top">DS</a>
+<a href="/java/index" target="_top">Java</a>
+<a href="/awt/index" target="_top">AWT</a>
+<a href="/collection-framework/index" target="_top">Collection</a>
+<a href="/jdbc/index" target="_top">Jdbc</a>
+<a href="/jsp/index" target="_top">JSP</a>
+<a href="/servlet/index" target="_top">Servlet</a>
+<a href="/sql/index" target="_top">SQL</a>
+<a href="/plsql/index" target="_top">PL/SQL</a>
+<a href="/program/index" target="_top">C-Code</a>
+<a href="/cpp-program/index" target="_top">C++-Code</a>
+<a href="/java-program/index" target="_top">Java-Code</a>
+<a href="/project/index" target="_top">Project</a>
+<a href="/word/index" target="_top">Word</a>
+<a href="/excel/index" target="_top">Excel</a>
+</div>
+<div id="right">
+
+<div style="width:41%; margin-left: 30%; margin-top: 30px;">
+<!-- Search Box -->
+
+</div>
+<!-- End Adsense Search Ad -->
+
+</div>
+</div>
+</div>   <!--  End wrapper -->
+</div>  <!-- End Topmenu -->
+<div id="header">
+<div class="wrapper">
+<h2 style="float:left;border:0;no-repeat; left;width:280px;overflow:visible;text-indent:-9999px;margin:0;padding:0;position:relative;left:0;z-index:10"> <a href="https://www.sitesbay.com/">Sitesbay - Easy to Learn <img style="float:left;border:0;no-repeat; left;width:280px;overflow:visible;text-indent:-9999px;margin:0;padding:0;position:relative;left:0;z-index:10" src="../files/logo.png" alt="Sitesbay" title="Sitesbay"></a></h2>
+<div style="padding-right: 58px; padding-top: 30px;">
+<div class="social-wrap">
+<ul>
+<li><a style="float:right;border: 4px solid #e5e5e5;" class="twitter1" href="https://twitter.com/sitesbay" rel="nofollow" target="_blank" title="Twitter"></a></li>
+<li><a style="float:right;border: 4px solid #e5e5e5;" class="youtube" href="https://www.youtube.com/c/Sitesbay/videos/?sub_confirmation=1" rel="nofollow" target="_blank" title="YouTube"></a></li>
+<li><a style="float:right;border: 4px solid #e5e5e5;" class="google-p1" href="https://plus.google.com/+sitesbay" rel="publisher" rel="nofollow" target="_blank" title="Google+"></a></li>
+<li><a style="float:right;border: 4px solid #e5e5e5;" class="facebook1" href="https://www.facebook.com/sitesbay" rel="nofollow" target="_blank" title="Facebook"></a></li>
+</ul>
+</div>
+</div>
+<!-- End wrapper -->
+</div> <!-- End Header -->
+</div> <!-- End Header -->
+<div id="topmenu">
+<div class="wrapper">
+<div id="left">
+<a href="/html/index" target="_top">Html</a>
+<a href="/html5/index" target="_top">Html5</a>
+<a href="/css/index" target="_top">CSS</a>
+<a href="/javascript/index" target="_top">JavaScript</a>
+<a href="/ajax/index" target="_top">Ajax</a>
+<a href="/jquery/index" target="_top">JQuery</a>
+<a href="/angularjs/index" target="_top">AngularJS</a>
+<a href="/json/index" target="_top">JSON</a>
+<a href="/google-maps/index" target="_top">GMaps</a>
+<a href="/adsense/index" target="_top">Adsense</a>
+<a href="/blogger/index" target="_top">Blogger</a>
+<a href="/online-earning/index" target="_top">Earning</a>
+<a href="/email-marketing/index" target="_top">Email</a>
+<a href="/domain-hosting/index" target="_top">Domain</a>
+<a href="/seo/index" target="_top">SEO</a>
+<a href="/smo/index" target="_top">SMO</a>
+</div>
+<div id="right">
+<a target="_blank" href="/interview/index" rel="_nofollow">QUE ?</a> |
+<a target="_top" href="/about">ABOUT</a> |
+<a target="_top" href="/services">SERVICES</a> |
+<a target="_blank" href="https://www.facebook.com/Sitesbay">CONTACT</a>
+</div>
+</div>   <!--  End wrapper -->
+</div>  <!-- End Topmenu --><!-- left column -->
+<div class="wrapper">
+<div id="leftcol">
+<div class="mini-logo">
+<img src="/os/images/operating-system-tutorial.png" alt="operating system tutorial" >
+</div>
+<nav>
+<div class="handle">Menu</div>
+<ul>
+<li class="heading">Basic of Operating System</li>
+<li><b><a target="_top" href="index">Operating System Tutorial</a></b></li>
+<li><a target="_top" href="os-what-is-operating-system">OS - What is Operating System</a></li>
+<li><a target="_top" href="os-types-of-operating-system">OS - Types of OS</a></li>
+<li><a target="_top" href="os-functions-of-operating-system">OS - Fuctions of OS</a></li>
+<li><a target="_top" href="os-features-of-operating-system">OS - Features of OS</a></li>
+<li><a target="_top" href="os-components-of-operating-system">OS - Components of OS</a></li>
+<li><a target="_top" href="os-process-states-in-operating-system">OS - Process States</a></li>
+<li><a target="_top" href="os-what-is-threads-in-operating-system">OS - Thread in OS</a></li>
+</ul>
+<ul>
+<li class="heading">CPU Scheduling</li>
+<li><a target="_top" href="os-what-is-cpu-scheduling">OS - What is CPU Scheduling</a></li>
+<li><a target="_top" href="os-types-of-cpu-scheduling">OS - Types of CPU Scheduling</a></li>
+<li><a target="_top" href="os-fcfs-scheduling-advantage-disadvantage">OS - FCFS Scheduling</a></li>
+<li><a target="_top" href="os-sjf-scheduling-advantage-disadvantage">OS - SJF Scheduling</a></li>
+<li><a target="_top" href="os-priority-scheduling-scheduling-advantage-disadvantage">OS - Priority Scheduling</a></li>
+<li><a target="_top" href="os-round-robin-scheduling-advantage-disadvantage">OS - Round Robin Scheduling</a></li>
+<li><a target="_top" href="os-kernel-and-its-functions-in-operating-system">OS - Function of Kernel</a></li>
+</ul>
+<ul>
+<li class="heading">Deadlocks</li>
+<li><a target="_top" href="os-what-is-deadlock-in-operating-system">OS - What is Deadlock</a></li>
+<li><a target="_top" href="os-raid-types-of-raid-advantage-disadvantage">OS - RAID</a></li>
+<li><a target="_top" href="os-what-is-demand-paging-in-operating-system">OS - Demand Paging</a></li>
+<li><a target="_top" href="os-what-is-segmentation-advantage-disadvantage">OS - Segmentation</a></li>
+<li><a target="_top" href="os-file-system-in-operating-system-os">OS - File System in OS</a></li>
+<li><a target="_top" href="os-livelock-in-os-operating-system">OS - Livelock</a></li>
+<li><a target="_top" href="os-what-is-segmentation-advantage-disadvantage">OS - Segmentation</a></li>
+<li><a target="_top" href="os-what-is-vertual-memory-in-operating-system">OS - Virtual Memory</a></li>
+</ul>
+<ul>
+<li class="heading">Differences</li>
+<li><a target="_top" href="os-difference-between-kernel-and-operating-system">OS - Kernel vs OS</a></li>
+<li><a target="_top" href="os-difference-between-32bit-and-64bit-operating-system">OS - 32 Bit vs 64 bit OS</a></li>
+<li><a target="_top" href="os-difference-between-firmware-and-operating-system">OS - Firmware vs OS</a></li>
+<li><a target="_top" href="os-difference-between-operating-system-and-kernel">OS - OS vs Kernel</a></li>
+<li><a target="_top" href="os-difference-between-process-and-thread">OS - Thread vs Process</a></li>
+<li><a target="_top" href="os-difference-between-paging-and-segmentation">OS - Paging vs Segmentation</a></li>
+<li><a target="_top" href="os-difference-between-multitasking-and-multiprocessing">OS - Multitasking vs Multiprocessing</a></li>
+</ul>
+<ul>
+<li class="sreading">Useful Tips</li>
+<li><a target="_top" href="/interview/operating-system-interview-question">OS Interview Question</a></li>
+</ul>
+</nav>
+</div><!-- End leftcol -->
+<!-- middle fields -->
+<div id="middlecol">
+<!-- Start write content -->
+<div class="content">
+<img src="/os/images/what-is-operating-system.jpg" alt="operating system tutorial" title="Image">
+<!-- upper preview or next button -->
+<hr />
+<div class='post_neighbors_container_wrapper'>
+<a class="pre-btn" href="index"><span style="color:#28B">Operating System Tutorial</span></a>
+<a class="nxt-btn" href="os-what-is-operating-system"><span style="color:#28B">What is Operating System</span></a>
+</div>
+<div class="clearer"></div>
+<hr />
+<h2 class="center">Operating System Tutorial</h2>
+<p>An <strong>Operating System (OS)</strong> is a collection of software that manages computer hardware resources and provides common services for computer programs. </br>An Operating System (OS) is a software that acts as an interface between the end-user and computer hardware. Every computer must have at least one OS to run other software programs and application like MS Word, Chrome, Games, etc.</p>
+<h2 class="center">Prerequisites</h2>
+<p>Before start learning Operating System Tutorial you are already aware about already aware of basic computer concepts like what is keyboard, mouse, monitor, input, output, primary memory and secondary memory etc, <a href="/computer/index" target="_blank" rel="dofollow">Computer Fundamentals</a>.</p>
+<div class="internal-link-container">
+<a class="internal-link" href="index">Operating System Tutorial</a>
+<a class="internal-link" href="os-what-is-operating-system">What is Operating System</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-types-of-operating-system">Types of Operating System</a>
+<a class="internal-link" href="os-functions-of-operating-system">Function of Operating System</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-features-of-operating-system">Features of Operating System</a>
+<a class="internal-link" href="os-components-of-operating-system">Components of Operating System</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-process-states-in-operating-system">Process States</a>
+<a class="internal-link" href="os-what-is-threads-in-operating-system">Thread in Operating System</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-what-is-cpu-scheduling">What is CPU Scheduling</a>
+<a class="internal-link" href="os-types-of-cpu-scheduling">Types of CPU Scheduling</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-fcfs-scheduling-advantage-disadvantage">FCFS Scheduling</a>
+<a class="internal-link" href="os-sjf-scheduling-advantage-disadvantage">SJF Scheduling</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-priority-scheduling-scheduling-advantage-disadvantage">Priority Scheduling</a>
+<a class="internal-link" href="os-round-robin-scheduling-advantage-disadvantage">Round Robin Scheduling</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-kernel-and-its-functions-in-operating-system">Functions of Kernel</a>
+<a class="internal-link" href="os-what-is-deadlock-in-operating-system">What is Deadlock</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-raid-types-of-raid-advantage-disadvantage">What is RAID</a>
+<a class="internal-link" href="os-what-is-demand-paging-in-operating-system">What is Demand Paging</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-what-is-segmentation-advantage-disadvantage">What is Segmentation Advantage</a>
+<a class="internal-link" href="os-file-system-in-operating-system-os">File System in Operating System</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-livelock-in-os-operating-system">Livelock in Operating System</a>
+<a class="internal-link" href="os-what-is-segmentation-advantage-disadvantage">Segmentation Disadvantage</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-what-is-vertual-memory-in-operating-system">What is Virtual Memory</a>
+<a class="internal-link" href="os-difference-between-kernel-and-operating-system">Difference Between Kernel and Operating System</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-difference-between-32bit-and-64bit-operating-system">Difference Between 32 Bit and 64 Bit OS</a>
+<a class="internal-link" href="os-difference-between-firmware-and-operating-system">Difference Between Firmware and OS</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-difference-between-operating-system-and-kernel">Difference Between Operating System and Kernel</a>
+<a class="internal-link" href="os-difference-between-process-and-thread">Difference Between Process and Thread</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="os-difference-between-paging-and-segmentation">Difference Between Paging and Segmentation</a>
+<a class="internal-link" href="os-difference-between-multitasking-and-multiprocessing">Difference Between Muttitasking and Multiprocessing</a>
+</div>
+<div class="internal-link-container">
+<a class="internal-link" href="/interview/operating-system-interview-question">Operating System Interview Questions</a>
+<a class="internal-link" href="/computer/index">Computer Fundamental Tutorial</a>
+</div>
+<!-- Bottom preview or next button -->
+<hr />
+<div class='post_neighbors_container_wrapper'>
+<a class="pre-btn" href="index"><span style="color:#28B">Operating System Tutorial</span></a>
+<a class="nxt-btn" href="os-what-is-operating-system"><span style="color:#28B">What is Operating System</span></a>
+</div>
+<hr />
+<!-- Bottom ads -->
+<div class="bottomads">
+<div style="padding-bottom:5px; margin-left:120px;">Google Advertisment
+</div>
+
+</div>
+<div style="display: table; padding: 10px; border: 5px dashed rgb(0, 0, 255); margin-bottom: 10px; background: none repeat scroll 0% 0% rgb(92, 175, 255); border: 5px dashed rgb(0, 0, 0);">
+<h2><a style="color: rgb(255, 255, 255);" href="/about" target="_blank">Buy This Ad Space @$20 per Month, Ad Size 600X200 Contact on: hitesh.xc@gmail.com or 9999595223</a></h2>
+</div>
+<div style="display: table; padding: 10px; border: 5px dashed rgb(0, 230, 0); margin-bottom: 10px; background: none repeat scroll 0% 0% rgb(128, 255, 229); border: 5px dashed rgb(0, 0, 0);">
+<h2>Magenet is best Adsense Alternative here we earn $2 for single link, Here we get links ads. <a style="color: rgb(0, 128, 102);" href="https://www.magenet.com/website-value-calculator/?ref=referral&ref_type=direct&ref_id=ccw2ixyhvvadizk2&ref_item=4" target="_blank">Magenet</a></h2>
+</div>
+<div class="clearer"></div><!-- end Bottom ads -->
+<div class="clearer"></div>
+</div>  <!-- End content -->
+</div>  <!-- End midcol -->
+<div id="rightcol">
+<!-- other Ads -->
+<div style="padding:5px; margin:5px; margin-top:2px; border:1px solid #908e8f; background:#fff; text-align:center; border-radius: 5px;">
+<div style="background: #00b8e4; color: #fff; font-size: 20px; font-weight: bold; height: 30px; text-align: center; margin: 0px; padding: 5px;>
+<p style="color:#FFFFFF;"><a style="color:#FFFFFF;" href="/project/index" target="_blank">For Projects 9999595223</a></p>
+</div>
+</div>
+<div style="padding-bottom:5px;">Google Advertisements</div>
+
+<!-- Sitesbay 300900 Ads -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8711073088012951"
+     crossorigin="anonymous"></script>
+<!-- Sitesbay 300x900 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:300px;height:900px"
+     data-ad-client="ca-pub-8711073088012951"
+     data-ad-slot="7361446355"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+
+
+</br>
+</br>
+<div style="padding-bottom:5px;padding-left:10px;padding-top:2px;">Buy Websites 9999595223
+</div>
+<div style="display: table; padding: 10px; background: none repeat scroll 0% 0% rgb(51, 122, 183); border: 5px dashed rgb(0, 0, 0);">
+<h2><a style="color: rgb(255, 255, 255);" href="/about" target="_blank">Buy College Projects with Documentation Contact on whatsapp 9999595223. Contact on: hitesh.xc@gmail.com or 9999595223</a> Try this Keyword <a style="color: rgb(255, 255, 255);" href="/cpp-program/index">C++ Programs</a></h2>
+</div>
+
+<!-- End other Ads -->
+
+<!-- right side ads -->
+<div class="rightads" style="align:middle">
+<div style="padding-bottom:5px;padding-left:10px;">Advertisements
+</div>
+
+</div>
+<!-- end right side ads --><!-- end right side ads -->
+</div> <!-- End Righcol -->
+<div style="clear:both;"></div>
+</div><!-- End wrapper -->
+<!-- Footer Area -->
+<footer>
+<div class="footer-top-row">
+<div class="container">
+<div class="footer-ribon">
+<span>Get in Touch</span>
+</div>
+<div class="footer-col-1">
+<h2 style="color:#fff;float:left;font-size:20px;font-weight:400;font-family:"Open Sans",Arial,sans-serif;padding:0 0 20px 0">Our Tutorial</h2>
+<ul>
+<li><span>&#x25b6;</span>&nbsp;<a href="/java/index">Java</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/jdbc/index">JDBC</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/servlet/index">Servlet</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/jsp/index">JSP</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/collection-framework/index">Collection</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/interview/index">Interview</a></li>
+</ul>
+</div>
+<div class="footer-col-2">
+<h2 style="color:#fff;float:left;font-size:20px;font-weight:400;font-family:"Open Sans",Arial,sans-serif;padding:0 0 20px 0">Trending Tutorials</h2>
+<ul>
+<li><span>&#x25b6;</span>&nbsp;<a href="/cyber-security/index" target="_blank" rel="nofollow">Cyber Security</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/ethical-hacking/index" target="_blank" rel="nofollow">Ethical Hacking</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/kali-linux/index" target="_blank" rel="nofollow">Kali Linux</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/seo/index" target="_blank" rel="nofollow">SEO</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/aptitude/index" target="_blank" rel="nofollow">Aptitude</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/reasoning/index" target="_blank" rel="nofollow">Reasoning</a></li>
+</ul>
+</div>
+<div class="footer-col-3">
+<h2 style="color:#fff;float:left;font-size:20px;font-weight:400;font-family:"Open Sans",Arial,sans-serif;padding:0 0 20px 0">Digital Marketing</h2>
+<ul>
+<li><span>&#x25b6;</span>&nbsp;<a href="/seo/index">SEO</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/smo/index">SMO</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/email-marketing/index">Email</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/adsense/index">Adsense</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/blogger/index">Blogger</a></li>
+<li><span>&#x25b6;</span>&nbsp;<a href="/online-earning/index">Earning</a></li>
+</ul>
+</div>
+<div class="footer-col-4">
+<h2 style="color:#fff;float:left;font-size:20px;font-weight:400;font-family:"Open Sans",Arial,sans-serif;padding:0 0 20px 0">Contact Us</h2>
+<ul>
+<li><span>&#x2297;</span>&nbsp;Email:&nbsp;&nbsp;<a href="mailto:contact@sitesbay.com">contact@sitesbay.com</a></li>
+<li><span>&#x2297;</span>&nbsp;Website:&nbsp;&nbsp;<a href="/index"  target="_blank">https://www.sitesbay.com</a></li>
+<li><span>&#x2297;</span>&nbsp;Facebook:&nbsp;&nbsp;<a href="https://www.facebook.com/sitesbay/" target="_blank" rel="nofollow">www.facebook.com/Sitesbay</a></li>
+</ul>
+</div>
+<div class="social-wrap">
+<ul>
+<li><a class="facebook1" href="https://www.facebook.com/sitesbayc" rel="nofollow" target="_blank" title="Facebook"></a></li>
+<li><a class="google-p1" href="https://plus.google.com/b/109922467763085678064" rel="nofollow" target="_blank" title="Google Plus"></a></li>
+<li><a class="twitter1" href="https://twitter.com/sitesbay" rel="nofollow" target="_blank" title="Twitter"></a></li>
+<li><a class="youtube" href="https://www.youtube.com/c/Sitesbay/videos/?sub_confirmation=1" rel="nofollow" target="_blank" title="Yuotube"></a></li>
+</ul>
+</div>
+</div> <!-- footer-top-row -->
+</div> <!-- container -->
+<div class="copyright">
+<div class="container">
+<div class="copyright-left-col">
+<a href="/index" target="_blank"><img src="../files/logo-footer.png" alt="sitesbay" title="Images"></a>
+<p>&#169; Copyright 2014-2023. All Rights Reserved &#64; <a href="/index">Sitesbay</a>.</p>
+</div>
+<div class="copyright-right-col">
+<ul>
+<li><a href="/about">About us</a></li>
+<li><span>&nbsp;|&nbsp;</span><a href="/privacy-policy">Privacy</a></li>
+<li><span>&nbsp;|&nbsp;</span><a href="/copyright">Copyright</a></li>
+<li><span>&nbsp;|&nbsp;</span><a href="https://www.facebook.com/Sitesbay">Feedback</a></li>
+</ul>
+</div>
+</div> <!-- container -->
+</div> <!-- copyright -->
+
+</footer>
+
+<script async type="text/javascript" src="../files/prettify.js"></script>
+<script async type="text/javascript" src="../files/run_prettify.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<script>
+	$('.handle').on('click', function() {
+	$('nav ul').toggleClass('showing');
+	});
+	</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-81421025-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-81421025-1');
+</script>
+</body>
+</html>
