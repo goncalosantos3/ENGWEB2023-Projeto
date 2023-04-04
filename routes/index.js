@@ -63,6 +63,7 @@ router.get('/:idC/content/upload', function(req, res) {
 
 /*                                          POST                                          */
 // Upload de um ficheiro
+// Quando se fizer um upload a ideia é cria um novo anúncio
 router.post('/:idC/content/upload', upload.single('myFile'), (req, res) =>{
   console.log('cdir: ' + __dirname)
   let oldPath = __dirname + '/../' + req.file.path
@@ -75,6 +76,7 @@ router.post('/:idC/content/upload', upload.single('myFile'), (req, res) =>{
     if(erro) console.log(erro)
   })
 
+  // Inserir o novo ficheiro no jsonfile dos ficheiros associado ao curso em questão
   var data = new Date().toISOString().substring(0,19);
   var files = jsonfile.readFileSync(__dirname + '/../data/Files' + req.params.idC + '.json') // Isto não está bem
   files.push({

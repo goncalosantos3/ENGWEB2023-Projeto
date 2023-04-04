@@ -1,11 +1,16 @@
-
 [
     {
         "_id": 1,
         "name": "Programação Funcional",
         "enq": "1º ano 1º semestre",
         "duration": "1 semester",
-        "desc": "Programming with the Haskell language"
+        "desc": "Programming with the Haskell language",
+        "news": [
+            {
+                "title": "First news ever!",
+                "description": "Primeira ficha disponível!"
+            }
+        ]
     },
     {
         "_id": 2,
