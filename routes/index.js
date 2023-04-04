@@ -53,10 +53,17 @@ router.get('/:idC/content/download/:fname', function(req, res) {
   res.download(path)
 });
 
+/* Pedido de upload de um ficheiro */
+router.get('/:idC/content/upload', function(req, res) {
+  console.log(req.params.idC)
+  // Redireciona para a página com o formulário de upload de um ficheiro
+  res.render('uploadFile', {idC: req.params.idC}) 
+})
+
 
 /*                                          POST                                          */
-// Rever isto
-router.post('/:idC/content', upload.single('myFile'), (req, res) =>{
+// Upload de um ficheiro
+router.post('/:idC/content/upload', upload.single('myFile'), (req, res) =>{
   console.log('cdir: ' + __dirname)
   let oldPath = __dirname + '/../' + req.file.path
   console.log('old: ' + oldPath)
@@ -69,7 +76,7 @@ router.post('/:idC/content', upload.single('myFile'), (req, res) =>{
   })
 
   var data = new Date().toISOString().substring(0,19);
-  var files = jsonfile.readFileSync(__dirname + '/../data/' + req.params.idC + '.json') // Isto não está bem
+  var files = jsonfile.readFileSync(__dirname + '/../data/Files' + req.params.idC + '.json') // Isto não está bem
   files.push({
     date: data,
     name: req.file.originalname,
@@ -78,10 +85,9 @@ router.post('/:idC/content', upload.single('myFile'), (req, res) =>{
     desc: req.body.desc
   })
 
-  jsonfile.writeFileSync(__dirname + '/../data/' + req.params.idC + '.json', files)
+  jsonfile.writeFileSync(__dirname + '/../data/Files' + req.params.idC + '.json', files)
   
-  // Faz um GET para o servidor na /
-  res.redirect('/')
+  res.redirect('/' + req.params.idC + '/content')
 })
 
 module.exports = router;
