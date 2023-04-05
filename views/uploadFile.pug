@@ -9,6 +9,7 @@ block content
         .w3-container 
             // Action especifica para onde o form faz o pedido POST
             form.w3-container(action='/' + idC + '/content/upload' method="POST" enctype="multipart/form-data")
+                h2 File information
                 label.w3-text-blue
                     b Select file
                 input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="file" name="myFile")
@@ -16,6 +17,16 @@ block content
                 label.w3-text-blue
                     b Description 
                 input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="desc")
+
+                hr 
+                h2 Create the announcement
+                label.w3-text-blue
+                    b Title
+                input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="news_title")
+
+                label.w3-text-blue
+                    b Description 
+                input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="news_desc")
 
                 input.w3-btn.w3-blue(type="submit" value="Upload")
 

@@ -60,6 +60,35 @@ router.get('/:idC/content/upload', function(req, res) {
   res.render('uploadFile', {idC: req.params.idC}) 
 })
 
+// Pediu para eliminar ficheiro
+router.get('/:idC/content/delete/:fname', function(req, res){
+  jsonfile.readFile(__dirname + "/../data/Files" + req.params.idC + ".json", (erro, registos) => {
+    if(erro){
+      res.render('error', {error: erro})
+    }else{
+      var file
+      for(let i=0; i<registos.length; i++){
+        if(registos[i].name == req.params.fname){
+          file = registos[i]
+        }
+      }
+
+      res.render('deleteFile', {f: file, idC: req.params.idC})
+    }
+  })
+})
+
+// Confirmou que quer eliminar
+router.get('/:idC/content/delete/:fname/confirm', function(req, res){
+  // Remover o ficheiro
+  var files = jsonfile.readFileSync(__dirname + '/../data/Files' + req.params.idC + '.json')
+  var filtered_files = files.filter( function(f) { //callback function
+    if(f.name != req.params.fname) { //filtering criteria
+      return f;
+    }
+  })
+  jsonfile.writeFileSync(__dirname + '/../data/Files' + req.params.idC + '.json', filtered_files)
+})
 
 /*                                          POST                                          */
 // Upload de um ficheiro
@@ -78,7 +107,7 @@ router.post('/:idC/content/upload', upload.single('myFile'), (req, res) =>{
 
   // Inserir o novo ficheiro no jsonfile dos ficheiros associado ao curso em questão
   var data = new Date().toISOString().substring(0,19);
-  var files = jsonfile.readFileSync(__dirname + '/../data/Files' + req.params.idC + '.json') // Isto não está bem
+  var files = jsonfile.readFileSync(__dirname + '/../data/Files' + req.params.idC + '.json')
   files.push({
     date: data,
     name: req.file.originalname,
@@ -86,10 +115,28 @@ router.post('/:idC/content/upload', upload.single('myFile'), (req, res) =>{
     size: req.file.size,
     desc: req.body.desc
   })
-
+  // Insere o novo ficheiro no jsonfile
   jsonfile.writeFileSync(__dirname + '/../data/Files' + req.params.idC + '.json', files)
   
-  res.redirect('/' + req.params.idC + '/content')
+  // Criar um novo anúncio associado ao curso em questão
+  Course.getCourse(req.params.idC)
+    .then(c => {
+      c.news[c.news.length] = {
+        title: req.body.news_title,
+        description: req.body.news_desc
+      }
+
+      Course.updateCourse(c)
+        .then(c => {
+          res.redirect('/' + req.params.idC + '/content')
+        })
+        .catch(erro => {
+          res.render('error', {error: erro, message: "Erro na alteração do registo do curso"})
+        })
+    })
+    .catch(erro => {
+      res.render('error', {error: erro, message: "Erro na obtenção do registo do curso"})
+    })
 })
 
 module.exports = router;

@@ -20,3 +20,13 @@ module.exports.getCourse = id => {
             return erro
         })
 }
+
+module.exports.updateCourse = c => {
+    return Course.updateOne({_id: c._id}, c)
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
