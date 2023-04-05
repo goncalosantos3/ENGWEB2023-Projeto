@@ -234,3 +234,13 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 #confirm{
     font-size: 25px;
 }
+
+#c-name{
+    display: inline-block;
+}
+
+#c-img{
+    float: right;
+    margin-top: 10px;
+    margin-right: 10px;
+}

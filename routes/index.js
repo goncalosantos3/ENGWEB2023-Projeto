@@ -88,6 +88,28 @@ router.get('/:idC/content/delete/:fname/confirm', function(req, res){
     }
   })
   jsonfile.writeFileSync(__dirname + '/../data/Files' + req.params.idC + '.json', filtered_files)
+
+  // Remover a notícia relacionada ao ficheiro que foi removido
+  Course.getCourse(req.params.idC)
+    .then(c => {
+      var filtered_news = c.news.filter( function(n) { //callback function
+        if(n.related != req.params.fname) { //filtering criteria
+          return f;
+        }
+      })
+      c.news = filtered_news
+
+      Course.updateCourse(c)
+        .then(c => {
+          res.redirect('/' + req.params.idC + '/content')
+        })
+        .catch(erro => {
+          res.render('error', {error: erro, message: "Erro na alteração do registo do curso"})
+        })
+    })
+    .catch(erro => {
+      res.render('error', {error: erro, message: "Erro na obtenção do registo do curso"})
+    })
 })
 
 /*                                          POST                                          */
@@ -123,7 +145,8 @@ router.post('/:idC/content/upload', upload.single('myFile'), (req, res) =>{
     .then(c => {
       c.news[c.news.length] = {
         title: req.body.news_title,
-        description: req.body.news_desc
+        description: req.body.news_desc,
+        related: req.file.originalname
       }
 
       Course.updateCourse(c)

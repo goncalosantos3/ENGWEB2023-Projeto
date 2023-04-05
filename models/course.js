@@ -2,7 +2,8 @@ const mongoose = require('mongoose')
 
 var newsSchema = new mongoose.Schema({
     title: String,
-    description: String
+    description: String,
+    related: String // Isto vai ter o nome do ficheiro associado a esta notícia
 })
 
 var courseSchema = new mongoose.Schema({
