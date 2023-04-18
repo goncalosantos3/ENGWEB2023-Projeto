@@ -8,17 +8,35 @@ block content
     .w3-container  
       form.w3-container(action="/register/" method="POST")
         fieldset 
-            legend Credenciais:
+            legend Infos:
+
+            label Email 
+            input.w3-input(type="text" name="email" required)
+
+            label Nome 
+            input.w3-input(type="text" name="name" required)
+
             label Username 
-            input.w3-input(type="text" name="username")
+            input.w3-input(type="text" name="username" required)
             
             label Password 
-            input.w3-input(type="password" name="password")
+            input.w3-input(type="password" name="password" required)
 
-            legend Papel: 
-            
+        fieldset 
+          label Papel:
+          br
+          input(type='radio' name='role' value='producer')
+          |  Produtor
+          br
+          input(type='radio' name='role' value='consumer')
+          |  Consumidor
 
         input.w3-btn.w3-blue.w3-margin(type="submit" value="Register!")
+
+      if(erroRole)
+        .w3-panel.w3-red  
+          h3 Erro no registro do utilizador! 
+          p Papel do utilizador não especificado!      
 
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d}
