@@ -1,2 +1,6 @@
 Courses/node_modules
+PGDRE/INTERFACE_SERVER/node_modules
+PGDRE/API_SERVER/node_modules
+PGDRE/AUTH_SERVER/node_modules
+PGDRE/AUTH_SERVER/sessions
 
