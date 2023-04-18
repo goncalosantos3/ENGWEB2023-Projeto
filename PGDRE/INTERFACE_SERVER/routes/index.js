@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var axios = require('axios'); // serve para fazer pedidos para os outros servidores
 
 /*                                GETS                                   */
 /* GET home page. */
@@ -37,7 +38,7 @@ router.post('/register', function(req,res){
 
 // Verificar se o utilizador já existe na base de dados
 router.post('/login', function(req, res){
-
+  axios.post('http://localhost:7778/users/login', req.body)
 })
 
 module.exports = router;
