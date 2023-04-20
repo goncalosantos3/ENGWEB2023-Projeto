@@ -21,6 +21,13 @@ router.get('/login', function(req, res){
   res.render('loginForm', {d: data})
 })
 
+// Vai servir para gerar a página com o perfil do utilizador
+// Tem que se verificar se o utilizador já está autenticado ou não
+router.get('/profile', function(req, res){  
+  var data = new Date().toISOString().substring(0,16)
+  res.render('profile', {d: data})
+})
+
 // logout
 router.get('/logout', function(req, res){
   // Inserir código necessário aqui para terminar a sessão do utilizador
