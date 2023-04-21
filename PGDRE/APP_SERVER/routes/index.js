@@ -47,6 +47,16 @@ router.get('/resources', function(req, res){
     .catch(erro => res.render('error', {error: erro}))
 })
 
+router.get('/resources/download/:rname', function(req, res){
+  axios.get('http://localhost:7779/resource/' + req.params.rname)
+    .then(dados => {
+      console.dir(dados.data)
+      let path = __dirname + '/../uploads/' + dados.data[0].type + "/" + req.params.rname
+      res.download(path)
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
 router.get('/upload/resource', function(req, res){
   var data = new Date().toISOString().substring(0,16)
   res.render('addResourceForm', {d: data})
@@ -63,8 +73,11 @@ router.post('/register', function(req,res){
 
 // Verificar se o utilizador já existe na base de dados
 router.post('/login', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  // Falta meter o código da autenticação do utilizador
   // axios.post('http://localhost:7778/users/login', req.body)
-})
+  res.render('home', {d: data})
+})  
 
 // Upload de um novo recurso educacional
 // Tem que se realizar a verificação de que o zip está correto

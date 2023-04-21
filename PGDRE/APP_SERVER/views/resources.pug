@@ -12,16 +12,24 @@ block content
                 th Subtítulo
                 th Tipo
                 th Autor 
-            if rs != undefined
-                each r in rs 
-                    tr 
-                        td= r.title
-                        if r.subtitle != undefined 
-                            td= r.subtitle
-                        else 
-                            td Indefinido
-                        td= r.type
-                        td= r.author
+                th Operations
+
+            each r in rs 
+                tr 
+                    td= r.title
+                    if r.subtitle != undefined 
+                        td= r.subtitle
+                    else 
+                        td Indefinido
+                    td= r.type
+                    td= r.author
+                    td  
+                        button.w3-btn.w3-round.w3-indigo.w3-margin 
+                          a(href="/resources/download/" + r.resourceName) Download
+                        button.w3-btn.w3-round.w3-indigo.w3-margin 
+                          a(href="/resources/edit/" + r.resourceName) Edit
+                        button.w3-btn.w3-round.w3-indigo.w3-margin 
+                          a(href="/resources/delete/" + r.resourceName) Delete
 
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d}

@@ -10,7 +10,7 @@ var resourceSchema = Schema({
     title: String, 
     subtitle: String,
     type: String,
-    dateCriation: String,
+    dateCreation: String,
     dateSubmission: String,
     visibility: String, // public ou private
     author: String

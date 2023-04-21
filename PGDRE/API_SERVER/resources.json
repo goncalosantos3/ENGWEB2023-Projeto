@@ -1,0 +1,22 @@
+[
+    {
+        "resourceName": "pacote1.zip",
+        "title": "Fichas de SO",
+        "subtitle": "Introdução à cadeira",
+        "type": "Ficha",
+        "dateCreation": "21-abr-2023",
+        "dateSubmission": "21-abr-2023",
+        "visibility": "Public",
+        "author": "Gonçalo Santos"
+    },
+    {
+        "resourceName": "pacote2.zip",
+        "title": "Testes de SO",
+        "subtitle": "Final da cadeira",
+        "type": "Teste",
+        "dateCreation": "21-abr-2023",
+        "dateSubmission": "21-abr-2023",
+        "visibility": "Public",
+        "author": "Gonçalo Santos"
+    }
+]
