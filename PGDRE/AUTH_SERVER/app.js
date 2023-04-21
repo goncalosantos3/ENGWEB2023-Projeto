@@ -3,11 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-// Cenas dos users e sessões, etc.
-const {v4 : uuidv4} = require('uuid')
 var session = require('express-session')
-var FileStore = require('session-file-store')(session)
+
+// O passport já tem uma sessão implementada
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy
 
@@ -31,51 +29,13 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(session({
-  genid: req => {
-    console.log('Dentro do middleware da sessão...')
-    console.log(req.sessionID)
-    return uuidv4()},
-  store: new FileStore(),
-  secret: 'O meu segredo',
-  resave: false,
-  saveUninitialized: true
-}))
 
-var User = require('./controllers/user')
-
-// Configuração da estratégia local
-passport.use(new LocalStrategy(
-  {usernameField: 'username'}, (username, password, done) => {
-    console.log("A autenticar: " + username + ", " + password)
-    User.getUser(username)
-      .then(user =>{
-        if(!user) {return done(null, false, {message: 'Não existe tal utilizador!\n'})}
-
-        if(password != user.password) {return done(null, false, {message: 'Password Inválida\n'})}
-
-        return done(null, user)
-      })
-      .catch(erro =>  done(erro))
-  }
-))
-
-// Indica-se ao passport como serealizar o utilizador
-// O username funciona como um userID
-passport.serializeUser((user, done) => {
-  console.log('Vou serealizar o user na sessão: ' + JSON.stringify(user))
-  // Serealização do utilizador. O passport grava o utilizador na sessão aqui.
-  done(null, user.username)
-})
-
-// Indica-se ao passport como desserializar o utilizador
-// O username funciona como um userID
-passport.deserializeUser((username, done) => {
-  console.log('Vou dessealizar o user: ' + username)
-  User.getUser(username)
-    .then(dados => done(null, dados))
-    .catch(erro => done(erro, false))
-})
+// passport config
+var UserModel = require('./models/user')
+// UserModel.authenticate é criada ao fazer o plugin
+passport.use(new LocalStrategy(UserModel.authenticate()))
+passport.serializeUser(UserModel.serializeUser())
+passport.deserializeUser(UserModel.deserializeUser())
 
 
 app.use(logger('dev'));
@@ -84,6 +44,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: 'bla bla bla'}))
 app.use(passport.initialize());
 app.use(passport.session());
 

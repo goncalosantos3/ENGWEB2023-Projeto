@@ -46,12 +46,13 @@ module.exports.updateUser = newUser => {
         })
 }
 
-module.exports.deleteUser = username => {
-    return User.deleteOne({username: username})
-        .then(resposta => {
-            return resposta
-        })
-        .catch(erro => {
-            return erro
-        })
+// Faz a desativação (e não e eliminação) de um utilizador
+module.exports.deactivateUser = username => {
+    // return User.deleteOne({username: username})
+    //     .then(resposta => {
+    //         return resposta
+    //     })
+    //     .catch(erro => {
+    //         return erro
+    //     })
 }

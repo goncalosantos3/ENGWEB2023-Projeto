@@ -82,5 +82,5 @@ function onError(error) {
  */
 
 function onListening() {
-  console.log("Servidor de Interface à custa na porta " + port + "...")
+  console.log("Servidor da App à custa na porta " + port + "...")
 }

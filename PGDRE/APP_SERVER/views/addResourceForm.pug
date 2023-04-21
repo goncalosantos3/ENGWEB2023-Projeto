@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  .w3-card-4
+    header.w3-container.w3-blue
+      h1 Formulário do Recurso Educativo
+    
+    .w3-container  
+      form.w3-container(action="/upload/resource" method="POST")
+        fieldset 
+            legend Detalhes:
+            label Ficheiro Zip 
+            input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="file" name="resource")
+
+        input.w3-btn.w3-blue.w3-margin(type="submit" value="Submit Resource!")
+
+    footer.w3-container.w3-blue
+      address Generated in PGDRE at #{d}
