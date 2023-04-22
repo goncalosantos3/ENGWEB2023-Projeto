@@ -63,6 +63,29 @@ router.get('/resources/:rname', function(req, res){
     .catch(erro => res.render('error', {error: erro}))
 })
 
+router.get('/resources/edit/:rname', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/resource/' + req.params.rname)
+    .then(dados => {
+      res.render('editResourceForm', {r: dados.data[0], d: data})
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
+router.get('/resources/delete/:rname', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/resource/' + req.params.rname)
+    .then(dados => {
+      res.render('confirmDeleteResource', {r: dados.data[0], d: data})
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
+router.get('/resources/delete/:rname/confirm', function(req, res){
+  // Falta implementar aqui o código para realmente remover o recurso
+  res.redirect('/resources')
+})
+
 router.get('/resources/download/:rname', function(req, res){
   axios.get('http://localhost:7779/resource/' + req.params.rname)
     .then(dados => {
@@ -92,7 +115,11 @@ router.post('/login', function(req, res){
   var data = new Date().toISOString().substring(0,16)
   // Falta meter o código da autenticação do utilizador
   // axios.post('http://localhost:7778/users/login', req.body)
-  res.render('home', {d: data})
+  axios.get('http://localhost:7779/news/list')
+    .then(dados => {
+      res.render('home', {news: dados.data, d: data})
+    })
+    .catch(erro => res.render('error', {error: erro}))
 })  
 
 // Upload de um novo recurso educacional

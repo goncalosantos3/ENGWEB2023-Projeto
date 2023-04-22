@@ -74,4 +74,15 @@ router.get('/resource/:rname/posts/:id', function(req, res){
     })
 })
 
+router.get('/news/list', function(req, res){
+  News.newsList()
+    .then(news => {
+      console.dir(news)
+      res.status(200).jsonp(news)
+    })
+    .catch(erro => {
+      res.status(507).jsonp({message: "Erro na obtenção da lista das notícias"})
+    })
+})
+
 module.exports = router;

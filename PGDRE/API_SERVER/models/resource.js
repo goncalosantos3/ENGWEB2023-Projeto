@@ -6,7 +6,7 @@ var Schema = mongoose.Schema
 */
 
 var resourceSchema = Schema({
-    resourceName: String, // Nome do zip
+    resourceName: String, // Nome do zip, é considerado o id. NÃO REPETÍVEL
     title: String, 
     subtitle: String,
     type: String,
