@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var Resource = require('../controllers/resource')
+var Post = require('../controllers/post')
+var News = require('../controllers/news')
 
 // Lista todos os recursos 
 router.get('/resource/list', function(req, res) {
@@ -47,6 +49,28 @@ router.get('/resource/:rname', function(req, res){
     })
     .catch(erro => {
       res.status(504).jsonp({message: "Erro na obtenção do recurso " + req.params.rname + ": " + erro})
+    })
+})
+
+router.get('/resource/:rname/posts', function(req, res){
+  Post.rPosts(req.params.rname)
+    .then(posts => {
+      console.dir(posts)
+      res.status(200).jsonp(posts)
+    })
+    .catch(erro => {
+      res.status(505).jsonp({message: "Erro na obtenção dos posts do recurso: " + req.params.rname})
+    })
+})
+
+router.get('/resource/:rname/posts/:id', function(req, res){
+  Post.post(req.params.id)
+    .then(post => {
+      console.dir(post)
+      res.status(200).jsonp(post)
+    })
+    .catch(erro => {
+      res.status(506).jsonp({message: "Erro na obtenção do post" + req.params.id + "do recurso: " + req.params.rname})
     })
 })
 

@@ -1,0 +1,22 @@
+[
+    {
+        "resourceName": "pacote1.zip",
+        "username": "Gonçalo",
+        "title": "Teste",
+        "description": "Primeiro post",
+        "likes": 2,
+        "date": "22-abr-2023",
+        "visibility": "Public",
+        "comments": []
+    },
+    {
+        "resourceName": "pacote2.zip",
+        "username": "Gonçalo",
+        "title": "Teste2",
+        "description": "Segundo post",
+        "likes": 3,
+        "date": "22-abr-2023",
+        "visibility": "Public",
+        "comments": []
+    }
+]

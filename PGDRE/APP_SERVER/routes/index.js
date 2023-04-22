@@ -47,6 +47,22 @@ router.get('/resources', function(req, res){
     .catch(erro => res.render('error', {error: erro}))
 })
 
+router.get('/resources/:rname', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/resource/' + req.params.rname)
+    .then(recurso => {
+      axios.get('http://localhost:7779/resource/' + req.params.rname + "/posts")
+        .then(posts => {
+          console.dir(posts.data)
+          res.render('resourceDetails', {r: recurso.data[0], ps: posts.data, d: data})
+        })
+        .catch(erro => {
+          erro => res.render('error', {error: erro})
+        })
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
 router.get('/resources/download/:rname', function(req, res){
   axios.get('http://localhost:7779/resource/' + req.params.rname)
     .then(dados => {

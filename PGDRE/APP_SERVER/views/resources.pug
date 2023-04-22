@@ -12,7 +12,7 @@ block content
                 th Subtítulo
                 th Tipo
                 th Autor 
-                th Operations
+                th Operações
 
             each r in rs 
                 tr 
@@ -24,12 +24,14 @@ block content
                     td= r.type
                     td= r.author
                     td  
-                        button.w3-btn.w3-round.w3-indigo.w3-margin 
-                          a(href="/resources/download/" + r.resourceName) Download
-                        button.w3-btn.w3-round.w3-indigo.w3-margin 
-                          a(href="/resources/edit/" + r.resourceName) Edit
-                        button.w3-btn.w3-round.w3-indigo.w3-margin 
-                          a(href="/resources/delete/" + r.resourceName) Delete
+                      button.w3-btn.w3-round.w3-indigo.w3-margin 
+                        a(href="/resources/" + r.resourceName) Detalhes
+                      button.w3-btn.w3-round.w3-indigo.w3-margin 
+                        a(href="/resources/download/" + r.resourceName) Download
+                      button.w3-btn.w3-round.w3-indigo.w3-margin 
+                        a(href="/resources/edit/" + r.resourceName) Editar
+                      button.w3-btn.w3-round.w3-indigo.w3-margin 
+                        a(href="/resources/delete/" + r.resourceName) Apagar
 
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d}
