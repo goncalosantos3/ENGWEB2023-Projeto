@@ -37,3 +37,38 @@ module.exports.news = id => {
             return erro
         })
 }
+
+// n: objeto news
+module.exports.addNews = n => {
+    return News.create(n)
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+// Elimina uma notícia em específico
+module.exports.deleteNews = id => {
+    return News
+        .deleteOne({_id: id})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+// Elimina todas as notícias de um certo recurso
+module.exports.deleteNewsR = rname => {
+    return News
+        .deleteMany({resourceName: rname})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}

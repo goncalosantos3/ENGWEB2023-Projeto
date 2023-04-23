@@ -52,6 +52,30 @@ router.get('/resource/:rname', function(req, res){
     })
 })
 
+// Eliminar um recurso 
+router.delete('/resource/:rname/delete', function(req, res){
+  Resource.deleteR(req.params.rname)
+    .then(resposta1 => {
+      News.deleteNewsR(req.params.rname)
+        .then(resposta2 => {
+          Post.deletePostsR(req.params.rname)
+            .then(resposta3 => {  
+              res.status(200).jsonp({message: "Apagado"})
+            })
+            .catch(erro => {
+              res.status(510).jsonp({message: "Erro na eliminação dos posts do recurso" + req.params.rname + ": " + erro})
+            })
+        })
+        .catch(erro => {
+          res.status(509).jsonp({message: "Erro na eliminação das notícias do recurso " + req.params.rname + ": " + erro})
+        })
+    })
+    .catch(erro => {
+      res.status(508).jsonp({message: "Erro na eliminação do recurso " + req.params.rname + ": " + erro})
+    })
+})
+
+// Posts associados a um recurso
 router.get('/resource/:rname/posts', function(req, res){
   Post.rPosts(req.params.rname)
     .then(posts => {
@@ -63,8 +87,9 @@ router.get('/resource/:rname/posts', function(req, res){
     })
 })
 
+// Um post em específico
 router.get('/resource/:rname/posts/:id', function(req, res){
-  Post.post(req.params.id)
+  Post.getPost(req.params.id)
     .then(post => {
       console.dir(post)
       res.status(200).jsonp(post)
@@ -74,6 +99,7 @@ router.get('/resource/:rname/posts/:id', function(req, res){
     })
 })
 
+// Lista de todas as notícias
 router.get('/news/list', function(req, res){
   News.newsList()
     .then(news => {

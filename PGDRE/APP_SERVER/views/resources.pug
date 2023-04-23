@@ -3,35 +3,38 @@ extends layout
 block content
     .w3-card-4
     header.w3-container.w3-blue
-      h1 Recursos
+      h1 Recursos #[a(href="/resources/add") #[img.w3-margin(src="/images/add.png" alt="add icon" width="30" height="30")]]
 
     .w3-container
-        table.w3-table-all
-            tr
-                th Título
-                th Subtítulo
-                th Tipo
-                th Autor 
-                th Operações
 
-            each r in rs 
-                tr 
-                    td= r.title
-                    if r.subtitle != undefined 
-                        td= r.subtitle
-                    else 
-                        td Indefinido
-                    td= r.type
-                    td= r.author
-                    td  
-                      button.w3-btn.w3-round.w3-indigo.w3-margin 
-                        a(href="/resources/" + r.resourceName) Detalhes
-                      button.w3-btn.w3-round.w3-indigo.w3-margin 
-                        a(href="/resources/download/" + r.resourceName) Download
-                      button.w3-btn.w3-round.w3-indigo.w3-margin 
-                        a(href="/resources/edit/" + r.resourceName) Editar
-                      button.w3-btn.w3-round.w3-indigo.w3-margin 
-                        a(href="/resources/delete/" + r.resourceName) Apagar
+      table.w3-table-all
+          tr
+              th Título
+              th Subtítulo
+              th Tipo
+              th Autor 
+              th Detalhes
+              th Operações
+
+          each r in rs 
+              tr 
+                  td= r.title
+                  if r.subtitle != undefined 
+                      td= r.subtitle
+                  else 
+                      td Indefinido
+                  td= r.type
+                  td= r.author
+                  td  
+                    a(href="/resources/" + r.resourceName)
+                      img.w3-margin(src="/images/details.png" alt="details icon" width="30" height="30")
+                  td  
+                    a(href="/resources/download/" + r.resourceName) 
+                      img.w3-round-xlarge.w3-margin(src="/images/download.png" alt="download icon" width="30" height="30")
+                    a(href="/resources/edit/" + r.resourceName)
+                      img.w3-round-large.w3-margin(src="/images/edit.png" alt="edit icon" width="30" height="30")
+                    a(href="/resources/delete/" + r.resourceName)
+                      img.w3-round-large.w3-margin(src="/images/delete.png" alt="delete icon" width="30" height="30")
 
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d}

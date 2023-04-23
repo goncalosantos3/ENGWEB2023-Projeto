@@ -33,11 +33,12 @@ router.get('/logout', function(req, res){
 
 // Vai servir para gerar a página com o perfil do utilizador
 // Tem que se verificar se o utilizador já está autenticado ou não
-// router.get('/profile', function(req, res){  
-//   var data = new Date().toISOString().substring(0,16)
-//   res.render('profile', {d: data})
-// })
+router.get('/profile', function(req, res){  
+  var data = new Date().toISOString().substring(0,16)
+  res.render('profile', {d: data})
+})
 
+// Lista de todos os recursos
 router.get('/resources', function(req, res){
   var data = new Date().toISOString().substring(0,16)
   axios.get('http://localhost:7779/resource/list')
@@ -47,6 +48,13 @@ router.get('/resources', function(req, res){
     .catch(erro => res.render('error', {error: erro}))
 })
 
+// Adicionar um novo recurso
+router.get('/resources/add', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  res.render('addResourceForm', {d: data})
+})
+
+// Vai buscar um recurso em específico
 router.get('/resources/:rname', function(req, res){
   var data = new Date().toISOString().substring(0,16)
   axios.get('http://localhost:7779/resource/' + req.params.rname)
@@ -99,6 +107,17 @@ router.get('/resources/download/:rname', function(req, res){
 router.get('/upload/resource', function(req, res){
   var data = new Date().toISOString().substring(0,16)
   res.render('addResourceForm', {d: data})
+})
+
+// Vai buscar a informação de um post em específico
+router.get('/resources/:rname/posts/:id', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id)
+    .then(dados => {
+      console.dir(dados.data)
+      res.render('postDetails', {p: dados.data, d: data})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
 })
 
 /*                                POSTS                                 */

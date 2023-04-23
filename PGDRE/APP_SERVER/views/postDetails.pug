@@ -1,0 +1,36 @@
+extends layout
+
+block content
+    .w3-card-4
+    header.w3-container.w3-blue
+      h1 Postagem
+
+    .w3-container
+        ul.w3-ul 
+            li #[b Resource Name: ] #{p.resourceName}
+            li #[b Utilizador: ] #{p.username} 
+            li #[b Title: ] #{p.title}
+            li #[b Description: ] #{p.description}
+            li #[b Gostos: ] #{p.likes}
+            li #[b Data: ] #{p.date}
+            li #[b Operations: ] 
+                a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/edit")
+                  img.w3-round-large.w3-margin(src="/images/edit.png" alt="edit icon" width="30" height="30")
+                a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/delete")
+                  img.w3-round-large.w3-margin(src="/images/delete.png" alt="delete icon" width="30" height="30")
+            li #[b Comentários:]
+                table.w3-table-all
+                    tr 
+                        th Utilizador
+                        th Título
+                        th Descrição
+                        th Data
+                    each c in p.comments 
+                        tr 
+                            td= c.username
+                            td= c.title
+                            td= c.description
+                            td= c.date
+
+    footer.w3-container.w3-blue
+      address Generated in PGDRE at #{d}

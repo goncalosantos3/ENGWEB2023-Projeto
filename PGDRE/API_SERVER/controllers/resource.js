@@ -50,3 +50,14 @@ module.exports.getRAutor = a => {
             return erro
         })
 }
+
+module.exports.deleteR = rname => {
+    return Resource
+        .deleteOne({resourceName: rname})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
