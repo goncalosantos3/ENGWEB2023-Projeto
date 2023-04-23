@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  .w3-card-4
+    header.w3-container.w3-blue
+      h1 Formulário dos Comentários
+
+    .w3-container  
+      .w3-container.w3-border.w3-margin
+        h2 Informação do Post
+        ul.w3-ul
+          li #[b Nome do Recurso: ] #{p.resourceName}
+          li #[b Utilizador: ] #{p.username}
+          li #[b Título: ] #{p.title}
+          li #[b Descrição: ] #{p.description}
+          li #[b Gostos: ] #{p.likes}
+          li #[b Data: ] #{p.date}
+
+      h2 Adicione um Comentário:
+      form.w3-container(action="/resources/" + p.resourceName + "/posts/" + p._id + "/comments/add" method="POST")
+        fieldset
+            input.w3-input(type="hidden" name="username" value="meter username aqui")
+            legend Detalhes:
+            label Título
+            input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="title")
+            label Descrição
+            input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="description")
+
+        input.w3-btn.w3-blue.w3-margin(type="submit" value="Submissão do Comentário!")
+
+    footer.w3-container.w3-blue
+      address Generated in PGDRE at #{d}

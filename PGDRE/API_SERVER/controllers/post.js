@@ -25,6 +25,26 @@ module.exports.getPost = id => {
         })
 }
 
+module.exports.addPost = p => {
+    return Post.create(p)
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+module.exports.updatePost = p => {
+    return Post.updateOne({_id: p._id}, p)
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
 // Elimina um post em específico
 module.exports.deletePost = id => {
     return Post 

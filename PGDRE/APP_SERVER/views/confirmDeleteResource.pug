@@ -7,14 +7,14 @@ block content
 
     .w3-container
         ul.w3-ul 
-            li #[b Resource Name: ] #{r.resourceName}
-            li #[b Title: ] #{r.title}
-            li #[b Subtitle: ] #{r.subtitle}
-            li #[b Type: ] #{r.type}
-            li #[b Author: ] #{r.author}
+            li #[b Nome do Recurso: ] #{r.resourceName}
+            li #[b Título: ] #{r.title}
+            li #[b Subtítulo: ] #{r.subtitle}
+            li #[b Tipo: ] #{r.type}
+            li #[b Autor: ] #{r.author}
 
         center
-            p Tem a certeza que quer remover este RE?
+            h2 Tem a certeza que quer remover este RE?
             button.w3-btn.w3-round.w3-green.w3-margin
                 a(href="/resources/delete/" + r.resourceName + "/confirm") Confirm 
             button.w3-btn.w3-round.w3-red.w3-margin

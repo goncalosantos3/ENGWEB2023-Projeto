@@ -83,7 +83,7 @@ router.get('/resource/:rname/posts', function(req, res){
       res.status(200).jsonp(posts)
     })
     .catch(erro => {
-      res.status(505).jsonp({message: "Erro na obtenção dos posts do recurso: " + req.params.rname})
+      res.status(505).jsonp({message: "Erro na obtenção dos posts do recurso " + req.params.rname + ": " + erro})
     })
 })
 
@@ -95,7 +95,48 @@ router.get('/resource/:rname/posts/:id', function(req, res){
       res.status(200).jsonp(post)
     })
     .catch(erro => {
-      res.status(506).jsonp({message: "Erro na obtenção do post" + req.params.id + "do recurso: " + req.params.rname})
+      res.status(506).jsonp({message: "Erro na obtenção do post" + req.params.id + "do recurso " + req.params.rname + ": " + erro})
+    })
+})
+
+// Adcionar um post a um recurso
+router.post('/resource/:rname/posts/add', function(req, res){
+  Post.addPost(req.body)
+    .then(post => {
+      res.status(200).jsonp(post)
+    })
+    .catch(erro => {
+      res.status(512).jsonp({message: "Erro na adição do post no recurso " + req.params.rname + ": " + erro})
+    })
+})
+
+// Adicionar um comentário a um post
+router.post('/resource/:rname/posts/:id/comments/add', function(req, res){
+  Post.getPost(req.params.id)
+    .then(post => {
+      post.comments.push(req.body) // Adiciona o comentário
+
+      Post.updatePost(post)
+        .then(post => {
+          res.status(200).jsonp(post)
+        })
+        .catch(erro => {
+          res.status(513).jsonp({message: "Erro na adição do comentário ao post no recurso " + req.params.rname + ": " + erro})
+        })
+    })
+    .catch(erro => {
+      res.status(514).jsonp({message: "Erro na busca do post do recurso " + req.params.rname + ": " + erro})
+    })
+})
+
+// Eliminação de um post
+router.delete('/posts/:id', function(req, res){
+  Post.deletePost(req.params.id)
+    .then(resposta1 => {
+      res.status(200).jsonp({message: "Apagado"})
+    })
+    .catch(erro => {
+      res.status(511).jsonp({message: "Erro na eliminação do post" + req.params.id + "do recurso " + req.params.rname + ": " + erro})
     })
 })
 

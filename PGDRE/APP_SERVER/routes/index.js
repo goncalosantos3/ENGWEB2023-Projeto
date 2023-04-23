@@ -109,6 +109,17 @@ router.get('/upload/resource', function(req, res){
   res.render('addResourceForm', {d: data})
 })
 
+// Adicionar um post
+router.get('/resources/:rname/posts/add', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/resource/' + req.params.rname)
+    .then(dados => {
+      console.dir(dados.data)
+      res.render('addPostForm', {r: dados.data[0], d: data})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
 // Vai buscar a informação de um post em específico
 router.get('/resources/:rname/posts/:id', function(req, res){
   var data = new Date().toISOString().substring(0,16)
@@ -116,6 +127,39 @@ router.get('/resources/:rname/posts/:id', function(req, res){
     .then(dados => {
       console.dir(dados.data)
       res.render('postDetails', {p: dados.data, d: data})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
+// Pedido para eliminar um post
+router.get('/resources/:rname/posts/:id/delete', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id)
+    .then(dados => {
+      console.dir(dados.data)
+      res.render('confirmDeletePost', {p: dados.data, d: data})
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
+// Confirmação da eliminação de um post
+router.get('/resources/:rname/posts/:id/delete/confirm', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.delete('http://localhost:7779/posts/' + req.params.id)
+    .then(dados => {
+      console.dir(dados.data)
+      res.render('confirmDeletePost', {p: dados.data, d: data})
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
+// Pedido para adicionar um comentário a um post
+router.get('/resources/:rname/posts/:id/comments/add', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id)
+    .then(dados => {
+      console.dir(dados.data)
+      res.render('addCommentForm', {p: dados.data, d: data})
     })
     .catch(erro => {res.render('error', {error: erro})})
 })
@@ -146,6 +190,46 @@ router.post('/login', function(req, res){
 router.post('/upload/resource', upload.single('resource'), function(req, res){
   var data = new Date().toISOString().substring(0,16)
   
+})
+
+// Adicionar um post
+router.post('/resources/:rname/posts/add', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+
+  var p = {
+    resourceName: req.body.resourceName,
+    username: req.body.username,
+    title: req.body.title,
+    description: req.body.description,
+    likes: 0, 
+    date: data,
+    visibility: req.body.visibility,
+    comments: []
+  }
+  axios.post('http://localhost:7779/resource/' + req.params.rname + "/posts/add", p)
+    .then(dados => {
+      console.dir(dados.data)
+      res.redirect('/resources/' + req.params.rname)
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
+// Adicionar um comentário a um post
+router.post('/resources/:rname/posts/:id/comments/add', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+
+  var c = {
+    usename: req.body.username,
+    title: req.body.title,
+    description: req.body.description,
+    date: data
+  }
+  axios.post('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id + "/comments/add", c)
+    .then(dados => {
+      console.dir(dados.data)
+      res.redirect('/resources/' + req.params.rname + "/posts/" + req.params.id)
+    })
+    .catch(erro => {res.render('error', {error: erro})})
 })
 
 module.exports = router;

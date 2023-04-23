@@ -22,7 +22,7 @@ block content
 
         .w3-card-4
             header.w3-container.w3-purple
-                h1 Posts
+                h1 Posts #[a(href="/resources/" + r.resourceName + "/posts/add") #[img.w3-margin(src="/images/add.png" alt="add icon" width="30" height="30")]]
 
             .w3-container
                 table.w3-table-all
@@ -33,6 +33,7 @@ block content
                         th Likes
                         th Date
                         th Detalhes
+                        th Operações
 
                     each p in ps 
                         tr 
@@ -42,8 +43,13 @@ block content
                             td= p.likes
                             td= p.date
                             td  
-                                a(href="/resources/" + r.resourceName + "/posts/" + p._id)
-                                  img(src="/images/details.png" alt="details icon" width="30" height="30")
+                              a(href="/resources/" + r.resourceName + "/posts/" + p._id)
+                                img(src="/images/details.png" alt="details icon" width="30" height="30")
+                            td 
+                              a.w3-margin(href="/resources/" + r.resourceName + "/posts/" + p._id + "/edit")
+                                img(src="/images/edit.png" alt="edit icon" width="30" height="30")
+                              a.w3-margin(href="/resources/" + r.resourceName + "/posts/" + p._id + "/delete")
+                                img(src="/images/delete.png" alt="delete icon" width="30" height="30")
 
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d}
