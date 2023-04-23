@@ -6,7 +6,7 @@ var postSchema = Schema({
     username: String, // O username do user que fez o post
     title: String,
     description: String,
-    likes: Number, // Número de likes
+    liked_by: [String], // Lista de users que deram like no post
     date: String,
     visibility: String, // A mesma do recurso
     comments: [{

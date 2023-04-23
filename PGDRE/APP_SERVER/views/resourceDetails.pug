@@ -7,11 +7,15 @@ block content
 
     .w3-container
         ul.w3-ul 
-            li #[b Resource Name: ] #{r.resourceName}
-            li #[b Title: ] #{r.title}
-            li #[b Subtitle: ] #{r.subtitle}
-            li #[b Type: ] #{r.type}
-            li #[b Author: ] #{r.author}
+            li #[b Nome do Recurso: ] #{r.resourceName}
+            li #[b Ficheiros: ]
+              ul.w3-ul 
+                each f in r.files
+                  li= f
+            li #[b Título: ] #{r.title}
+            li #[b Subtítulo: ] #{r.subtitle}
+            li #[b Tipo: ] #{r.type}
+            li #[b Autor: ] #{r.author}
             li #[b Operations:] 
                 a(href="/resources/download/" + r.resourceName) 
                   img.w3-round-xlarge.w3-margin(src="/images/download.png" alt="download icon" width="30" height="30")
@@ -30,7 +34,7 @@ block content
                         th Utilizador
                         th Título
                         th Descrição
-                        th Likes
+                        th Gostos
                         th Date
                         th Detalhes
                         th Operações
@@ -40,7 +44,7 @@ block content
                             td= p.username
                             td= p.title
                             td= p.description
-                            td= p.likes
+                            td= p.liked_by.length
                             td= p.date
                             td  
                               a(href="/resources/" + r.resourceName + "/posts/" + p._id)

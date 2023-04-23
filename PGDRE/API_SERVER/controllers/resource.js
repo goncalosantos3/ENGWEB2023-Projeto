@@ -51,6 +51,17 @@ module.exports.getRAutor = a => {
         })
 }
 
+module.exports.updateR = r => {
+    return Resource 
+        .updateOne({resourceName: r.resourceName}, r)
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
 module.exports.deleteR = rname => {
     return Resource
         .deleteOne({resourceName: rname})

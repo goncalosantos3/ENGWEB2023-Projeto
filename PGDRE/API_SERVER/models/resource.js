@@ -7,6 +7,7 @@ var Schema = mongoose.Schema
 
 var resourceSchema = Schema({
     resourceName: String, // Nome do zip, é considerado o id. NÃO REPETÍVEL
+    files: [String], // Lista de ficheiros (conteúdo) do zip
     title: String, 
     subtitle: String,
     type: String,

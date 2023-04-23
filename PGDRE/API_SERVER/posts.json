@@ -4,7 +4,7 @@
         "username": "Gonçalo",
         "title": "Teste",
         "description": "Primeiro post",
-        "likes": 2,
+        "liked_by": ["Gonçalo Santos", "Telmo Maciel"],
         "date": "22-abr-2023",
         "visibility": "Public",
         "comments": []
@@ -14,7 +14,7 @@
         "username": "Gonçalo",
         "title": "Teste2",
         "description": "Segundo post",
-        "likes": 3,
+        "liked_by": ["Gonçalo Santos", "Telmo Maciel"],
         "date": "22-abr-2023",
         "visibility": "Public",
         "comments": []

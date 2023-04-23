@@ -84,7 +84,10 @@ router.get('/resources/edit/:rname', function(req, res){
   var data = new Date().toISOString().substring(0,16)
   axios.get('http://localhost:7779/resource/' + req.params.rname)
     .then(dados => {
-      res.render('editResourceForm', {r: dados.data[0], d: data})
+      var files = ""
+      for(let i=0; i<dados.data[0].files.length; i++)
+        files += dados.data[0].files[i] + ", "
+      res.render('editResourceForm', {r: dados.data[0], files: files, d: data})
     })
     .catch(erro => res.render('error', {error: erro}))
 })
@@ -217,6 +220,31 @@ router.post('/upload/resource', upload.single('resource'), function(req, res){
   
 })
 
+// Editar um recurso
+router.post('/resources/:rname/edit', function(req, res){
+  axios.get('http://localhost:7779/resource/' + req.params.rname)
+    .then(dados => {
+      var r = {
+        resourceName: req.body.resourceName,
+        files: dados.data[0].files,
+        title: req.body.title,
+        subtitle: req.body.subtitle,
+        type: req.body.type,
+        dateCreation: dados.data[0].dateCreation,
+        dateSubmission: dados.data[0].dateSubmission,
+        visibility: req.body.visibility,
+        author: req.body.author
+      }
+
+      axios.post('http://localhost:7779/resource/' + req.params.rname + "/edit", r)
+      .then(dados => {
+        res.redirect('/resources')
+      })
+      .catch(erro => {res.render('error', {error: erro})})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
 // Adicionar um post
 router.post('/resources/:rname/posts/add', function(req, res){
   var data = new Date().toISOString().substring(0,16)
@@ -226,7 +254,7 @@ router.post('/resources/:rname/posts/add', function(req, res){
     username: req.body.username,
     title: req.body.title,
     description: req.body.description,
-    likes: 0, 
+    liked_by: [], 
     date: data,
     visibility: req.body.visibility,
     comments: []
@@ -249,7 +277,7 @@ router.post('/resources/:rname/posts/:id/edit', function(req, res){
         username: req.body.username,
         title: req.body.title,
         description: req.body.description,
-        likes: req.body.likes,
+        liked_by: req.body.liked_by,
         date: req.body.date,
         visibility: req.body.visibility,
         comments: dados.data.comments

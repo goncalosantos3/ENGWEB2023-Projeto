@@ -11,7 +11,7 @@ block content
             li #[b Utilizador: ] #{p.username} 
             li #[b Title: ] #{p.title}
             li #[b Description: ] #{p.description}
-            li #[b Gostos: ] #{p.likes}
+            li #[b Gostos: ] #{p.liked_by.length}
             li #[b Data: ] #{p.date}
             li #[b Operations: ] 
                 a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/edit")

@@ -52,6 +52,19 @@ router.get('/resource/:rname', function(req, res){
     })
 })
 
+// Editar um recurso
+router.post('/resource/:rname/edit', function(req, res){
+  console.log("OLA!")
+  Resource.updateR(req.body)
+    .then(recurso => {
+      console.dir(recurso)
+      res.status(200).jsonp(recurso)
+    })
+    .catch(erro => {
+      res.status(518).jsonp({message: "Erro na edição do recurso " + req.params.rname + ": " + erro})
+    })
+})
+
 // Eliminar um recurso 
 router.delete('/resource/:rname/delete', function(req, res){
   Resource.deleteR(req.params.rname)
