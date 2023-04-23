@@ -131,6 +131,17 @@ router.get('/resources/:rname/posts/:id', function(req, res){
     .catch(erro => {res.render('error', {error: erro})})
 })
 
+// Edição de um post
+router.get('/resources/:rname/posts/:id/edit', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id)
+    .then(dados => {
+      console.dir(dados.data)
+      res.render('editPostForm', {p: dados.data, d: data})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
 // Pedido para eliminar um post
 router.get('/resources/:rname/posts/:id/delete', function(req, res){
   var data = new Date().toISOString().substring(0,16)
@@ -151,6 +162,15 @@ router.get('/resources/:rname/posts/:id/delete/confirm', function(req, res){
       res.render('confirmDeletePost', {p: dados.data, d: data})
     })
     .catch(erro => res.render('error', {error: erro}))
+})
+
+// Adicionar um like a um post
+router.get('/resources/:rname/posts/:id/like', function(req, res){
+  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id + '/like')
+    .then(dados => {
+      res.redirect('/resources/' + req.params.rname + '/posts/' + req.params.id)
+    })
+    .catch(erro => {res.render('error', {error: erro})})
 })
 
 // Pedido para adicionar um comentário a um post
@@ -210,6 +230,31 @@ router.post('/resources/:rname/posts/add', function(req, res){
     .then(dados => {
       console.dir(dados.data)
       res.redirect('/resources/' + req.params.rname)
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
+// Editar um post
+router.post('/resources/:rname/posts/:id/edit', function(req, res){
+  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id)
+    .then(dados => {
+      var p = {
+        _id: dados.data._id,
+        resourceName: req.body.resourceName,
+        username: req.body.username,
+        title: req.body.title,
+        description: req.body.description,
+        likes: req.body.likes,
+        date: req.body.date,
+        visibility: req.body.visibility,
+        comments: dados.data.comments
+      }
+      axios.post('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id + "/edit", p)
+      .then(dados => {
+        console.dir(dados.data)
+        res.redirect('/resources/' + req.params.rname)
+      })
+      .catch(erro => {res.render('error', {error: erro})})
     })
     .catch(erro => {res.render('error', {error: erro})})
 })

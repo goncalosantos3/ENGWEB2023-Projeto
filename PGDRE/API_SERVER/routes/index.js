@@ -99,7 +99,25 @@ router.get('/resource/:rname/posts/:id', function(req, res){
     })
 })
 
-// Adcionar um post a um recurso
+// Adicionar um like a um post
+router.get('/resource/:rname/posts/:id/like', function(req, res){
+  Post.getPost(req.params.id)
+    .then(post => {
+      post.likes += 1
+      Post.updatePost(post)
+        .then(dados => {
+          res.status(200).jsonp(dados)
+        })
+        .catch(erro => {
+          res.status(516).jsonp({message: "Erro na edição do post " + req.params.id + "do recurso " + req.params.rname + ": " + erro})
+        })
+    })
+    .catch(erro => {
+      res.status(517).jsonp({message: "Erro na obtenção do post" + req.params.id + "do recurso " + req.params.rname + ": " + erro})
+    })
+})
+
+// Adicionar um post a um recurso
 router.post('/resource/:rname/posts/add', function(req, res){
   Post.addPost(req.body)
     .then(post => {
@@ -107,6 +125,18 @@ router.post('/resource/:rname/posts/add', function(req, res){
     })
     .catch(erro => {
       res.status(512).jsonp({message: "Erro na adição do post no recurso " + req.params.rname + ": " + erro})
+    })
+})
+
+// Editar um post
+router.post('/resource/:rname/posts/:id/edit', function(req, res){
+  console.dir(req.body)
+  Post.updatePost(req.body)
+    .then(post => {
+      res.status(200).jsonp(post)
+    })
+    .catch(erro => {
+      res.status(515).jsonp({message: "Erro na edição do post no recurso " + req.params.rname + ": " + erro})
     })
 })
 
