@@ -31,6 +31,15 @@ router.get('/logout', function(req, res){
   res.redirect('/')
 })
 
+router.get('/home', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/news/list')
+    .then(dados => {
+      res.render('home', {news: dados.data, d: data})
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
 // Vai servir para gerar a página com o perfil do utilizador
 // Tem que se verificar se o utilizador já está autenticado ou não
 router.get('/profile', function(req, res){  
@@ -198,11 +207,7 @@ router.post('/login', function(req, res){
   var data = new Date().toISOString().substring(0,16)
   // Falta meter o código da autenticação do utilizador
   // axios.post('http://localhost:7778/users/login', req.body)
-  axios.get('http://localhost:7779/news/list')
-    .then(dados => {
-      res.render('home', {news: dados.data, d: data})
-    })
-    .catch(erro => res.render('error', {error: erro}))
+  res.redirect('home')
 })  
 
 // Upload de um novo recurso educacional
