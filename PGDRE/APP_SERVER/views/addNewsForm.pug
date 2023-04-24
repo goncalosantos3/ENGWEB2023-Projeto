@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  .w3-card-4
+    header.w3-container.w3-blue
+      h1 Formulário das Notícias
+
+    .w3-container  
+        .w3-container.w3-margin
+        form.w3-container(action="/news/add" method="POST")
+            fieldset
+                input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="hidden" name="username" value="Por implementar!")
+                label Nome do Recurso 
+                input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="resourceName")
+                label Evento
+                input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="event")
+            input.w3-btn.w3-blue.w3-margin(type="submit" value="Submissão da Notícia!")
+        
+        if erro != undefined
+            .w3-panel.w3-yellow
+                h3 Erro:
+                p= erro
+    footer.w3-container.w3-blue
+      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]

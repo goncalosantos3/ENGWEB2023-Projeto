@@ -6,6 +6,9 @@ var fs = require('fs') // file system
 var multer = require('multer');
 var upload = multer({dest: 'uploads'}) // Guarda tudo numa pasta "uploads"
 
+const StreamZip = require('node-stream-zip');
+const JSZip = require('jszip');
+
 /*                                GETS                                   */
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -92,6 +95,7 @@ router.get('/resources/edit/:rname', function(req, res){
     .catch(erro => res.render('error', {error: erro}))
 })
 
+// Pedido de eliminação de um recurso
 router.get('/resources/delete/:rname', function(req, res){
   var data = new Date().toISOString().substring(0,16)
   axios.get('http://localhost:7779/resource/' + req.params.rname)
@@ -101,11 +105,16 @@ router.get('/resources/delete/:rname', function(req, res){
     .catch(erro => res.render('error', {error: erro}))
 })
 
+// Eliminar um recurso
 router.get('/resources/delete/:rname/confirm', function(req, res){
-  // Falta implementar aqui o código para realmente remover o recurso
-  res.redirect('/resources')
+  axios.delete('http://localhost:7779/resource/' + req.params.rname + "/delete")
+    .then(dados => {
+      res.redirect('/resources')
+    })
+    .catch(erro => res.render('error', {error: erro}))
 })
 
+// Download de um recurso
 router.get('/resources/download/:rname', function(req, res){
   axios.get('http://localhost:7779/resource/' + req.params.rname)
     .then(dados => {
@@ -116,6 +125,7 @@ router.get('/resources/download/:rname', function(req, res){
     .catch(erro => res.render('error', {error: erro}))
 })
 
+// Pedido para adicionar um recurso
 router.get('/upload/resource', function(req, res){
   var data = new Date().toISOString().substring(0,16)
   res.render('addResourceForm', {d: data})
@@ -196,6 +206,43 @@ router.get('/resources/:rname/posts/:id/comments/add', function(req, res){
     .catch(erro => {res.render('error', {error: erro})})
 })
 
+// Pedido para adicionar uma notícia
+router.get('/news/add', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  res.render('addNewsForm', {d: data})
+})
+
+// Pedido para editar uma notícia
+router.get('/news/edit/:id', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/news/' + req.params.id)
+    .then(dados => {
+      console.dir(dados)
+      res.render('editNewsForm', {n: dados.data, d: data})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
+// Pedido para remover uma notícia
+router.get('/news/delete/:id', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/news/' + req.params.id)
+    .then(dados => {
+      console.dir(dados)
+      res.render('deleteNewsConfirm', {n: dados.data, d: data})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
+// Remover um notícia
+router.get('/news/delete/:id/confirm', function(req, res){
+  axios.delete('http://localhost:7779/news/' + req.params.id)
+    .then(dados => {
+      res.redirect('/home')
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
 /*                                POSTS                                 */
 // Criar um novo registo de utilizador (verificar se não existe um utilizador com as mesmas credenciais)
 router.post('/register', function(req,res){
@@ -213,11 +260,170 @@ router.post('/login', function(req, res){
   res.redirect('home')
 })  
 
+// Função que verifica se o rname do novo recurso já existia ou não
+// Se já existir, o recurso tem que ser rejeitado
+function verificaRName(req, res, next){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/resource/' + req.file.originalname)
+    .then(dados => {
+      if(dados.data.length != 0){ // Já existe um recurso com este nome
+        let path = __dirname + '/../' + req.file.path
+        try{
+          fs.unlinkSync(path)
+        }catch(e){
+          console.log(e)
+        }
+        res.render('addResourceForm', {erros: ["O nome do recurso já existe. Por favor altere-o!"], d:data})
+      }else{
+        next() // Continua com o upload do recurso
+      }
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+}
+
 // Upload de um novo recurso educacional
 // Tem que se realizar a verificação de que o zip está correto
-router.post('/upload/resource', upload.single('resource'), function(req, res){
+// Os recursos não podem ter nomes repetidos (resourceName é considerado um id)
+router.post('/upload/resource', upload.single('resource'), verificaRName, function(req, res){
   var data = new Date().toISOString().substring(0,16)
+  var metadata
+  erros = []
+  recurso = {
+    conteudo: [],
+    todos: [],
+    manifesto: {
+      existe: true,
+      valido: true
+    },
+    metadados: {
+      existe: true,
+      valido: true
+    }
+  }
+  // 1. Verificar se o manifesto bate certo com o conteúdo do zip
+  // 2. Verificar se o ficheiro SIP json está correto
+  if(req.file.mimetype == 'application/zip' || req.file.mimetype == "application/x-zip-compressed"){
+    var zip = new StreamZip({
+      file: req.file.path,
+      storeEntries: true
+    })
+
+    zip.on("error", (err) => {
+      console.log("xD")
+      res.render("error", {error: err})
+    });
+    zip.on('ready', () => {
+      for (const entry of Object.values(zip.entries())){
+        recurso.todos.push(entry.name)
+        if(entry.name != "manifest.txt" && entry.name != "PGDRE-SIP.json"){
+          recurso.conteudo.push(entry.name)
+        }
+      }
+
+      if(recurso.conteudo.length == 0){
+        erros.push("O recurso não contém conteúdo.")
+      }
+
+      if(recurso.todos.includes("manifest.txt")){
+        manifest = zip.entryDataSync("manifest.txt").toString('utf8')
+        manifest = manifest.replace('\n', '')
+        files = manifest.split('|')
+        for(file of recurso.conteudo){
+          if(!files.includes(file)){
+            recurso.manifesto.valido = false
+          }
+        }
+
+        if(recurso.manifesto.valido == false){
+          erros.push("O recurso não contém um ficheiro manifesto válido")
+        }
+      }else{
+        recurso.manifesto.existe = false
+        erros.push("O recurso não contém um ficheiro manifesto")
+      }
+
+      if(recurso.todos.includes("PGDRE-SIP.json")){
+        jsonfile = zip.entryDataSync("PGDRE-SIP.json").toString('utf8')
+        metadata = JSON.parse(jsonfile)
+        req.body.metadados = metadata
+
+        if(!(metadata.hasOwnProperty('title')
+        && metadata.hasOwnProperty('type') && metadata.hasOwnProperty('dateCreation')
+        && metadata.hasOwnProperty('visibility') && metadata.hasOwnProperty('author'))){
+          recurso.metadados.valid = false
+        }
   
+        if(metadata.type != 'Ficha' && metadata.type != 'Teste' && metadata.type != 'Slides' && metadata.type != 'Tese'){
+          recurso.metadados.valid = false
+        }
+
+        if(metadata.visibility != 'Public' && metadata.visibility != 'Private'){
+          recurso.metadados.valid = false
+        }
+
+        if(recurso.metadados.valid == false){
+          erros.push("O recurso contém um ficheiro de metadados inválido")
+        }      
+      }else{
+        recurso.metadados.existe = false
+        erros.push("O recurso não tem um ficheiro de metadados")
+      }
+      
+      // Se houve algum erro o recurso não é validado
+      if(erros.length != 0){
+        let path = __dirname + '/../' + req.file.path
+        try{
+          fs.unlinkSync(path) // Remove o recurso inválido
+        }catch(e){
+          console.log(e)
+        }
+        res.render('addResourceForm', {erros: erros, d: data})
+      }else{// Recurso validado com sucesso
+        dados = zip.entryDataSync("PGDRE-SIP.json").toString('utf8')
+        metadadosObj = JSON.parse(dados)
+
+        var r = {
+          resourceName: req.file.originalname,
+          files: recurso.conteudo,
+          title: metadadosObj.title,
+          subtitle: metadadosObj.subtitle,
+          type: metadadosObj.type,
+          dateCreation: metadadosObj.dateCreation,
+          dateSubmission: new Date().toISOString().slice(0, 19).split('T').join(' '),
+          visibility: metadadosObj.visibility,
+          author: metadadosObj.author
+        } 
+        let oldPath =  __dirname + '/../' + req.file.path
+        let newPath = __dirname + '/../uploads/' + metadadosObj.type + '/' + req.file.originalname
+
+        fs.rename(oldPath,newPath, erro =>{
+          if(erro) res.render('error',{error:erro})
+          else{
+            axios.post('http://localhost:7779/resource/add', r)
+              .then(dados => {
+                var n = {
+                  username: "A implementar!",
+                  resourceName: req.file.originalname,
+                  event: "O utilizador (a implementar) adicionou um novo recurso: " + req.file.originalname,
+                  date: new Date().toISOString().slice(0, 19).split('T').join(' '),
+                  visibility: r.visibility
+                }
+
+                axios.post('http://localhost:7779/news/add', n)
+                  .then(dados => {
+                   res.redirect('/resources')
+                  })
+                  .catch(e => res.render('error', {error: e})) 
+              })
+              .catch(error => res.render('error', {error: error}))
+          }
+        })
+      }
+    })
+  }else{
+    erros.push("O recurso não é um zip!")
+    res.render('addResourceForm', {erros: erros})
+  }
 })
 
 // Editar um recurso
@@ -297,7 +503,7 @@ router.post('/resources/:rname/posts/:id/comments/add', function(req, res){
   var data = new Date().toISOString().substring(0,16)
 
   var c = {
-    usename: req.body.username,
+    username: req.body.username,
     title: req.body.title,
     description: req.body.description,
     date: data
@@ -310,4 +516,57 @@ router.post('/resources/:rname/posts/:id/comments/add', function(req, res){
     .catch(erro => {res.render('error', {error: erro})})
 })
 
+// Pesquisa nos recursos
+router.post('/resources/search', function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.post('http://localhost:7779/resource/search', req.body)
+    .then(dados => {
+      res.render('resources', {rs: dados.data, d: data})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
+// Adicionar uma notícia
+// Tenho que verificar se o nome do recurso inserido é válido ou não
+router.post('/news/add', function(req, res){
+  axios.get('http://localhost:7779/resource/' + req.body.resourceName)
+    .then(dados => {
+      console.dir(dados.data)
+      if(dados.data.length == 0){ // Não existe nenhum recurso com esse nome
+        res.render('addNewsForm', {erro: "O nome do Recurso é inválido!"})
+      }else{ // Existe um recurso com este nome
+        var n = {
+          username: req.body.username,
+          resourceName: req.body.resourceName,
+          event: req.body.event,
+          date: new Date().toISOString().slice(0, 19).split('T').join(' '),
+          visibility: dados.data[0].visibility
+        }
+        axios.post('http://localhost:7779/news/add', n)
+          .then(dados => {
+            res.redirect('/home')
+          })
+          .catch(erro => {res.render('error', {error: erro})})
+      }
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
+// Editar uma notícia
+router.post('/news/edit/:id', function(req, res){
+  var n = {
+    _id: req.params.id,
+    username: req.body.username,
+    resourceName: req.body.resourceName,
+    event: req.body.event,
+    date: req.body.date,
+    visibility: req.body.visibility,
+  }
+
+  axios.post('http://localhost:7779/news/edit/' + req.params.id, n)
+    .then(dados => {
+      res.redirect('/home')
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
 module.exports = router;

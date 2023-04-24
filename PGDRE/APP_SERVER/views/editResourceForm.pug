@@ -12,8 +12,6 @@ block content
           legend Não editáveis:
           label Nome do Recurso 
           input.w3-input(type="text" name="resourceName" value=r.resourceName readonly)
-          label Autor
-          input.w3-input(type="text" name="author" value=r.author readonly)
           label Ficheiros 
           input.w3-input(type="text" name="files" value=files readonly)
           label Tipo 
@@ -27,8 +25,10 @@ block content
           input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="title" value=r.title)
           label Subtítulo
           input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="subtitle" value=r.subtitle)
-        
+          label Autor
+          input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="author" value=r.author)
+
         input.w3-btn.w3-blue.w3-margin(type="submit" value="Editar Recurso!")
 
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d}
+      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]

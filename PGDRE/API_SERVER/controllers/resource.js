@@ -51,6 +51,28 @@ module.exports.getRAutor = a => {
         })
 }
 
+module.exports.getRTitle = t => {
+    return Resource
+        .find({title: t})
+        .sort({resourceName: 1})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+module.exports.addR = r => {
+    return Resource.create(r)
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
 module.exports.updateR = r => {
     return Resource 
         .updateOne({resourceName: r.resourceName}, r)

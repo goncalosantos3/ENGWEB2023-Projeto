@@ -3,11 +3,10 @@ extends layout
 block content
     .w3-card-4
     header.w3-container.w3-blue
-      h1 Recurso
+      h1 Recurso: #[i #{r.resourceName}]
 
     .w3-container
         ul.w3-ul 
-            li #[b Nome do Recurso: ] #{r.resourceName}
             li #[b Ficheiros: ]
               ul.w3-ul 
                 each f in r.files
@@ -56,4 +55,4 @@ block content
                                 img(src="/images/delete.png" alt="delete icon" width="30" height="30")
 
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d}
+      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]

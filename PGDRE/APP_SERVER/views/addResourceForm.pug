@@ -6,13 +6,18 @@ block content
       h1 Formulário do Recurso Educativo
 
     .w3-container  
-      form.w3-container(action="/upload/resource" method="POST")
+      form.w3-container(action="/upload/resource" method="POST" enctype='multipart/form-data')
         fieldset 
             legend Detalhes:
             label Ficheiro Zip 
             input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="file" name="resource")
-
         input.w3-btn.w3-blue.w3-margin(type="submit" value="Submissão do Recurso!")
 
+      if erros != undefined
+        if erros.length != 0
+          .w3-panel.w3-yellow
+            h3 Erro!
+            for e in erros 
+              p= e
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d}
+      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]

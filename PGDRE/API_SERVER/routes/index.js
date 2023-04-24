@@ -52,9 +52,50 @@ router.get('/resource/:rname', function(req, res){
     })
 })
 
+router.post('/resource/search', function(req, res){
+  // Pesquisar por título
+  if(req.body.filtro == 'title'){
+    Resource.getRTitle(req.body.search)
+      .then(recursos => {
+        res.status(200).jsonp(recursos)
+      })
+      .catch(erro => {
+        res.status(219).jsonp({message: "Erro na pesquisa por título: " + erro})
+      })
+  }else if(req.body.filtro == 'type'){
+    Resource.listType(req.body.search)
+      .then(recursos => {
+        res.status(200).jsonp(recursos)
+      })
+      .catch(erro => {
+        res.status(220).jsonp({message: "Erro na pesquisa por tipo: " + erro})
+      })
+  }else if(req.body.filtro == 'author'){
+    Resource.getRAutor(req.body.search)
+      .then(recursos => {
+        res.status(200).jsonp(recursos)
+      })
+      .catch(erro => {
+        res.status(221).jsonp({message: "Erro na pesquisa por autor: " + erro})
+      })
+  }
+})
+
+// Adicionar um recurso
+router.post('/resource/add', function(req, res){
+  console.dir(req.body)
+  Resource.addR(req.body)
+    .then(recurso => {
+      console.dir(recurso)
+      res.status(200).jsonp(recurso)
+    })
+    .catch(erro => {
+      res.status(518).jsonp({message: "Erro na adição do recurso: " + erro})
+    })
+})
+
 // Editar um recurso
 router.post('/resource/:rname/edit', function(req, res){
-  console.log("OLA!")
   Resource.updateR(req.body)
     .then(recurso => {
       console.dir(recurso)
@@ -191,7 +232,55 @@ router.get('/news/list', function(req, res){
       res.status(200).jsonp(news)
     })
     .catch(erro => {
-      res.status(507).jsonp({message: "Erro na obtenção da lista das notícias"})
+      res.status(507).jsonp({message: "Erro na obtenção da lista das notícias: " + erro})
+    })
+})
+
+// Uma notícia em específico
+router.get('/news/:id', function(req, res){
+  News.news(req.params.id)
+    .then(news => {
+      console.dir(news)
+      res.status(200).jsonp(news)
+    })
+    .catch(erro => {
+      res.status(522).jsonp({message: "Erro na obtenção da notícia: " + erro})
+    })
+})
+
+// Adicionar uma notícia
+router.post('/news/add', function(req, res){
+  News.addNews(req.body)
+    .then(news => {
+      console.dir(news)
+      res.status(200).jsonp(news)
+    })
+    .catch(erro => {
+      res.status(519).jsonp({message: "Erro na adição da notícia: " + erro})
+    })
+})
+
+// Editar uma notícia 
+router.post('/news/edit/:id', function(req, res){
+  News.updateNews(req.body)
+    .then(news => {
+      console.dir(news)
+      res.status(200).jsonp(news)
+    })
+    .catch(erro => {
+      res.status(524).jsonp({message: "Erro na edição da notícia: " + erro})
+    })
+})
+
+// Eliminar uma notícia
+router.delete('/news/:id', function(req, res){
+  News.deleteNews(req.params.id)
+    .then(news => {
+      console.dir(news)
+      res.status(200).jsonp(news)
+    })
+    .catch(erro => {
+      res.status(523).jsonp({message: "Erro na eliminação da notícia: " + erro})
     })
 })
 

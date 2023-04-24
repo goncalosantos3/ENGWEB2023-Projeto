@@ -6,6 +6,20 @@ block content
       h1 Recursos #[a(href="/resources/add") #[img.w3-margin(src="/images/add.png" alt="add icon" width="30" height="30")]]
 
     .w3-container
+      .w3-container#child
+        h3 Pesquisa
+        form.w3-container(action="/resources/search" method="POST")
+          select(name="filtro")
+            option(value="title") Título
+            option(value="type") Tipo  
+            option(value="author") Autor 
+          input#search.w3-margin-bottom(type="text" name="search")        
+          input.w3-margin-left(type="image" alt="search icon" src="/images/search.png" height="30" width="30")
+
+      .w3-container#child
+        button.w3-btn.w3-blue  
+          a(href="/resources") Mostrar todos  
+      hr
 
       table.w3-table-all
           tr
@@ -37,4 +51,4 @@ block content
                       img.w3-round-large.w3-margin(src="/images/delete.png" alt="delete icon" width="30" height="30")
 
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d}
+      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]

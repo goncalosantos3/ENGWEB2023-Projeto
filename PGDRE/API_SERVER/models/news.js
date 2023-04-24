@@ -2,9 +2,9 @@ var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
 var newsSchema = Schema({
-    username: String,
+    username: String, // Quem deu a notícia
     resourceName: String,
-    type: String, // Like, post, insert, delete...
+    event: String, // O que aconteceu (a notícia em si)
     date: String,
     visibility: String // A mesma do recurso
 })

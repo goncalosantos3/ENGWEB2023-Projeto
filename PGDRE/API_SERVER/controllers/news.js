@@ -29,7 +29,7 @@ module.exports.rNews = rname => {
 // Get one news in particular
 module.exports.news = id => {
     return News
-        .find({_id: id})
+        .findOne({_id: id})
         .then(resposta => {
             return resposta
         })
@@ -41,6 +41,17 @@ module.exports.news = id => {
 // n: objeto news
 module.exports.addNews = n => {
     return News.create(n)
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+module.exports.updateNews = n => {
+    return News
+        .updateOne({_id: n._id}, n)
         .then(resposta => {
             return resposta
         })

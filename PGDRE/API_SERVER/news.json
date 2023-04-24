@@ -2,14 +2,14 @@
     {
         "username": "Gonçalo",
         "resourceName": "pacote1.zip",
-        "type": "Postou novos recursos",
+        "event": "Postou novos recursos",
         "date": "22-abr-2023",
         "visibility": "Public"
     },
     {
         "username": "Gonçalo",
         "resourceName": "pacote2.zip",
-        "type": "Postou novos recursos",
+        "event": "Postou novos recursos",
         "date": "22-abr-2023",
         "visibility": "Public"
     }

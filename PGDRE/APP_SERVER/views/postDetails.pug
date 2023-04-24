@@ -40,7 +40,7 @@ block content
                         td= c.date
                         td 
                           a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/comments/" + c.id + "/delete")
-                            img.w3-round-large.w3-margin(src="/images/delete.png" alt="delete icon" width="30" height="30")
+                            img.w3-round-large(src="/images/delete.png" alt="delete icon" width="30" height="30")
 
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d}
+      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]
