@@ -4,20 +4,29 @@
         "name": "Gonçalo",
         "username": "Goncas",
         "password": "123",
-        "role": "Administrator"
+        "level": "Administrator",
+        "dateCreated": "hoje",
+        "lastAccess": "hoje",
+        "active": true
     },
     {
         "email": "a456@alunos.uminho.pt",
         "name": "Zequinha",
         "username": "Zeca",
         "password": "456",
-        "role": "Consumer"
+        "level": "Consumer",
+        "dateCreated": "hoje",
+        "lastAccess": "hoje",
+        "active": true
     },
     {
         "email": "a789@alunos.uminho.pt",
         "name": "José",
         "username": "Zé",
         "password": "789",
-        "role": "Producer"
+        "level": "Producer",
+        "dateCreated": "hoje",
+        "lastAccess": "hoje",
+        "active": true
     }
 ]

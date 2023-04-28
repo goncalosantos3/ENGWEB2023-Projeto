@@ -2,7 +2,7 @@ var User = require('../models/user')
 
 // User list
 module.exports.list = () => {
-    return User.find()
+    return User.find({active: true})
                .sort({nome: 1})
         .then(resposta => {
             return resposta
@@ -24,7 +24,7 @@ module.exports.getUser = username => {
 }
 
 // u tem que ser o objeto do user
-module.exports.insertUser = u => {
+module.exports.addUser = u => {
     return User.create(u)
         .then(resposta => {
             return resposta
@@ -34,10 +34,9 @@ module.exports.insertUser = u => {
         })
 }
 
-// O _id do newUser tem que ser o mesmo do user antigo
 // Evitar mudar o username (pode causar problemas porque é considerado um id)
 module.exports.updateUser = newUser => {
-    return User.updateOne({_id: newUser._id}, newUser)  
+    return User.updateOne({username: newUser.username}, newUser)  
         .then(resposta => {
             return resposta
         })
@@ -48,11 +47,22 @@ module.exports.updateUser = newUser => {
 
 // Faz a desativação (e não e eliminação) de um utilizador
 module.exports.deactivateUser = username => {
-    // return User.deleteOne({username: username})
-    //     .then(resposta => {
-    //         return resposta
-    //     })
-    //     .catch(erro => {
-    //         return erro
-    //     })
+    return User.updateOne({username: username}, {$set: {active: false}})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+// Faz a ativação de um utilizador
+module.exports.activateUser = username => {
+    return User.updateOne({username: username}, {$set: {active: true}})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
 }

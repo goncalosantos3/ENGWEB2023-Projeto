@@ -1,57 +1,40 @@
 var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var session = require('express-session')
 
-// O passport já tem uma sessão implementada
 var passport = require('passport')
 var LocalStrategy = require('passport-local').Strategy
 
-// Configuração com a BD
-var mongoose = require('mongoose')
-var mongoDB = 'mongodb://127.0.0.1/PGDRE'
-mongoose.connect(mongoDB, {
-  useNewUrlParser: true, useUnifiedTopology: true})
-var db = mongoose.connection
-db.on('error', console.error.bind(console, 'MongoDB connection error...'))
-db.on('open', function(){
-  console.log("Conexão com MongoDB realizada com sucesso!")
-})
+var mongoose = require('mongoose');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-
-var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
+mongoose.connect('mongodb://127.0.0.1/PGDRE', 
+      { useNewUrlParser: true,
+        useUnifiedTopology: true,
+        serverSelectionTimeoutMS: 5000});
+  
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'Erro de conexão ao MongoDB...'));
+db.once('open', function() {
+  console.log("Conexão ao MongoDB realizada com sucesso...")
+});
 
 // passport config
-var UserModel = require('./models/user')
-// UserModel.authenticate é criada ao fazer o plugin
-passport.use(new LocalStrategy(UserModel.authenticate()))
-passport.serializeUser(UserModel.serializeUser())
-passport.deserializeUser(UserModel.deserializeUser())
+var User = require('./models/user');
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
+var usersRouter = require('./routes/user');
+
+var app = express();
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({
-  resave: false,
-  saveUninitialized: true,
-  secret: 'bla bla bla'}))
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
@@ -67,7 +50,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.jsonp({error: err});
 });
 
 module.exports = app;

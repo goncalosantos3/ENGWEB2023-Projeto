@@ -7,7 +7,24 @@ var multer = require('multer');
 var upload = multer({dest: 'uploads'}) // Guarda tudo numa pasta "uploads"
 
 const StreamZip = require('node-stream-zip');
-const JSZip = require('jszip');
+const JSZip = require('jszip'); // Verificar se preciso disto!!!
+
+// Esta função verifica primeiro se existe um token no pedido
+// Depois verifica se o token é válido ou não
+function verificaToken(req, res, next){
+  if(req.cookies && req.cookies.token){
+    jwt.verify(req.cookies.token, "PGDRE", function(e, payload){
+      if(e){// Erro na validação do token
+        res.render('error', {error: "O token do pedido falhou na validação..."})
+      }
+      else{ // Só avança se existir um token e se este for verificado com sucesso
+        next()
+      }
+    })
+  }else{ // Não existe token
+    res.render('error', {error: "O pedido não tem um token..."})
+  }
+}
 
 /*                                GETS                                   */
 /* GET home page. */
@@ -30,11 +47,12 @@ router.get('/login', function(req, res){
 
 // logout
 router.get('/logout', function(req, res){
-  // Inserir código necessário aqui para terminar a sessão do utilizador
+  res.cookie('token', "token.destruido")
   res.redirect('/')
 })
 
-router.get('/home', function(req, res){
+// Página inicial 
+router.get('/home', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
   axios.get('http://localhost:7779/news/list')
     .then(dados => {
@@ -45,7 +63,7 @@ router.get('/home', function(req, res){
 
 // Vai servir para gerar a página com o perfil do utilizador
 // Tem que se verificar se o utilizador já está autenticado ou não
-router.get('/profile', function(req, res){  
+router.get('/profile', verificaToken, function(req, res){  
   var data = new Date().toISOString().substring(0,16)
   res.render('profile', {d: data})
 })
@@ -244,20 +262,34 @@ router.get('/news/delete/:id/confirm', function(req, res){
 })
 
 /*                                POSTS                                 */
-// Criar um novo registo de utilizador (verificar se não existe um utilizador com as mesmas credenciais)
-router.post('/register', function(req,res){
+// Criar um novo registo de utilizador
+// O utilizador não fica autenticado, apenas é inserido um novo utilizador na BD
+// Tem que se verificar se já existe algum user com o mesmo username
+router.post('/register', verificaToken, function(req,res){
   if(req.body.role == undefined){
     // Faltou completar o papel do utilizador
     res.render('registerForm', {erroRole: true}) 
   }
+
+  axios.post("http://localhost:7778/register?token=" + req.cookies.token, req.body)
+    .then(dados => {
+      // Falta fazer a template de confirmação de registo
+      res.redirect('/')
+    })
+    .catch(erro => {
+      res.render('error', {error: erro})
+    })
 })
 
-// Verificar se o utilizador já existe na base de dados
 router.post('/login', function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  // Falta meter o código da autenticação do utilizador
-  // axios.post('http://localhost:7778/users/login', req.body)
-  res.redirect('home')
+  axios.post("http://localhost:7778/login", req.body)
+    // A resposta, em caso de sucesso, é associado o jwt ao user
+    .then(dados => {
+      res.cookie('token', dados.data.token)
+      res.redirect('/')
+    })
+    .catch(erro => {res.render('error', {error: erro})})
 })  
 
 // Função que verifica se o rname do novo recurso já existia ou não

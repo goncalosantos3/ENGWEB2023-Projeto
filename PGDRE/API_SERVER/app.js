@@ -29,6 +29,35 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Middleware de proteção (nega pedidos não autenticados)
+app.use(function(req, res, next){
+  var myToken
+  if(req.query && req.query.token)
+    myToken = req.query.token
+  else if(req.body && req.body.token)
+    myToken = req.body.token
+  else 
+    myToken = false
+  
+  // Se não tiver nem num, nem noutro este if dá falso
+  if(myToken){
+    jwt.verify(myToken, "PGDRE", function(e, payload){
+      if(e){
+        // Erro na verificação do token
+        res.status(401).jsonp({error: e})
+      }
+      else{
+        // Sucesso na verificação do token
+        next()
+      }
+    })
+  }
+  else{
+    // Não existe token
+    res.status(401).jsonp({error: "Token inexistente!"})
+  }
+})
+
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
