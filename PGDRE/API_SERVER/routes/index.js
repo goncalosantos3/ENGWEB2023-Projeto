@@ -228,7 +228,6 @@ router.delete('/posts/:id', function(req, res){
 router.get('/news/list', function(req, res){
   News.newsList()
     .then(news => {
-      console.dir(news)
       res.status(200).jsonp(news)
     })
     .catch(erro => {

@@ -1,8 +1,7 @@
 var mongoose = require('mongoose')
 var passportLocalMongoose = require('passport-local-mongoose')
-var Schema = mongoose.Schema
 
-var userSchema = Schema({
+var userSchema = new mongoose.Schema({
     email: String,
     name: String,
     username: String, // Considerado o id (NÃO REPETÍVEL)
@@ -16,4 +15,4 @@ var userSchema = Schema({
 
 userSchema.plugin(passportLocalMongoose)
 
-module.exports = mongoose.model('user', userSchema, 'users')
+module.exports = mongoose.model('user', userSchema)

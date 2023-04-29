@@ -7,7 +7,7 @@ var LocalStrategy = require('passport-local').Strategy
 
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1/PGDRE', 
+mongoose.connect('mongodb://127.0.0.1/authdemoEW', 
       { useNewUrlParser: true,
         useUnifiedTopology: true,
         serverSelectionTimeoutMS: 5000});

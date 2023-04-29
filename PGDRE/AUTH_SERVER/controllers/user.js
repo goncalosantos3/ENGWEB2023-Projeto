@@ -2,7 +2,31 @@ var User = require('../models/user')
 
 // User list
 module.exports.list = () => {
+    return User.find()
+               .sort({nome: 1})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+// Active users
+module.exports.activeUsers = () => {
     return User.find({active: true})
+               .sort({nome: 1})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+// Deactivated users
+module.exports.deactiveUsers = () => {
+    return User.find({active: false})
                .sort({nome: 1})
         .then(resposta => {
             return resposta
@@ -26,6 +50,17 @@ module.exports.getUser = username => {
 // u tem que ser o objeto do user
 module.exports.addUser = u => {
     return User.create(u)
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+// Atualiza o campo lastAccess
+module.exports.loginUser = (username, data) => {
+    return User.updateOne({username: username}, {$set: {lastAccess: data}})
         .then(resposta => {
             return resposta
         })

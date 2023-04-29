@@ -1,8 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var jwt = require('jsonwebtoken')
 
 // Configuração com a BD
 var mongoose = require('mongoose')
@@ -19,15 +18,9 @@ var indexRouter = require('./routes/index');
 
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware de proteção (nega pedidos não autenticados)
 app.use(function(req, res, next){
@@ -38,16 +31,17 @@ app.use(function(req, res, next){
     myToken = req.body.token
   else 
     myToken = false
-  
+
   // Se não tiver nem num, nem noutro este if dá falso
   if(myToken){
-    jwt.verify(myToken, "PGDRE", function(e, payload){
+    jwt.verify(myToken, "PGDRE2023", function(e, payload){
       if(e){
         // Erro na verificação do token
         res.status(401).jsonp({error: e})
       }
       else{
         // Sucesso na verificação do token
+        console.log("Sucesso na autenticação!")
         next()
       }
     })

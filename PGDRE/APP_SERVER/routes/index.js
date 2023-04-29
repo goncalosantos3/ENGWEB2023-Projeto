@@ -9,15 +9,18 @@ var upload = multer({dest: 'uploads'}) // Guarda tudo numa pasta "uploads"
 const StreamZip = require('node-stream-zip');
 const JSZip = require('jszip'); // Verificar se preciso disto!!!
 
+var jwt = require("jsonwebtoken")
+
 // Esta função verifica primeiro se existe um token no pedido
 // Depois verifica se o token é válido ou não
 function verificaToken(req, res, next){
   if(req.cookies && req.cookies.token){
-    jwt.verify(req.cookies.token, "PGDRE", function(e, payload){
+    jwt.verify(req.cookies.token, "PGDRE2023", function(e, payload){
       if(e){// Erro na validação do token
         res.render('error', {error: "O token do pedido falhou na validação..."})
       }
       else{ // Só avança se existir um token e se este for verificado com sucesso
+        req.user = payload // Informações do user -> req.user
         next()
       }
     })
@@ -46,7 +49,7 @@ router.get('/login', function(req, res){
 })
 
 // logout
-router.get('/logout', function(req, res){
+router.get('/logout', verificaToken, function(req, res){
   res.cookie('token', "token.destruido")
   res.redirect('/')
 })
@@ -54,9 +57,10 @@ router.get('/logout', function(req, res){
 // Página inicial 
 router.get('/home', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/news/list')
+  axios.get('http://localhost:7779/news/list?token=' + req.cookies.token)
     .then(dados => {
-      res.render('home', {news: dados.data, d: data})
+      console.dir(req.user)
+      res.render('home', {u: req.user, news: dados.data, d: data})
     })
     .catch(erro => res.render('error', {error: erro}))
 })
@@ -65,34 +69,46 @@ router.get('/home', verificaToken, function(req, res){
 // Tem que se verificar se o utilizador já está autenticado ou não
 router.get('/profile', verificaToken, function(req, res){  
   var data = new Date().toISOString().substring(0,16)
-  res.render('profile', {d: data})
+  axios.get('http://localhost:7778/users/get/' + req.user.username + "?token=" + req.cookies.token)
+    .then(dados => {
+      res.render('profile', {u: dados.data, d: data})
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
+router.get('/profile/edit', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7778/users/get/' + req.user.username + "?token=" + req.cookies.token)
+    .then(dados => {
+      res.render('editProfileForm', {u: dados.data, d: data})
+    })
+    .catch(erro => res.render('error', {error: erro}))
 })
 
 // Lista de todos os recursos
-router.get('/resources', function(req, res){
+router.get('/resources', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/list')
+  axios.get('http://localhost:7779/resource/list?token=' + req.cookies.token)
     .then(dados => {
-      res.render('resources', {rs: dados.data, d: data})
+      res.render('resources', {u: req.user, rs: dados.data, d: data})
     })
     .catch(erro => res.render('error', {error: erro}))
 })
 
 // Adicionar um novo recurso
-router.get('/resources/add', function(req, res){
+router.get('/resources/add', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  res.render('addResourceForm', {d: data})
+  res.render('addResourceForm', {u: req.user, d: data})
 })
 
 // Vai buscar um recurso em específico
-router.get('/resources/:rname', function(req, res){
+router.get('/resources/:rname', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(recurso => {
-      axios.get('http://localhost:7779/resource/' + req.params.rname + "/posts")
+      axios.get('http://localhost:7779/resource/' + req.params.rname + "/posts?token=" + req.cookies.token)
         .then(posts => {
-          console.dir(posts.data)
-          res.render('resourceDetails', {r: recurso.data[0], ps: posts.data, d: data})
+          res.render('resourceDetails', {u: req.user, r: recurso.data[0], ps: posts.data, d: data})
         })
         .catch(erro => {
           erro => res.render('error', {error: erro})
@@ -101,7 +117,7 @@ router.get('/resources/:rname', function(req, res){
     .catch(erro => res.render('error', {error: erro}))
 })
 
-router.get('/resources/edit/:rname', function(req, res){
+router.get('/resources/edit/:rname', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
   axios.get('http://localhost:7779/resource/' + req.params.rname)
     .then(dados => {
@@ -114,7 +130,7 @@ router.get('/resources/edit/:rname', function(req, res){
 })
 
 // Pedido de eliminação de um recurso
-router.get('/resources/delete/:rname', function(req, res){
+router.get('/resources/delete/:rname', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
   axios.get('http://localhost:7779/resource/' + req.params.rname)
     .then(dados => {
@@ -124,7 +140,7 @@ router.get('/resources/delete/:rname', function(req, res){
 })
 
 // Eliminar um recurso
-router.get('/resources/delete/:rname/confirm', function(req, res){
+router.get('/resources/delete/:rname/confirm', verificaToken, function(req, res){
   axios.delete('http://localhost:7779/resource/' + req.params.rname + "/delete")
     .then(dados => {
       res.redirect('/resources')
@@ -133,7 +149,7 @@ router.get('/resources/delete/:rname/confirm', function(req, res){
 })
 
 // Download de um recurso
-router.get('/resources/download/:rname', function(req, res){
+router.get('/resources/download/:rname', verificaToken, function(req, res){
   axios.get('http://localhost:7779/resource/' + req.params.rname)
     .then(dados => {
       console.dir(dados.data)
@@ -144,7 +160,7 @@ router.get('/resources/download/:rname', function(req, res){
 })
 
 // Pedido para adicionar um recurso
-router.get('/upload/resource', function(req, res){
+router.get('/upload/resource', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
   res.render('addResourceForm', {d: data})
 })
@@ -266,15 +282,21 @@ router.get('/news/delete/:id/confirm', function(req, res){
 // O utilizador não fica autenticado, apenas é inserido um novo utilizador na BD
 // Tem que se verificar se já existe algum user com o mesmo username
 router.post('/register', verificaToken, function(req,res){
-  if(req.body.role == undefined){
-    // Faltou completar o papel do utilizador
+  var data = new Date().toISOString().substring(0,16)
+  if(req.body.level == undefined){
+    // Faltou completar o nível do utilizador
     res.render('registerForm', {erroRole: true}) 
   }
 
-  axios.post("http://localhost:7778/register?token=" + req.cookies.token, req.body)
+  axios.post("http://localhost:7778/users/register?token=" + req.cookies.token, req.body)
     .then(dados => {
-      // Falta fazer a template de confirmação de registo
-      res.redirect('/')
+      axios.get("http://localhost:7778/users/get/" + req.body.username + "?token=" + req.cookies.token)
+        .then(dados => {
+          res.render('confirmRegister', {u: dados.data, d: data})
+        })
+        .catch(erro => {
+          res.render('error', {error: erro})
+        })
     })
     .catch(erro => {
       res.render('error', {error: erro})
@@ -283,20 +305,39 @@ router.post('/register', verificaToken, function(req,res){
 
 router.post('/login', function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.post("http://localhost:7778/login", req.body)
+  axios.post("http://localhost:7778/users/login", req.body)
     // A resposta, em caso de sucesso, é associado o jwt ao user
     .then(dados => {
       res.cookie('token', dados.data.token)
-      res.redirect('/')
+      res.redirect('/home')
     })
     .catch(erro => {res.render('error', {error: erro})})
 })  
+
+router.post('/profile/edit', verificaToken, function(req, res){
+  axios.get("http://localhost:7778/users/get/" + req.body.username + "?token=" + req.cookies.token)
+    .then(dados => {
+      if(req.body.password == undefined){
+        req.body.password = dados.data.password
+      }
+      if(req.body.active == undefined){
+        req.body.active = dados.data.active
+      }
+
+      axios.put("http://localhost:7778/users/edit/" + req.body.username + "?token=" + req.cookies.token, req.body)
+        .then(dados => {
+          res.redirect('/profile')
+        })
+        .catch(erro => {res.render('error', {error: erro})})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
 
 // Função que verifica se o rname do novo recurso já existia ou não
 // Se já existir, o recurso tem que ser rejeitado
 function verificaRName(req, res, next){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.file.originalname)
+  axios.get('http://localhost:7779/resource/' + req.file.originalname + "?token=" + req.cookies.token)
     .then(dados => {
       if(dados.data.length != 0){ // Já existe um recurso com este nome
         let path = __dirname + '/../' + req.file.path
@@ -316,7 +357,7 @@ function verificaRName(req, res, next){
 // Upload de um novo recurso educacional
 // Tem que se realizar a verificação de que o zip está correto
 // Os recursos não podem ter nomes repetidos (resourceName é considerado um id)
-router.post('/upload/resource', upload.single('resource'), verificaRName, function(req, res){
+router.post('/upload/resource', upload.single('resource'), verificaToken, verificaRName,function(req, res){
   var data = new Date().toISOString().substring(0,16)
   var metadata
   erros = []
@@ -341,7 +382,6 @@ router.post('/upload/resource', upload.single('resource'), verificaRName, functi
     })
 
     zip.on("error", (err) => {
-      console.log("xD")
       res.render("error", {error: err})
     });
     zip.on('ready', () => {
@@ -431,17 +471,17 @@ router.post('/upload/resource', upload.single('resource'), verificaRName, functi
         fs.rename(oldPath,newPath, erro =>{
           if(erro) res.render('error',{error:erro})
           else{
-            axios.post('http://localhost:7779/resource/add', r)
+            axios.post('http://localhost:7779/resource/add?token=' + req.cookies.token, r)
               .then(dados => {
                 var n = {
-                  username: "A implementar!",
+                  username: req.user.username,
                   resourceName: req.file.originalname,
-                  event: "O utilizador (a implementar) adicionou um novo recurso: " + req.file.originalname,
+                  event: "O utilizador " + req.user.username + " adicionou um novo recurso: " + req.file.originalname,
                   date: new Date().toISOString().slice(0, 19).split('T').join(' '),
                   visibility: r.visibility
                 }
 
-                axios.post('http://localhost:7779/news/add', n)
+                axios.post('http://localhost:7779/news/add?token=' + req.cookies.token, n)
                   .then(dados => {
                    res.redirect('/resources')
                   })
@@ -549,11 +589,19 @@ router.post('/resources/:rname/posts/:id/comments/add', function(req, res){
 })
 
 // Pesquisa nos recursos
-router.post('/resources/search', function(req, res){
+router.post('/resources/search', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.post('http://localhost:7779/resource/search', req.body)
+  if(req.body.search == ""){
+    axios.get('http://localhost:7779/resource/list?token=' + req.cookies.token)
+      .then(dados => {
+        res.render('resources', {u: req.user, rs: dados.data, d: data})
+      })
+      .catch(erro => res.render('error', {error: erro}))
+  }
+
+  axios.post('http://localhost:7779/resource/search?token=' + req.cookies.token, req.body)
     .then(dados => {
-      res.render('resources', {rs: dados.data, d: data})
+      res.render('resources', {u: req.user, rs: dados.data, d: data})
     })
     .catch(erro => {res.render('error', {error: erro})})
 })

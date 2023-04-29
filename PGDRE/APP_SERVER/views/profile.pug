@@ -6,11 +6,32 @@ block content
       h1 Profile #[img(src="/images/profile.png" alt="profile icon" height="50" width="50")]
     
     .w3-container  
-        ul 
-            li #[b Nome:] Por implementar!
-            li #[b Email:] Por implementar!   
-            li #[b Username:] Por implementar!   
-            li #[b Papel:] Por implementar! 
+      if u
+        ul.w3-ul
+          li #[b Nome:] #{u.name}
+          li #[b Email:] #{u.email}
+          li #[b Username:] #{u.username} 
+          li #[b Nível:] #{u.level}
+          li #[b Active: ] #{u.active}
+          li #[b Operações: ]
+            ul.w3-ul
+              li
+                a(href="/profile/edit") Editar Perfil
+                  img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/edit.png" alt="edit icon" width="30" height="30")
+              if u.active == true
+                li 
+                  a(href="/profile/deactivate") Desativar Conta
+                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/deactivate.png" alt="edit icon" width="30" height="30")
+              if u.active == false 
+                li 
+                  a(href="/profile/activate") Ativar Conta
+                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/activate.png" alt="edit icon" width="30" height="30")
+              if u.level == "admin"
+                li 
+                  a(href="/register") Adicionar utilizador 
+                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/add.png" alt="edit icon" width="30" height="30")
+      else 
+        p Sem informações a apresentar!
 
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]
