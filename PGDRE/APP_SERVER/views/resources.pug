@@ -25,6 +25,7 @@ block content
               th Subtítulo
               th Tipo
               th Autor 
+              th Submissor
               th Detalhes
               th Operações
 
@@ -37,6 +38,7 @@ block content
                       td Indefinido
                   td= r.type
                   td= r.author
+                  td= r.submitter
                   td  
                     a(href="/resources/" + r.resourceName)
                       img.w3-margin(src="/images/details.png" alt="details icon" width="30" height="30")

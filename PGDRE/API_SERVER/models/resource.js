@@ -14,7 +14,8 @@ var resourceSchema = Schema({
     dateCreation: String,
     dateSubmission: String,
     visibility: String, // Public ou Private
-    author: String
+    author: String,
+    submitter: String
 })
 
 module.exports = mongoose.model('resource', resourceSchema, 'resources')

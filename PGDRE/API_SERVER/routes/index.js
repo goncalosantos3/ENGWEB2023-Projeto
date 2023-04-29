@@ -157,14 +157,18 @@ router.get('/resource/:rname/posts/:id', function(req, res){
 router.get('/resource/:rname/posts/:id/like', function(req, res){
   Post.getPost(req.params.id)
     .then(post => {
-      post.likes += 1
-      Post.updatePost(post)
-        .then(dados => {
-          res.status(200).jsonp(dados)
-        })
-        .catch(erro => {
-          res.status(516).jsonp({message: "Erro na edição do post " + req.params.id + "do recurso " + req.params.rname + ": " + erro})
-        })
+      if(!post.liked_by.includes(req.user.username)){
+        post.liked_by.push(req.user.username)
+        Post.updatePost(post)
+          .then(dados => {
+            res.status(200).jsonp(dados)
+          })
+          .catch(erro => {
+            res.status(516).jsonp({message: "Erro na edição do post " + req.params.id + "do recurso " + req.params.rname + ": " + erro})
+          })
+      }else{// O user já deu like
+        res.status(200).jsonp(post)
+      }
     })
     .catch(erro => {
       res.status(517).jsonp({message: "Erro na obtenção do post" + req.params.id + "do recurso " + req.params.rname + ": " + erro})
@@ -221,6 +225,28 @@ router.delete('/posts/:id', function(req, res){
     })
     .catch(erro => {
       res.status(511).jsonp({message: "Erro na eliminação do post" + req.params.id + "do recurso " + req.params.rname + ": " + erro})
+    })
+})
+
+// Eliminação de um comentário
+router.delete('/resource/:rname/posts/:p_id/comments/:c_id', function(req, res){
+  Post.getPost(req.params.p_id)
+    .then(post => {
+      var comments = post.comments.filter(c => {
+        if(c._id != req.params.c_id)
+          return c
+      })
+      post.comments = comments
+      Post.updatePost(post)
+        .then(post => {
+          res.status(200).jsonp(post)
+        })
+        .catch(erro => {
+          res.status(531).jsonp({message: "Erro na atualização do post" + req.params.p_id + "do recurso " + req.params.rname + ": " + erro})
+        })
+    })
+    .catch(erro => {
+      res.status(530).jsonp({message: "Erro na obtenção do post" + req.params.p_id + "do recurso " + req.params.rname + ": " + erro})
     })
 })
 

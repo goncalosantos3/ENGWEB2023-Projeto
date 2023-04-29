@@ -17,5 +17,10 @@ block content
 
         input.w3-btn.w3-blue.w3-margin(type="submit" value="Login!")
 
+    if message != undefined
+      .w3-panel.w3-yellow
+        h3 Erro no login!
+        p= message
+
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d}

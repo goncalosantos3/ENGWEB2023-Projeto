@@ -17,9 +17,9 @@ block content
         center
             h2 Tem a certeza que quer remover este Post?
             button.w3-btn.w3-round.w3-green.w3-margin
-                a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/delete/confirm") Confirm 
+                a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/delete/confirm") Confirmar 
             button.w3-btn.w3-round.w3-red.w3-margin
-                a(href="/resources/" + p.resourceName) Cancel
+                a(href="/resources/" + p.resourceName + "/posts/" + p._id) Cancelar
     
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]

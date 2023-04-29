@@ -85,6 +85,49 @@ router.get('/profile/edit', verificaToken, function(req, res){
     .catch(erro => res.render('error', {error: erro}))
 })
 
+// Pedido de desativação de conta
+router.get('/profile/deactivate', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7778/users/get/' + req.user.username + "?token=" + req.cookies.token)
+    .then(dados => {
+      res.render('confirmProfileDeactivation', {u: dados.data, d: data})
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
+// Desativar uma conta implica:
+// 1. Alterar o campo active do user
+// 2. Não ser possível fazer login com esta conta até que esta seja ativada outra vez
+// 3. Fazer o logout da conta
+router.get('/profile/deactivate/confirm', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.put('http://localhost:7778/users/' + req.user.username + '/deactivate?token=' + req.cookies.token)
+    .then(dados => {
+      res.redirect('/logout')
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
+router.get('/profile/activate', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7778/users/get/deactive?token=' + req.cookies.token)
+    .then(dados => {
+      res.render('activateProfile', {us: dados.data, d: data})
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
+// Ativar uma conta
+// Para ativar uma conta basta mudar o conta active do user
+router.get('/profile/activate/:username', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.put('http://localhost:7778/users/'+ req.params.username + '/activate?token=' + req.cookies.token)
+    .then(dados => {
+      res.redirect('/profile/activate')
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
 // Lista de todos os recursos
 router.get('/resources', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
@@ -119,11 +162,16 @@ router.get('/resources/:rname', verificaToken, function(req, res){
 
 router.get('/resources/edit/:rname', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(dados => {
       var files = ""
-      for(let i=0; i<dados.data[0].files.length; i++)
-        files += dados.data[0].files[i] + ", "
+      for(let i=0; i<dados.data[0].files.length; i++){
+        if(i != 0){
+          files += ", "
+        }
+        files += dados.data[0].files[i]
+      }
+
       res.render('editResourceForm', {r: dados.data[0], files: files, d: data})
     })
     .catch(erro => res.render('error', {error: erro}))
@@ -132,7 +180,7 @@ router.get('/resources/edit/:rname', verificaToken, function(req, res){
 // Pedido de eliminação de um recurso
 router.get('/resources/delete/:rname', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('confirmDeleteResource', {r: dados.data[0], d: data})
     })
@@ -141,7 +189,7 @@ router.get('/resources/delete/:rname', verificaToken, function(req, res){
 
 // Eliminar um recurso
 router.get('/resources/delete/:rname/confirm', verificaToken, function(req, res){
-  axios.delete('http://localhost:7779/resource/' + req.params.rname + "/delete")
+  axios.delete('http://localhost:7779/resource/' + req.params.rname + "/delete?token=" + req.cookies.token)
     .then(dados => {
       res.redirect('/resources')
     })
@@ -165,64 +213,59 @@ router.get('/upload/resource', verificaToken, function(req, res){
   res.render('addResourceForm', {d: data})
 })
 
-// Adicionar um post
-router.get('/resources/:rname/posts/add', function(req, res){
+// Pedido para adicionar um post
+router.get('/resources/:rname/posts/add', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(dados => {
-      console.dir(dados.data)
-      res.render('addPostForm', {r: dados.data[0], d: data})
+      res.render('addPostForm', {u: req.user, r: dados.data[0], d: data})
     })
     .catch(erro => {res.render('error', {error: erro})})
 })
 
 // Vai buscar a informação de um post em específico
-router.get('/resources/:rname/posts/:id', function(req, res){
+router.get('/resources/:rname/posts/:id', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
-      console.dir(dados.data)
-      res.render('postDetails', {p: dados.data, d: data})
+      res.render('postDetails', {u: req.user, p: dados.data, d: data})
     })
     .catch(erro => {res.render('error', {error: erro})})
 })
 
 // Edição de um post
-router.get('/resources/:rname/posts/:id/edit', function(req, res){
+router.get('/resources/:rname/posts/:id/edit', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
-      console.dir(dados.data)
       res.render('editPostForm', {p: dados.data, d: data})
     })
     .catch(erro => {res.render('error', {error: erro})})
 })
 
 // Pedido para eliminar um post
-router.get('/resources/:rname/posts/:id/delete', function(req, res){
+router.get('/resources/:rname/posts/:id/delete', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
-      console.dir(dados.data)
       res.render('confirmDeletePost', {p: dados.data, d: data})
     })
     .catch(erro => res.render('error', {error: erro}))
 })
 
 // Confirmação da eliminação de um post
-router.get('/resources/:rname/posts/:id/delete/confirm', function(req, res){
+router.get('/resources/:rname/posts/:id/delete/confirm', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.delete('http://localhost:7779/posts/' + req.params.id)
+  axios.delete('http://localhost:7779/posts/' + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
-      console.dir(dados.data)
-      res.render('confirmDeletePost', {p: dados.data, d: data})
+      res.redirect('/resources/' + req.params.rname)
     })
     .catch(erro => res.render('error', {error: erro}))
 })
 
 // Adicionar um like a um post
-router.get('/resources/:rname/posts/:id/like', function(req, res){
-  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id + '/like')
+router.get('/resources/:rname/posts/:id/like', verificaToken, function(req, res){
+  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id + '/like?token=' + req.cookies.token)
     .then(dados => {
       res.redirect('/resources/' + req.params.rname + '/posts/' + req.params.id)
     })
@@ -230,39 +273,54 @@ router.get('/resources/:rname/posts/:id/like', function(req, res){
 })
 
 // Pedido para adicionar um comentário a um post
-router.get('/resources/:rname/posts/:id/comments/add', function(req, res){
+router.get('/resources/:rname/posts/:id/comments/add', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
-      console.dir(dados.data)
-      res.render('addCommentForm', {p: dados.data, d: data})
+      res.render('addCommentForm', {u: req.user, p: dados.data, d: data})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
+// Eliminar um comentário de um post
+router.get('/resources/:rname/posts/:p_id/comments/:c_id/delete', verificaToken, function(req, res){
+  axios.delete('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.p_id + "/comments/" + req.params.c_id + "?token=" + req.cookies.token)
+    .then(dados => {
+      res.redirect('/resources/' + req.params.rname + "/posts/" + req.params.p_id)
     })
     .catch(erro => {res.render('error', {error: erro})})
 })
 
 // Pedido para adicionar uma notícia
-router.get('/news/add', function(req, res){
+router.get('/news/add', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  res.render('addNewsForm', {d: data})
+  axios.get('http://localhost:7779/resource/list?token=' + req.cookies.token)
+    .then(dados => {
+      res.render('addNewsForm', {u: req.user, rs: dados.data, d: data})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
 })
 
 // Pedido para editar uma notícia
-router.get('/news/edit/:id', function(req, res){
+router.get('/news/edit/:id', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/news/' + req.params.id)
+  axios.get('http://localhost:7779/resource/list?token=' + req.cookies.token)
     .then(dados => {
-      console.dir(dados)
-      res.render('editNewsForm', {n: dados.data, d: data})
+      var rs = dados.data
+      axios.get('http://localhost:7779/news/' + req.params.id + "?token=" + req.cookies.token)
+        .then(dados => {
+          res.render('editNewsForm', {rs: rs, n: dados.data, d: data})
+        })
+        .catch(erro => {res.render('error', {error: erro})})
     })
     .catch(erro => {res.render('error', {error: erro})})
 })
 
 // Pedido para remover uma notícia
-router.get('/news/delete/:id', function(req, res){
+router.get('/news/delete/:id', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/news/' + req.params.id)
+  axios.get('http://localhost:7779/news/' + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
-      console.dir(dados)
       res.render('deleteNewsConfirm', {n: dados.data, d: data})
     })
     .catch(erro => {res.render('error', {error: erro})})
@@ -308,8 +366,12 @@ router.post('/login', function(req, res){
   axios.post("http://localhost:7778/users/login", req.body)
     // A resposta, em caso de sucesso, é associado o jwt ao user
     .then(dados => {
-      res.cookie('token', dados.data.token)
-      res.redirect('/home')
+      if(dados.data.message != undefined){ // A conta está desativa
+        res.render('loginForm', {message: dados.data.message})
+      }else{
+        res.cookie('token', dados.data.token)
+        res.redirect('/home')
+      }
     })
     .catch(erro => {res.render('error', {error: erro})})
 })  
@@ -463,7 +525,8 @@ router.post('/upload/resource', upload.single('resource'), verificaToken, verifi
           dateCreation: metadadosObj.dateCreation,
           dateSubmission: new Date().toISOString().slice(0, 19).split('T').join(' '),
           visibility: metadadosObj.visibility,
-          author: metadadosObj.author
+          author: metadadosObj.author,
+          submitter: req.user.username
         } 
         let oldPath =  __dirname + '/../' + req.file.path
         let newPath = __dirname + '/../uploads/' + metadadosObj.type + '/' + req.file.originalname
@@ -499,8 +562,8 @@ router.post('/upload/resource', upload.single('resource'), verificaToken, verifi
 })
 
 // Editar um recurso
-router.post('/resources/:rname/edit', function(req, res){
-  axios.get('http://localhost:7779/resource/' + req.params.rname)
+router.post('/resources/:rname/edit', verificaToken, function(req, res){
+  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(dados => {
       var r = {
         resourceName: req.body.resourceName,
@@ -511,10 +574,11 @@ router.post('/resources/:rname/edit', function(req, res){
         dateCreation: dados.data[0].dateCreation,
         dateSubmission: dados.data[0].dateSubmission,
         visibility: req.body.visibility,
-        author: req.body.author
+        author: req.body.author,
+        submitter: req.body.submitter
       }
 
-      axios.post('http://localhost:7779/resource/' + req.params.rname + "/edit", r)
+      axios.post('http://localhost:7779/resource/' + req.params.rname + "/edit?token=" +req.cookies.token, r)
       .then(dados => {
         res.redirect('/resources')
       })
@@ -524,7 +588,7 @@ router.post('/resources/:rname/edit', function(req, res){
 })
 
 // Adicionar um post
-router.post('/resources/:rname/posts/add', function(req, res){
+router.post('/resources/:rname/posts/add', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
 
   var p = {
@@ -537,17 +601,16 @@ router.post('/resources/:rname/posts/add', function(req, res){
     visibility: req.body.visibility,
     comments: []
   }
-  axios.post('http://localhost:7779/resource/' + req.params.rname + "/posts/add", p)
+  axios.post('http://localhost:7779/resource/' + req.params.rname + "/posts/add?token=" + req.cookies.token, p)
     .then(dados => {
-      console.dir(dados.data)
       res.redirect('/resources/' + req.params.rname)
     })
     .catch(erro => {res.render('error', {error: erro})})
 })
 
 // Editar um post
-router.post('/resources/:rname/posts/:id/edit', function(req, res){
-  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id)
+router.post('/resources/:rname/posts/:id/edit', verificaToken, function(req, res){
+  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
       var p = {
         _id: dados.data._id,
@@ -560,18 +623,17 @@ router.post('/resources/:rname/posts/:id/edit', function(req, res){
         visibility: req.body.visibility,
         comments: dados.data.comments
       }
-      axios.post('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id + "/edit", p)
-      .then(dados => {
-        console.dir(dados.data)
-        res.redirect('/resources/' + req.params.rname)
-      })
-      .catch(erro => {res.render('error', {error: erro})})
+      axios.post('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id + "/edit?token=" + req.cookies.token, p)
+        .then(dados => {
+          res.redirect('/resources/' + req.params.rname)
+        })
+        .catch(erro => {res.render('error', {error: erro})})
     })
     .catch(erro => {res.render('error', {error: erro})})
 })
 
 // Adicionar um comentário a um post
-router.post('/resources/:rname/posts/:id/comments/add', function(req, res){
+router.post('/resources/:rname/posts/:id/comments/add', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
 
   var c = {
@@ -580,9 +642,8 @@ router.post('/resources/:rname/posts/:id/comments/add', function(req, res){
     description: req.body.description,
     date: data
   }
-  axios.post('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id + "/comments/add", c)
+  axios.post('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id + "/comments/add?token=" + req.cookies.token, c)
     .then(dados => {
-      console.dir(dados.data)
       res.redirect('/resources/' + req.params.rname + "/posts/" + req.params.id)
     })
     .catch(erro => {res.render('error', {error: erro})})
@@ -608,42 +669,38 @@ router.post('/resources/search', verificaToken, function(req, res){
 
 // Adicionar uma notícia
 // Tenho que verificar se o nome do recurso inserido é válido ou não
-router.post('/news/add', function(req, res){
-  axios.get('http://localhost:7779/resource/' + req.body.resourceName)
+router.post('/news/add', verificaToken, function(req, res){
+  axios.get('http://localhost:7779/resource/' + req.body.resourceName + "?token=" + req.cookies.token)
     .then(dados => {
-      console.dir(dados.data)
-      if(dados.data.length == 0){ // Não existe nenhum recurso com esse nome
-        res.render('addNewsForm', {erro: "O nome do Recurso é inválido!"})
-      }else{ // Existe um recurso com este nome
-        var n = {
-          username: req.body.username,
-          resourceName: req.body.resourceName,
-          event: req.body.event,
-          date: new Date().toISOString().slice(0, 19).split('T').join(' '),
-          visibility: dados.data[0].visibility
-        }
-        axios.post('http://localhost:7779/news/add', n)
-          .then(dados => {
-            res.redirect('/home')
-          })
-          .catch(erro => {res.render('error', {error: erro})})
+      var n = {
+        username: req.body.username,
+        resourceName: req.body.resourceName,
+        event: req.body.event,
+        date: new Date().toISOString().slice(0, 19).split('T').join(' '),
+        visibility: dados.data[0].visibility // A mesma do recurso
       }
+
+      axios.post('http://localhost:7779/news/add?token=' + req.cookies.token, n)
+        .then(dados => {
+          res.redirect('/home')
+        })
+        .catch(erro => {res.render('error', {error: erro})})
     })
     .catch(erro => {res.render('error', {error: erro})})
 })
 
 // Editar uma notícia
-router.post('/news/edit/:id', function(req, res){
+router.post('/news/edit/:id', verificaToken, function(req, res){
   var n = {
     _id: req.params.id,
     username: req.body.username,
     resourceName: req.body.resourceName,
     event: req.body.event,
-    date: req.body.date,
+    date: new Date().toISOString().slice(0, 19).split('T').join(' '),
     visibility: req.body.visibility,
   }
 
-  axios.post('http://localhost:7779/news/edit/' + req.params.id, n)
+  axios.post('http://localhost:7779/news/edit/' + req.params.id + "?token=" + req.cookies.token, n)
     .then(dados => {
       res.redirect('/home')
     })

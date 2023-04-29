@@ -24,7 +24,7 @@ module.exports.activeUsers = () => {
         })
 }
 
-// Deactivated users
+// Deactivate users
 module.exports.deactiveUsers = () => {
     return User.find({active: false})
                .sort({nome: 1})

@@ -14,12 +14,13 @@ block content
             li #[b Gostos: ] #{p.liked_by.length}
             li #[b Data: ] #{p.date}
             li #[b Operations: ] 
+              a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/like")
+                img.w3-margin(src="/images/like.png" alt="like icon" width="30" height="30")
+              if u.level == "admin" || u.username == p.username
                 a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/edit")
                   img.w3-round-large.w3-margin(src="/images/edit.png" alt="edit icon" width="30" height="30")
                 a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/delete")
                   img.w3-round-large.w3-margin(src="/images/delete.png" alt="delete icon" width="30" height="30")
-                a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/like")
-                  img.w3-margin(src="/images/like.png" alt="like icon" width="30" height="30")
             .w3-card-4
             header.w3-container.w3-purple
                 h1 Comentários #[a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/comments/add") #[img.w3-margin(src="/images/add.png" alt="add icon" width="30" height="30")]]
@@ -39,8 +40,9 @@ block content
                         td= c.description
                         td= c.date
                         td 
-                          a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/comments/" + c.id + "/delete")
-                            img.w3-round-large(src="/images/delete.png" alt="delete icon" width="30" height="30")
+                          if u.level == "admin" || u.username == c.username
+                            a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/comments/" + c._id + "/delete")
+                              img.w3-round-large(src="/images/delete.png" alt="delete icon" width="30" height="30")
 
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]

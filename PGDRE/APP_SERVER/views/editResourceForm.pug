@@ -18,6 +18,8 @@ block content
           input.w3-input(type="text" name="type" value=r.type readonly)
           label Visibilidade 
           input.w3-input(type="text" name="visibility" value=r.visibility readonly)
+          label Submissor
+          input.w3-input(type="text" name="submitter" value=r.submitter readonly)
 
         fieldset  
           legend Editáveis:
@@ -28,7 +30,9 @@ block content
           label Autor
           input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="author" value=r.author)
 
-        input.w3-btn.w3-blue.w3-margin(type="submit" value="Editar Recurso!")
+        input.w3-btn.w3-green.w3-margin(type="submit" value="Editar Recurso!")
+        button.w3-btn.w3-round.w3-red.w3-margin
+          a(href="/resources/" + r.resourceName) Cancelar 
 
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]

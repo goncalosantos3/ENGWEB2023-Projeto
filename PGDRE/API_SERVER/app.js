@@ -41,6 +41,7 @@ app.use(function(req, res, next){
       }
       else{
         // Sucesso na verificação do token
+        req.user = payload // Informação do user (username, level e active) fica em req.user
         console.log("Sucesso na autenticação!")
         next()
       }

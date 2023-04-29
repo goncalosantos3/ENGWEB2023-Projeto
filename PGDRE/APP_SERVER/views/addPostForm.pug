@@ -14,12 +14,13 @@ block content
           li #[b Subtitle: ] #{r.subtitle}
           li #[b Type: ] #{r.type}
           li #[b Author: ] #{r.author}
+          li #[b Submissor: ] #{r.submitter}
 
       h2 Adicione o Post:
       form.w3-container(action="/resources/" + r.resourceName + "/posts/add" method="POST")
         fieldset
             input.w3-input(type="hidden" name="resourceName" value=r.resourceName)
-            input.w3-input(type="hidden" name="username" value="meter username aqui")
+            input.w3-input(type="hidden" name="username" value=u.username)
             input.w3-input(type="hidden" name="visibility" value=r.visibility)
             legend Detalhes:
             label Título
@@ -27,7 +28,9 @@ block content
             label Descrição
             input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="description")
 
-        input.w3-btn.w3-blue.w3-margin(type="submit" value="Submissão do Post!")
+        input.w3-btn.w3-green.w3-margin(type="submit" value="Submissão do Post!")
+        button.w3-btn.w3-round.w3-red.w3-margin
+          a(href="/resources/" + r.resourceName) Cancelar 
 
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]

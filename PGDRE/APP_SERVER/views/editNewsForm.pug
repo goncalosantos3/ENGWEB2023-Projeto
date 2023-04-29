@@ -9,9 +9,7 @@ block content
       form.w3-container(action="/news/edit/" + n._id method="POST")
         fieldset
           legend Não editáveis:
-          label Nome do Recurso 
-          input.w3-input(type="text" name="resourceName" value=n.resourceName readonly)
-          label Utilizador
+          label Submissor da Notícia
           input.w3-input(type="text" name="username" value=n.username readonly)
           label Data 
           input.w3-input(type="text" name="date" value=n.date readonly)
@@ -20,10 +18,17 @@ block content
 
         fieldset  
           legend Editáveis:
+          label Nome do Recurso 
+              select(name="resourceName")
+                each r in rs
+                  option(value=r.resourceName) #{r.resourceName}
+          br
           label Evento
           input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="event" value=n.event)
         
-        input.w3-btn.w3-blue.w3-margin(type="submit" value="Editar Notícia!")
-
+        input.w3-btn.w3-green.w3-margin(type="submit" value="Editar Notícia!")
+        button.w3-btn.w3-round.w3-red.w3-margin
+          a(href="/home") Cancelar 
+          
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]

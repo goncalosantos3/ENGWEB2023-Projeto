@@ -21,10 +21,10 @@ block content
               if u.active == true
                 li 
                   a(href="/profile/deactivate") Desativar Conta
-                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/deactivate.png" alt="edit icon" width="30" height="30")
-              if u.active == false 
+                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/deactivate.png" alt="edit icon" width="30" height="30") 
+              if u.level == "admin"  
                 li 
-                  a(href="/profile/activate") Ativar Conta
+                  a(href="/profile/activate") Ativar uma Conta
                     img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/activate.png" alt="edit icon" width="30" height="30")
               if u.level == "admin"
                 li 

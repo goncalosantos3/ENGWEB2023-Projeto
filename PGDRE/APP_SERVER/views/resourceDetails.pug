@@ -15,10 +15,11 @@ block content
             li #[b Subtítulo: ] #{r.subtitle}
             li #[b Tipo: ] #{r.type}
             li #[b Autor: ] #{r.author}
+            li #[b Submissor: ] #{r.submitter} 
             li #[b Operations:] 
                 a(href="/resources/download/" + r.resourceName) 
                   img.w3-round-xlarge.w3-margin(src="/images/download.png" alt="download icon" width="30" height="30")
-                if u.level == "admin" || (u.level == "producer" && r.author == u.username)
+                if u.level == "admin" || (u.level == "producer" && r.submitter == u.username)
                   a(href="/resources/edit/" + r.resourceName)
                     img.w3-round-large.w3-margin(src="/images/edit.png" alt="edit icon" width="30" height="30")
                   a(href="/resources/delete/" + r.resourceName)
@@ -49,8 +50,10 @@ block content
                             td  
                               a(href="/resources/" + r.resourceName + "/posts/" + p._id)
                                 img(src="/images/details.png" alt="details icon" width="30" height="30")
-                            if u.level == "admin" || u.username == p.username
-                              td 
+                            td 
+                              a.w3-margin(href="/resources/" + r.resourceName + "/posts/" + p._id + "/like")
+                                img(src="/images/like.png" alt="like icon" width="30" height="30")
+                              if u.level == "admin" || u.username == p.username
                                 a.w3-margin(href="/resources/" + r.resourceName + "/posts/" + p._id + "/edit")
                                   img(src="/images/edit.png" alt="edit icon" width="30" height="30")
                                 a.w3-margin(href="/resources/" + r.resourceName + "/posts/" + p._id + "/delete")

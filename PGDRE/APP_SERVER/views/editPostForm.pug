@@ -27,7 +27,9 @@ block content
           label Descrição
           input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="description" value=p.description)
         
-        input.w3-btn.w3-blue.w3-margin(type="submit" value="Editar Post!")
+        input.w3-btn.w3-green.w3-margin(type="submit" value="Editar Post!")
+        button.w3-btn.w3-round.w3-red.w3-margin
+          a(href="/resources/" + p.resourceName + "/posts/" + p._id) Cancelar 
 
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]

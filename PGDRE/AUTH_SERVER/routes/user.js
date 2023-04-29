@@ -16,6 +16,15 @@ router.get('/get', auth.verificaAcesso, function(req, res){
     .catch(erro => res.status(502).jsonp({error: "Erro na obtenção da lista de users: " + erro}))
 })
 
+// Lista de todos os utilizadores desativos
+router.get('/get/deactive', auth.verificaAcesso, function(req, res){
+  User.deactiveUsers()
+    .then(users => {
+      res.status(200).jsonp(users)
+    })
+    .catch(erro => res.status(531).jsonp({error: "Erro na obtenção dos utilizadores desativos: " + error}))
+})
+
 // Vai buscar um utilizador em específico
 router.get('/get/:username', auth.verificaAcesso, function(req, res){
   User.getUser(req.params.username)
@@ -80,20 +89,28 @@ router.post('/register', auth.verificaAcesso, function(req, res) {
 
 // A rota do login é a única que não está protegida
 router.post('/login', passport.authenticate('local'), function(req, res){
-  console.log("xD")
-  var d = new Date().toISOString().substring(0,19)
-  User.loginUser(req.user.username, d)
+  var d = new Date().toISOString().slice(0, 19).split('T').join(' ')
+  User.getUser(req.user.username)
     .then(user => {
-      jwt.sign({ username: req.user.username, level: req.user.level, 
-        active: req.user.active}, 
-        "PGDRE2023",
-        {expiresIn: 3600},
-        function(e, token) {
-          if(e) res.status(500).jsonp({error: "Erro na geração do token: " + e}) 
-          else res.status(201).jsonp({token: token})
-        });
+      // Só podemos fazer login se o user estiver ativo
+      if(user.active == true){
+        User.loginUser(req.user.username, d)
+          .then(user => {
+            jwt.sign({ username: req.user.username, level: req.user.level, 
+              active: req.user.active}, 
+              "PGDRE2023",
+              {expiresIn: 3600},
+              function(e, token) {
+                if(e) res.status(500).jsonp({error: "Erro na geração do token: " + e}) 
+                else res.status(201).jsonp({token: token})
+              });
+          })
+          .catch(erro => {res.status(506).jsonp({error: "Erro na atualização do user: " + erro})})
+      }else{  
+        res.status(201).jsonp({message: "Esta conta está desativada! Não é possível fazer login com a mesma."})
+      }
     })
-    .catch(erro => {res.status(506).jsonp({error: "Erro na atualização do user: " + erro})})
+    .catch(erro => {res.status(510).jsonp({error: "Erro na obtenção do user: " + erro})})
 })
 
 module.exports = router;
