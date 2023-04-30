@@ -25,6 +25,42 @@ module.exports.getPost = id => {
         })
 }
 
+// Lista de posts com um determinado título
+module.exports.getPostsT = t => {
+    return Post
+        .find({title: t})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+// Lista de posts com um determinado número de likes
+module.exports.getPostsL = l => {
+    return Post
+        .find({liked_by: {$size: l}})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+// Lista de posts de um utilizador
+module.exports.getPostsU = u => {
+    return Post
+        .find({username: u})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
 module.exports.addPost = p => {
     return Post.create(p)
         .then(resposta => {

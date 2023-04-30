@@ -10,7 +10,8 @@ var userSchema = new mongoose.Schema({
     level: String, // Level: Consumer ou Producer ou Administrator
     dateCreated: String, // Data da inserção do utilizador na BD
     lastAccess: String, // Data do último login à plataforma
-    active: Boolean // Vai servir para ativar e desativar uma conta (ao invés de a eliminar) 
+    active: Boolean, // Vai servir para ativar e desativar uma conta (ao invés de a eliminar) 
+    profilePic: String
 })
 
 userSchema.plugin(passportLocalMongoose)

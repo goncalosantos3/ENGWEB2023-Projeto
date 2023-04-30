@@ -4,7 +4,7 @@ var News = require('../models/news')
 module.exports.newsList = () => {
     return News
         .find()
-        .sort({date: 1})
+        .sort({date: -1})
         .then(resposta => {
             return resposta
         })
@@ -30,6 +30,18 @@ module.exports.rNews = rname => {
 module.exports.news = id => {
     return News
         .findOne({_id: id})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}
+
+// Lista das notícias de um utilizador
+module.exports.getnewsU = username => {
+    return News 
+        .find({username: username})
         .then(resposta => {
             return resposta
         })

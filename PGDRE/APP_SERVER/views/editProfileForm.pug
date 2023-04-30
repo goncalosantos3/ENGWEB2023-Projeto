@@ -17,6 +17,11 @@ block content
           input.w3-input(type="text" name="dateCreated" value=u.dateCreated readonly)
           label Último acesso
           input.w3-input(type="text" name="lastAccess" value=u.lastAccess readonly)
+          label Activo
+          if u.active
+            input.w3-input(type="text" name="active" value="yes" readonly)
+          else 
+            input.w3-input(type="text" name="active" value="no" readonly)
 
         fieldset  
           legend Editáveis:
@@ -26,13 +31,6 @@ block content
           input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="name" value=u.name)
           label Password
           input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="password" name="password")
-          label Activo
-          br
-          input(type='radio' name='active' value=true)
-          |  Sim
-          br
-          input(type='radio' name='active' value=false)
-          |  Não
 
         input.w3-btn.w3-green.w3-margin(type="submit" value="Editar Perfil!")
         button.w3-btn.w3-round.w3-red.w3-margin

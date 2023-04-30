@@ -85,6 +85,12 @@ router.get('/profile/edit', verificaToken, function(req, res){
     .catch(erro => res.render('error', {error: erro}))
 })
 
+// Pedido para adicionar uma foto de perfil
+router.get('/profile/profilePic', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  res.render('addProfilePicForm', {d: data})
+})
+
 // Pedido de desativação de conta
 router.get('/profile/deactivate', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
@@ -108,6 +114,26 @@ router.get('/profile/deactivate/confirm', verificaToken, function(req, res){
     .catch(erro => res.render('error', {error: erro}))
 })
 
+// (Admin) pedido de desativação de uma conta
+router.get('/profile/deactivate/admin', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7778/users/get/active?token=' + req.cookies.token)
+    .then(dados => {
+      res.render('deactivateProfile', {us: dados.data, d: data})
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
+// (Admin) desativação de uma conta
+router.get('/profile/deactivate/:username', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.put('http://localhost:7778/users/' + req.params.username + '/deactivate?token=' + req.cookies.token)
+    .then(dados => {
+      res.redirect('/profile/deactivate/admin')
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
 router.get('/profile/activate', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
   axios.get('http://localhost:7778/users/get/deactive?token=' + req.cookies.token)
@@ -124,6 +150,16 @@ router.get('/profile/activate/:username', verificaToken, function(req, res){
   axios.put('http://localhost:7778/users/'+ req.params.username + '/activate?token=' + req.cookies.token)
     .then(dados => {
       res.redirect('/profile/activate')
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
+// Investigar uma conta
+router.get('/profile/admin/investigate', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7778/users/get?token=' + req.cookies.token)
+    .then(dados => {
+      res.render('investigateUser', {us: dados.data, d: data})
     })
     .catch(erro => res.render('error', {error: erro}))
 })
@@ -292,6 +328,7 @@ router.get('/resources/:rname/posts/:p_id/comments/:c_id/delete', verificaToken,
 })
 
 // Pedido para adicionar uma notícia
+// Se o user for um producer este só pode adicionar notícias sobre os seus recursos
 router.get('/news/add', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
   axios.get('http://localhost:7779/resource/list?token=' + req.cookies.token)
@@ -327,8 +364,8 @@ router.get('/news/delete/:id', verificaToken, function(req, res){
 })
 
 // Remover um notícia
-router.get('/news/delete/:id/confirm', function(req, res){
-  axios.delete('http://localhost:7779/news/' + req.params.id)
+router.get('/news/delete/:id/confirm', verificaToken, function(req, res){
+  axios.delete('http://localhost:7779/news/' + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
       res.redirect('/home')
     })
@@ -341,12 +378,14 @@ router.get('/news/delete/:id/confirm', function(req, res){
 // Tem que se verificar se já existe algum user com o mesmo username
 router.post('/register', verificaToken, function(req,res){
   var data = new Date().toISOString().substring(0,16)
+  
+  console.log("Level: " + req.body.level)
   if(req.body.level == undefined){
     // Faltou completar o nível do utilizador
-    res.render('registerForm', {erroRole: true}) 
-  }
-
-  axios.post("http://localhost:7778/users/register?token=" + req.cookies.token, req.body)
+    res.render('registerForm', {erro: "Nível da conta não especificado"}) 
+  }else{
+    req.body.profilePic = undefined
+    axios.post("http://localhost:7778/users/register?token=" + req.cookies.token, req.body)
     .then(dados => {
       axios.get("http://localhost:7778/users/get/" + req.body.username + "?token=" + req.cookies.token)
         .then(dados => {
@@ -359,6 +398,7 @@ router.post('/register', verificaToken, function(req,res){
     .catch(erro => {
       res.render('error', {error: erro})
     })
+  }
 })
 
 router.post('/login', function(req, res){
@@ -382,15 +422,59 @@ router.post('/profile/edit', verificaToken, function(req, res){
       if(req.body.password == undefined){
         req.body.password = dados.data.password
       }
-      if(req.body.active == undefined){
-        req.body.active = dados.data.active
+      if(req.body.active == "yes"){
+        req.body.active = true
+      }else if(req.body.active == "no"){
+        req.body.active = false
       }
+      req.body.profilePic = dados.data.profilePic // A foto de perfil não pode ser alterada neste formulário
 
       axios.put("http://localhost:7778/users/edit/" + req.body.username + "?token=" + req.cookies.token, req.body)
         .then(dados => {
           res.redirect('/profile')
         })
         .catch(erro => {res.render('error', {error: erro})})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
+// Adicionar uma foto de perfil
+router.post('/profile/profilePic', verificaToken, upload.single('profilePic'), function(req, res){
+  if(req.file == undefined){
+    res.render('addProfilePicForm', {erro: "Você não selecionou um ficheiro!"})
+  }else{
+    if(req.file.mimetype == "image/jpeg" || req.file.mimetype == "image/png"){
+      let oldPath =  __dirname + '/../' + req.file.path
+      let newPath = __dirname + '/../public/profilePics/' + req.user.level + '/' + req.file.originalname
+      fs.rename(oldPath,newPath, erro => {
+        if(erro) res.render('error',{error:erro})
+      })
+
+      var pic = {
+        profilePic: req.file.originalname
+      }
+      axios.put("http://localhost:7778/users/" + req.user.username + "/profile/profilePic?token=" + req.cookies.token, pic)
+        .then(user => {
+          res.redirect('/profile')
+        })
+        .catch(erro => {res.render('error', {error: erro})})
+    }else{
+      let path =  __dirname + '/../' + req.file.path
+      try{
+        fs.unlinkSync(path)
+      }catch(e){
+        console.log(e)
+      }
+      res.render('addProfilePicForm', {erro: "O tipo do ficheiro selecionado não é válido!"})
+    }
+  }
+})
+
+router.post('/profile/admin/investigate', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get("http://localhost:7778/users/get/" + req.body.username + "?token=" + req.cookies.token)
+    .then(dados => {
+      res.render('investigateProfile', {u: dados.data, d: data})
     })
     .catch(erro => {res.render('error', {error: erro})})
 })
@@ -667,8 +751,48 @@ router.post('/resources/search', verificaToken, function(req, res){
     .catch(erro => {res.render('error', {error: erro})})
 })
 
+// Pesquisa nos posts
+router.post('/resources/:rname/posts/search', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
+    .then(dados => {
+      var r = dados.data[0]
+      if(req.body.search == ""){
+        axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts?token=' + req.cookies.token)
+          .then(dados => {
+            res.render('resourceDetails', {u: req.user, r: r, ps: dados.data, d: data})
+          })
+          .catch(erro => res.render('error', {error: erro}))
+      }else{
+        axios.post('http://localhost:7779/resource/' + req.params.rname + '/posts/search?token=' + req.cookies.token, req.body)
+          .then(dados => {
+            res.render('resourceDetails', {u: req.user, r: r, ps: dados.data, d: data})
+          })
+          .catch(erro => {res.render('error', {error: erro})})
+      }
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
+// Pesquisa nas notícias
+router.post('/news/search', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  if(req.body.search == ""){
+    axios.get('http://localhost:7779/news/list?token=' + req.cookies.token)
+      .then(dados => {
+        res.render('home', {u: req.user, news: dados.data, d: data})
+      })
+      .catch(erro => res.render('error', {error: erro}))
+  }else{
+    axios.post('http://localhost:7779/news/search?token=' + req.cookies.token, req.body)
+    .then(dados => {
+      res.render('home', {u: req.user, news: dados.data, d: data})
+    })
+    .catch(erro => res.render('error', {error: erro}))
+  }
+})
+
 // Adicionar uma notícia
-// Tenho que verificar se o nome do recurso inserido é válido ou não
 router.post('/news/add', verificaToken, function(req, res){
   axios.get('http://localhost:7779/resource/' + req.body.resourceName + "?token=" + req.cookies.token)
     .then(dados => {

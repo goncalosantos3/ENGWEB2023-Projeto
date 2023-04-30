@@ -52,6 +52,7 @@ router.get('/resource/:rname', function(req, res){
     })
 })
 
+// Pesquisa em recursos
 router.post('/resource/search', function(req, res){
   // Pesquisar por título
   if(req.body.filtro == 'title'){
@@ -77,6 +78,57 @@ router.post('/resource/search', function(req, res){
       })
       .catch(erro => {
         res.status(221).jsonp({message: "Erro na pesquisa por autor: " + erro})
+      })
+  }
+})
+
+// Pesquisa em posts
+router.post('/resource/:rname/posts/search', function(req, res){
+  // Pesquisar por título
+  if(req.body.filtro == 'title'){
+    Post.getPostsT(req.body.search)
+      .then(recursos => {
+        res.status(200).jsonp(recursos)
+      })
+      .catch(erro => {
+        res.status(219).jsonp({message: "Erro na pesquisa do post por título: " + erro})
+      })
+  }else if(req.body.filtro == 'likes'){
+    Post.getPostsL(req.body.search)
+      .then(recursos => {
+        res.status(200).jsonp(recursos)
+      })
+      .catch(erro => {
+        res.status(220).jsonp({message: "Erro na pesquisa do post por gostos: " + erro})
+      })
+  }else if(req.body.filtro == 'username'){
+    Post.getPostsU(req.body.search)
+      .then(recursos => {
+        res.status(200).jsonp(recursos)
+      })
+      .catch(erro => {
+        res.status(221).jsonp({message: "Erro na pesquisa do post por utilizador: " + erro})
+      })
+  }
+})
+
+// Pesquisa em news
+router.post('/news/search', function(req, res){
+  if(req.body.filtro == 'username'){
+    News.getnewsU(req.body.search)
+      .then(recursos => {
+        res.status(200).jsonp(recursos)
+      })
+      .catch(erro => {
+        res.status(219).jsonp({message: "Erro na pesquisa da notícia por utilizador: " + erro})
+      })
+  }else if(req.body.filtro == 'resourceName'){
+    News.rNews(req.body.search)
+      .then(recursos => {
+        res.status(200).jsonp(recursos)
+      })
+      .catch(erro => {
+        res.status(220).jsonp({message: "Erro na pesquisa da notícia por recurso: " + erro})
       })
   }
 })

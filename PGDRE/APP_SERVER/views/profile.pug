@@ -3,8 +3,11 @@ extends layout
 block content
     .w3-card-4
     header.w3-container.w3-blue
-      h1 Profile #[img(src="/images/profile.png" alt="profile icon" height="50" width="50")]
-    
+      if u.profilePic != undefined
+        h1 Profile #[img(src="/profilePics/" + u.level + "/" + u.profilePic alt="profile picture" height="50" width="50")]
+      else 
+        h1 Profile #[img(src="/images/profile.png" alt="profile icon" height="50" width="50")]
+
     .w3-container  
       if u
         ul.w3-ul
@@ -18,18 +21,26 @@ block content
               li
                 a(href="/profile/edit") Editar Perfil
                   img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/edit.png" alt="edit icon" width="30" height="30")
-              if u.active == true
+              li 
+                a(href="/profile/profilePic") Adicionar uma Foto de Perfil
+                  img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/user.png" alt="user icon" width="30" height="30")
+              if u.active == true && u.level != "admin"
                 li 
                   a(href="/profile/deactivate") Desativar Conta
-                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/deactivate.png" alt="edit icon" width="30" height="30") 
-              if u.level == "admin"  
+                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/deactivate.png" alt="deactivate icon" width="30" height="30") 
+              if u.level == "admin" 
+                li
+                  a(href="/profile/deactivate/admin") Desativar uma Conta 
+                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/deactivate.png" alt="deactivate icon" width="30" height="30")
                 li 
                   a(href="/profile/activate") Ativar uma Conta
-                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/activate.png" alt="edit icon" width="30" height="30")
-              if u.level == "admin"
+                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/activate.png" alt="activate icon" width="30" height="30")
                 li 
                   a(href="/register") Adicionar utilizador 
-                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/add.png" alt="edit icon" width="30" height="30")
+                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/add.png" alt="add icon" width="30" height="30")
+                li 
+                  a(href="/profile/admin/investigate") Investigar um utilizador 
+                    img.w3-round-large.w3-margin-rigth.w3-margin-left(src="/images/search.png" alt="search icon" width="30" height="30")
       else 
         p Sem informações a apresentar!
 

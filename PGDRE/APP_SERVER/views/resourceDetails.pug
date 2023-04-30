@@ -30,6 +30,15 @@ block content
                 h1 Posts #[a(href="/resources/" + r.resourceName + "/posts/add") #[img.w3-margin(src="/images/add.png" alt="add icon" width="30" height="30")]]
 
             .w3-container
+              .w3-container
+                h4 Pesquisa
+                  form.w3-container(action="/resources/" + r.resourceName + "/posts/search" method="POST")
+                    select(name="filtro")
+                      option(value="title") Título
+                      option(value="likes") Gostos  
+                      option(value="username") Utilizador 
+                    input#search.w3-margin-bottom(type="text" name="search")        
+                    input.w3-margin-left(type="image" alt="search icon" src="/images/search.png" height="30" width="30") 
                 table.w3-table-all
                     tr 
                         th Utilizador

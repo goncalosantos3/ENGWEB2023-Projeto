@@ -26,10 +26,12 @@ block content
               th Tipo
               th Autor 
               th Submissor
+              th Visibilidade
               th Detalhes
               th Operações
 
           each r in rs 
+            if r.visibility == "Public" || (r.visibility == "Private" && u.level == "admin") || (r.visibility == "Private" && u.level == "producer" && u.username == r.submitter)
               tr 
                   td= r.title
                   if r.subtitle != undefined 
@@ -39,13 +41,14 @@ block content
                   td= r.type
                   td= r.author
                   td= r.submitter
+                  td= r.visibility
                   td  
                     a(href="/resources/" + r.resourceName)
                       img.w3-margin(src="/images/details.png" alt="details icon" width="30" height="30")
                   td  
                     a(href="/resources/download/" + r.resourceName) 
                       img.w3-round-xlarge.w3-margin(src="/images/download.png" alt="download icon" width="30" height="30")
-                    if u.level == "admin" || (u.level == "producer" && r.author == u.username)
+                    if u.level == "admin" || (u.level == "producer" && r.submitter == u.username)
                       a(href="/resources/edit/" + r.resourceName)
                         img.w3-round-large.w3-margin(src="/images/edit.png" alt="edit icon" width="30" height="30")
                       a(href="/resources/delete/" + r.resourceName)

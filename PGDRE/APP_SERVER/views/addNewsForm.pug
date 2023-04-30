@@ -10,10 +10,17 @@ block content
         form.w3-container(action="/news/add" method="POST")
             fieldset
               input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="hidden" name="username" value=u.username)
-              label Nome do Recurso 
-              select(name="resourceName")
-                each r in rs
-                  option(value=r.resourceName) #{r.resourceName}
+              if u.level == "admin"
+                label Nome do Recurso 
+                select(name="resourceName")
+                  each r in rs
+                    option(value=r.resourceName) #{r.resourceName}
+              if u.level == "producer"
+                label Nome do Recurso 
+                select(name="resourceName")
+                  each r in rs
+                    if r.submitter == u.username
+                      option(value=r.resourceName) #{r.resourceName}
               br
               label Evento
               input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="event")

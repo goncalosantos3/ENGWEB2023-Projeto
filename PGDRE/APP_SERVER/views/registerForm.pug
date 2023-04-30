@@ -8,23 +8,22 @@ block content
     .w3-container  
       form.w3-container(action="/register" method="POST")
         fieldset 
-            legend Infos:
+          legend Infos:
 
-            label Email 
-            input.w3-input(type="text" name="email" required)
+          label Email 
+          input.w3-input(type="text" name="email" required)
 
-            label Nome 
-            input.w3-input(type="text" name="name" required)
+          label Nome 
+          input.w3-input(type="text" name="name" required)
 
-            label Username 
-            input.w3-input(type="text" name="username" required)
+          label Username 
+          input.w3-input(type="text" name="username" required)
             
-            label Password 
-            input.w3-input(type="password" name="password" required)
+          label Password 
+          input.w3-input(type="password" name="password" required)
 
         fieldset 
-          label Nível:
-          br
+          legend Nível:
           input(type='radio' name='level' value='producer')
           |  Produtor
           br
@@ -36,10 +35,10 @@ block content
 
         input.w3-btn.w3-blue.w3-margin(type="submit" value="Register!")
 
-      if(erroRole)
-        .w3-panel.w3-red  
-          h3 Erro no registro do utilizador! 
-          p Nível do utilizador não especificado!      
+      if erro != undefined
+        .w3-panel.w3-yellow
+          h3 Erro!
+          p= erro      
 
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d}
