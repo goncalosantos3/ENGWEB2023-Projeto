@@ -234,7 +234,7 @@ router.get('/resources/delete/:rname/confirm', verificaToken, function(req, res)
 
 // Download de um recurso
 router.get('/resources/download/:rname', verificaToken, function(req, res){
-  axios.get('http://localhost:7779/resource/' + req.params.rname)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(dados => {
       console.dir(dados.data)
       let path = __dirname + '/../uploads/' + dados.data[0].type + "/" + req.params.rname
@@ -385,19 +385,24 @@ router.post('/register', verificaToken, function(req,res){
     res.render('registerForm', {erro: "Nível da conta não especificado"}) 
   }else{
     req.body.profilePic = undefined
-    axios.post("http://localhost:7778/users/register?token=" + req.cookies.token, req.body)
-    .then(dados => {
-      axios.get("http://localhost:7778/users/get/" + req.body.username + "?token=" + req.cookies.token)
-        .then(dados => {
-          res.render('confirmRegister', {u: dados.data, d: data})
-        })
-        .catch(erro => {
-          res.render('error', {error: erro})
-        })
-    })
-    .catch(erro => {
-      res.render('error', {error: erro})
-    })
+    // Verificar se não existe nenhum utilizador com o mesmo username
+    axios.get("http://localhost:7778/users/get/" + req.body.username + "?token=" + req.cookies.token)
+      .then(dados => {
+        if(dados.data != null){
+          res.render('registerForm', {erro: "Já existe um utilizador com esse nome de utilizador! Por favor escolha outro."})
+        }else{
+          axios.post("http://localhost:7778/users/register?token=" + req.cookies.token, req.body)
+            .then(dados => {
+              axios.get("http://localhost:7778/users/get/" + req.body.username + "?token=" + req.cookies.token)
+                .then(dados => {
+                  res.render('confirmRegister', {u: dados.data, d: data})
+                })
+                .catch(erro => {res.render('error', {error: erro})})
+            })
+            .catch(erro => {res.render('error', {error: erro})})
+        }
+      })
+      .catch(erro => {res.render('error', {error: erro})})
   }
 })
 
