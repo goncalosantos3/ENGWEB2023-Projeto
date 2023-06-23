@@ -10,7 +10,7 @@ block content
         fieldset 
             legend Detalhes:
             label Ficheiro Zip 
-            input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="file" name="resource")
+            input.w3-input.w3-border.w3-round.w3-light-grey(type="file" name="resource")
         input.w3-btn.w3-green.w3-margin(type="submit" value="Submissão do Recurso!")
         button.w3-btn.w3-round.w3-red.w3-margin
           a(href="/resources") Cancelar 
@@ -22,4 +22,4 @@ block content
             for e in erros 
               p= e
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]
+      address Generated in PGDRE at #{d} #[a#home(href="/home") Go back to home!]

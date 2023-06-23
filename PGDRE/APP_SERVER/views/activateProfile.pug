@@ -7,23 +7,25 @@ block content
       h2 Escolha uma conta para ativar!
 
     .w3-container
-        table.w3-table-all
-          tr
-            th Nome de Utilizador
-            th Nome
-            th Email 
-            th Nível
-            th Ativar
-
-          each u in us
-            tr 
-                td= u.username
-                td= u.name 
-                td= u.email 
-                td= u.level
-                td  
-                  a(href="/profile/activate/" + u.username) 
-                    img.w3-round-xlarge(src="/images/activate.png" alt="activate icon" width="30" height="30")
+      table.w3-table-all
+        tr
+          th Nome de Utilizador
+          th Nome
+          th Email 
+          th Nível
+          th Ativar
+        each u in us
+          tr 
+              td= u.username
+              td= u.name 
+              td= u.email 
+              td= u.level
+              td  
+                a(href="/profile/activate/" + u.username) 
+                  img.w3-round-xlarge(src="/images/activate.png" alt="activate icon" width="30" height="30")
     
+      button#cancel.w3-btn.w3-round.w3-red.w3-margin
+        a(href="/profile") Cancelar
+
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]
+      address Generated in PGDRE at #{d} #[a#home(href="/home") Go back to home!]

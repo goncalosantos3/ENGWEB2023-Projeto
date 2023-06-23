@@ -181,6 +181,46 @@ router.delete('/resource/:rname/delete', function(req, res){
     })
 })
 
+// Avaliar um recurso
+router.post('/resource/:rname/evaluate', function(req, res){
+  Resource.getResource(req.params.rname)
+    .then(r => {
+      ev = 0
+      changed = false
+      evs = r[0].evaluation.eved_by
+
+      for(let i=0; i<evs.length; i++){
+        if(evs[i].user == req.user.username){ // Este utilizador já tinha dado a sua avaliação antes
+          changed = true
+          evs[i].rating = req.body.ev
+        }
+        ev += evs[i].rating
+      }
+
+      if(!changed){
+        evs.push({user: req.user.username, rating: req.body.ev})
+        ev += req.body.ev
+      }
+      ev = ev/evs.length
+
+      r[0].evaluation = {
+        ev: ev,
+        eved_by: evs
+      }
+
+      Resource.updateR(r[0])
+        .then(resposta => {
+          res.status(200).jsonp(resposta)
+        })
+        .catch(erro => {
+          res.status(540).jsonp({message: "Erro na avaliação do recurso" + req.params.rname + ": " + erro})
+        })
+    })
+    .catch(erro => {
+      res.status(539).jsonp({message: "Erro na obtenção do recurso " + req.params.rname + ": " + erro})
+    })
+})
+
 // Posts associados a um recurso
 router.get('/resource/:rname/posts', function(req, res){
   Post.rPosts(req.params.rname)

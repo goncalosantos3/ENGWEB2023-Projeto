@@ -24,16 +24,19 @@ block content
 
         fieldset 
           legend Nível:
+          input(type='radio' name='level' value='admin')
+          |  Administrador
+          br
           input(type='radio' name='level' value='producer')
           |  Produtor
           br
           input(type='radio' name='level' value='consumer')
           |  Consumidor
-          br
-          input(type='radio' name='level' value='admin')
-          |  Administrador
 
         input.w3-btn.w3-blue.w3-margin(type="submit" value="Register!")
+
+        button#cancel.w3-btn.w3-round.w3-red.w3-margin
+          a(href="/profile") Voltar atrás
 
       if erro != undefined
         .w3-panel.w3-yellow

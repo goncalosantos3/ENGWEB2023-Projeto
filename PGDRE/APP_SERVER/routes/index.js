@@ -249,6 +249,16 @@ router.get('/upload/resource', verificaToken, function(req, res){
   res.render('addResourceForm', {d: data})
 })
 
+// Pedido para avaliar um recurso
+router.get('/resources/:rname/evaluate', verificaToken, function(req, res){
+  var data = new Date().toISOString().substring(0,16)
+  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
+    .then(dados => {
+      res.render('evaluateResource', {r: dados.data[0], d: data})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
 // Pedido para adicionar um post
 router.get('/resources/:rname/posts/add', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
@@ -615,7 +625,11 @@ router.post('/upload/resource', upload.single('resource'), verificaToken, verifi
           dateSubmission: new Date().toISOString().slice(0, 19).split('T').join(' '),
           visibility: metadadosObj.visibility,
           author: metadadosObj.author,
-          submitter: req.user.username
+          submitter: req.user.username,
+          evaluation: {
+            ev: 0,
+            eved_by: []
+          }
         } 
         let oldPath =  __dirname + '/../' + req.file.path
         let newPath = __dirname + '/../uploads/' + metadadosObj.type + '/' + req.file.originalname
@@ -676,17 +690,40 @@ router.post('/resources/:rname/edit', verificaToken, function(req, res){
     .catch(erro => {res.render('error', {error: erro})})
 })
 
+// Avaliar um recurso
+router.post('/resources/:rname/evaluate', verificaToken, function(req, res){
+  axios.post('http://localhost:7779/resource/' + req.params.rname + "/evaluate?token=" + req.cookies.token, {ev: req.body.ev})
+    .then(dados1 => {
+      axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
+        .then(dados2 => {
+          var n = {
+            username: req.user.username,
+            resourceName: req.params.rname,
+            event: "O utilizador " + req.body.username + " avaliou o recurso " + req.params.rname,
+            date: new Date().toISOString().slice(0, 19).split('T').join(' '),
+            visibility: dados2.data[0].visibility // A mesma do recurso
+          }
+    
+          axios.post('http://localhost:7779/news/add?token=' + req.cookies.token, n)
+            .then(dados => {
+              res.redirect('/resources/' + req.params.rname)
+            })
+            .catch(erro => {res.render('error', {error: erro})})
+        })
+        .catch(erro => {res.render('error', {error: erro})})
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+}) 
+
 // Adicionar um post
 router.post('/resources/:rname/posts/add', verificaToken, function(req, res){
-  var data = new Date().toISOString().substring(0,16)
-
   var p = {
     resourceName: req.body.resourceName,
     username: req.body.username,
     title: req.body.title,
     description: req.body.description,
     liked_by: [], 
-    date: data,
+    date: new Date().toISOString().slice(0, 19).split('T').join(' '),
     visibility: req.body.visibility,
     comments: []
   }

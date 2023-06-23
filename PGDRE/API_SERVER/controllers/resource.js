@@ -63,6 +63,7 @@ module.exports.getRTitle = t => {
         })
 }
 
+// Adição de um recurso
 module.exports.addR = r => {
     return Resource.create(r)
         .then(resposta => {
@@ -73,6 +74,7 @@ module.exports.addR = r => {
         })
 }
 
+// Atualização de um recurso
 module.exports.updateR = r => {
     return Resource 
         .updateOne({resourceName: r.resourceName}, r)
@@ -84,6 +86,7 @@ module.exports.updateR = r => {
         })
 }
 
+// Eliminação de um recurso
 module.exports.deleteR = rname => {
     return Resource
         .deleteOne({resourceName: rname})

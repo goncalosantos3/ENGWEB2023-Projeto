@@ -25,8 +25,9 @@ block content
               th Subtítulo
               th Tipo
               th Autor 
-              th Submissor
+              th Submissor  
               th Visibilidade
+              th Avaliação
               th Detalhes
               th Operações
 
@@ -41,13 +42,19 @@ block content
                   td= r.type
                   td= r.author
                   td= r.submitter
-                  td= r.visibility
+                  if r.visibility == "Public"
+                    td Público
+                  else 
+                    td Privado
+                  td #{r.evaluation.ev} ⭐
                   td  
                     a(href="/resources/" + r.resourceName)
                       img.w3-margin(src="/images/details.png" alt="details icon" width="30" height="30")
                   td  
                     a(href="/resources/download/" + r.resourceName) 
                       img.w3-round-xlarge.w3-margin(src="/images/download.png" alt="download icon" width="30" height="30")
+                    a(href="/resources/" + r.resourceName + "/evaluate")
+                      img.w3-round-xlarge.w3-margin(src="/images/estrela.png" alt="star icon" width="30" height="30")
                     if u.level == "admin" || (u.level == "producer" && r.submitter == u.username)
                       a(href="/resources/edit/" + r.resourceName)
                         img.w3-round-large.w3-margin(src="/images/edit.png" alt="edit icon" width="30" height="30")
@@ -55,4 +62,4 @@ block content
                         img.w3-round-large.w3-margin(src="/images/delete.png" alt="delete icon" width="30" height="30")
 
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]
+      address Generated in PGDRE at #{d} #[a#home(href="/home") Go back to home!]

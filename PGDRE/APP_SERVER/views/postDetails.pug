@@ -3,13 +3,13 @@ extends layout
 block content
     .w3-card-4
     header.w3-container.w3-blue
-      h1 Postagem
+      h1 Postagem: #{p.title}
 
     .w3-container
         ul.w3-ul 
+            li #[b Title: ] #{p.title}
             li #[b Resource Name: ] #{p.resourceName}
             li #[b Utilizador: ] #{p.username} 
-            li #[b Title: ] #{p.title}
             li #[b Description: ] #{p.description}
             li #[b Gostos: ] #{p.liked_by.length}
             li #[b Data: ] #{p.date}
@@ -21,6 +21,10 @@ block content
                   img.w3-round-large.w3-margin(src="/images/edit.png" alt="edit icon" width="30" height="30")
                 a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/delete")
                   img.w3-round-large.w3-margin(src="/images/delete.png" alt="delete icon" width="30" height="30")
+
+              button#cancel.w3-btn.w3-round.w3-red.w3-margin
+                a(href="/resources/" + p.resourceName) Voltar aos detalhes do recurso
+            
             .w3-card-4
             header.w3-container.w3-purple
                 h1 Comentários #[a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/comments/add") #[img.w3-margin(src="/images/add.png" alt="add icon" width="30" height="30")]]
@@ -45,4 +49,4 @@ block content
                               img.w3-round-large(src="/images/delete.png" alt="delete icon" width="30" height="30")
 
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]
+      address Generated in PGDRE at #{d} #[a#home(href="/home") Go back to home!]

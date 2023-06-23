@@ -1,0 +1,38 @@
+extends layout
+
+block content
+    .w3-card-4
+    header.w3-container.w3-blue
+      h1 Avaliação de um recurso
+
+    .w3-container
+      ul.w3-ul
+          li #[b Nome do Recurso: ] #{r.resourceName} 
+          li #[b Conteúdo: ]
+            ul.w3-ul 
+              each f in r.files
+                li= f
+          li #[b Título: ] #{r.title}
+          li #[b Subtítulo: ] #{r.subtitle}
+          li #[b Tipo: ] #{r.type}
+          li #[b Autor: ] #{r.author}
+          li #[b Submissor: ] #{r.submitter}
+          li #[b Avaliação Atual: ] #{r.evaluation.ev}⭐
+
+      h2 Submeta a sua avaliação:
+      center
+        form.w3-container(action="/resources/" + r.resourceName + "/evaluate" method="POST")
+          select(name="ev")
+            option(value="0") 0⭐
+            option(value="1") 1⭐
+            option(value="2") 2⭐
+            option(value="3") 3⭐
+            option(value="4") 4⭐ 
+            option(value="5") 5⭐
+          input.w3-margin-left(type="image" alt="evaluate icon" src="/images/evaluate.png" height="30" width="30")
+
+      button#cancel.w3-btn.w3-round.w3-red.w3-margin
+        a(href="/resources/" + r.resourceName) Cancelar
+
+    footer.w3-container.w3-blue
+      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]

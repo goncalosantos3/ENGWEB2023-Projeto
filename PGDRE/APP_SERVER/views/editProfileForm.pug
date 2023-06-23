@@ -19,9 +19,9 @@ block content
           input.w3-input(type="text" name="lastAccess" value=u.lastAccess readonly)
           label Activo
           if u.active
-            input.w3-input(type="text" name="active" value="yes" readonly)
+            input.w3-input(type="text" name="active" value="Sim" readonly)
           else 
-            input.w3-input(type="text" name="active" value="no" readonly)
+            input.w3-input(type="text" name="active" value="Não" readonly)
 
         fieldset  
           legend Editáveis:
@@ -37,4 +37,4 @@ block content
           a(href="/profile") Cancelar 
 
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]
+      address Generated in PGDRE at #{d} #[a#home(href="/home") Go back to home!]

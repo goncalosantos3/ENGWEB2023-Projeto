@@ -5,7 +5,12 @@ block content
     header.w3-container.w3-blue
       h1 Plataforma de Gestão e Disponibilização de Recursos Educativos
     if u
-      h2.w3-margin-left Bem-vindo: #{u.username}! (#{u.level})
+      if u.level == "admin"
+        h2.w3-margin-left Bem-vindo: #{u.username}! (Administrador/a)
+      if u.level == "producer"
+        h2.w3-margin-left Bem-vindo: #{u.username}! (Produtor/a)
+      if u.level == "consumer"
+        h2.w3-margin-left Bem-vindo: #{u.username}! (Consumidor/a)
     
     .w3-container
         center
@@ -51,6 +56,8 @@ block content
                       img.w3-round-large.w3-margin-right.w3-margin-left(src="/images/edit.png" alt="edit icon" width="30" height="30")
                     a(href="/news/delete/" + n._id)
                       img.w3-round-large.w3-margin-right.w3-margin-left(src="/images/delete.png" alt="delete icon" width="30" height="30")
+                else 
+                  td Indisponível!
 
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]
+      address Generated in PGDRE at #{d}
