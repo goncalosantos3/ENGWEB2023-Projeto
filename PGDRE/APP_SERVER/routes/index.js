@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var axios = require('axios'); // serve para fazer pedidos para os outros servidores
+var popups = require('../public/javascripts/popups')
 
 var fs = require('fs') // file system
 var multer = require('multer');
@@ -405,7 +406,7 @@ router.post('/register', verificaToken, function(req,res){
             .then(dados => {
               axios.get("http://localhost:7778/users/get/" + req.body.username + "?token=" + req.cookies.token)
                 .then(dados => {
-                  res.render('confirmRegister', {u: dados.data, d: data})
+                  res.render('confirmRegister', {u: dados.data, d: data, popup: true})
                 })
                 .catch(erro => {res.render('error', {error: erro})})
             })
@@ -692,6 +693,7 @@ router.post('/resources/:rname/edit', verificaToken, function(req, res){
 
 // Avaliar um recurso
 router.post('/resources/:rname/evaluate', verificaToken, function(req, res){
+  console.dir(req.body)
   axios.post('http://localhost:7779/resource/' + req.params.rname + "/evaluate?token=" + req.cookies.token, {ev: req.body.ev})
     .then(dados1 => {
       axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
@@ -699,11 +701,11 @@ router.post('/resources/:rname/evaluate', verificaToken, function(req, res){
           var n = {
             username: req.user.username,
             resourceName: req.params.rname,
-            event: "O utilizador " + req.body.username + " avaliou o recurso " + req.params.rname,
+            event: "O utilizador " + req.user.username + " avaliou o recurso " + req.params.rname,
             date: new Date().toISOString().slice(0, 19).split('T').join(' '),
             visibility: dados2.data[0].visibility // A mesma do recurso
           }
-    
+
           axios.post('http://localhost:7779/news/add?token=' + req.cookies.token, n)
             .then(dados => {
               res.redirect('/resources/' + req.params.rname)

@@ -23,7 +23,7 @@ block content
                       option(value=r.resourceName) #{r.resourceName}
               br
               label Evento
-              input.w3-input.w3-border.w3-round.w3-margin.w3-light-grey(type="text" name="event")
+              input.w3-input.w3-border.w3-round.w3-light-grey(type="text" name="event")
             input.w3-btn.w3-green.w3-margin(type="submit" value="Submissão da Notícia!")
             button.w3-btn.w3-round.w3-red.w3-margin
               a(href="/home") Cancelar 
@@ -32,5 +32,6 @@ block content
           .w3-panel.w3-yellow
               h3 Erro:
               p= erro
+
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]
+      address Generated in PGDRE at #{d} #[a#home(href="/home") Go back to home!]

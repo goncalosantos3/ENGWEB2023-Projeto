@@ -1,6 +1,7 @@
 extends layout
 
 block content
+    .modal(id="display")
     .w3-card-4
     header.w3-container.w3-blue
       h1 Postagem: #{p.title}
@@ -38,11 +39,11 @@ block content
                       th Data
                       th Operações
                   each c in p.comments 
-                      tr 
-                        td= c.username
-                        td= c.title
-                        td= c.description
-                        td= c.date
+                      tr
+                        td(onclick='showComment(\"' + p.resourceName + '\", \"' + p._id + '\", \"' + c.username + '\", \"' + c.title + '\", \"' + c.description + '\", \"' + c.date + '\")')= c.username
+                        td(onclick='showComment(\"' + p.resourceName + '\", \"' + p._id + '\", \"' + c.username + '\", \"' + c.title + '\", \"' + c.description + '\", \"' + c.date + '\")')= c.title
+                        td(onclick='showComment(\"' + p.resourceName + '\", \"' + p._id + '\", \"' + c.username + '\", \"' + c.title + '\", \"' + c.description + '\", \"' + c.date + '\")')= c.description
+                        td(onclick='showComment(\"' + p.resourceName + '\", \"' + p._id + '\", \"' + c.username + '\", \"' + c.title + '\", \"' + c.description + '\", \"' + c.date + '\")')= c.date
                         td 
                           if u.level == "admin" || u.username == c.username
                             a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/comments/" + c._id + "/delete")

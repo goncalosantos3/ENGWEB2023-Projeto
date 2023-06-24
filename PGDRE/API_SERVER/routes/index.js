@@ -8,7 +8,6 @@ var News = require('../controllers/news')
 router.get('/resource/list', function(req, res) {
   Resource.list()
     .then(recursos => {
-      console.dir(recursos)
       res.status(200).jsonp(recursos)
     })
     .catch(erro => {
@@ -20,7 +19,6 @@ router.get('/resource/list', function(req, res) {
 router.get('/resource/list/:type', function(req, res) {
   Resource.listType(req.params.type)
     .then(recursos => {
-      console.dir(recursos)
       res.status(200).jsonp(recursos)
     })
     .catch(erro => {
@@ -32,7 +30,6 @@ router.get('/resource/list/:type', function(req, res) {
 router.get('resource/list/:author', function(req, res){
   Resource.getRAutor(req.params.author)
     .then(recursos => {
-      console.dir(recursos)
       res.status(200).jsonp(recursos)
     })
     .catch(erro => {
@@ -44,7 +41,6 @@ router.get('resource/list/:author', function(req, res){
 router.get('/resource/:rname', function(req, res){
   Resource.getResource(req.params.rname)
     .then(recurso => {
-      console.dir(recurso)
       res.status(200).jsonp(recurso)
     })
     .catch(erro => {
@@ -135,10 +131,8 @@ router.post('/news/search', function(req, res){
 
 // Adicionar um recurso
 router.post('/resource/add', function(req, res){
-  console.dir(req.body)
   Resource.addR(req.body)
     .then(recurso => {
-      console.dir(recurso)
       res.status(200).jsonp(recurso)
     })
     .catch(erro => {
@@ -150,7 +144,6 @@ router.post('/resource/add', function(req, res){
 router.post('/resource/:rname/edit', function(req, res){
   Resource.updateR(req.body)
     .then(recurso => {
-      console.dir(recurso)
       res.status(200).jsonp(recurso)
     })
     .catch(erro => {
@@ -183,6 +176,7 @@ router.delete('/resource/:rname/delete', function(req, res){
 
 // Avaliar um recurso
 router.post('/resource/:rname/evaluate', function(req, res){
+  console.dir(req.body)
   Resource.getResource(req.params.rname)
     .then(r => {
       ev = 0
@@ -225,7 +219,6 @@ router.post('/resource/:rname/evaluate', function(req, res){
 router.get('/resource/:rname/posts', function(req, res){
   Post.rPosts(req.params.rname)
     .then(posts => {
-      console.dir(posts)
       res.status(200).jsonp(posts)
     })
     .catch(erro => {
@@ -237,7 +230,6 @@ router.get('/resource/:rname/posts', function(req, res){
 router.get('/resource/:rname/posts/:id', function(req, res){
   Post.getPost(req.params.id)
     .then(post => {
-      console.dir(post)
       res.status(200).jsonp(post)
     })
     .catch(erro => {
@@ -280,7 +272,6 @@ router.post('/resource/:rname/posts/add', function(req, res){
 
 // Editar um post
 router.post('/resource/:rname/posts/:id/edit', function(req, res){
-  console.dir(req.body)
   Post.updatePost(req.body)
     .then(post => {
       res.status(200).jsonp(post)
@@ -357,7 +348,6 @@ router.get('/news/list', function(req, res){
 router.get('/news/:id', function(req, res){
   News.news(req.params.id)
     .then(news => {
-      console.dir(news)
       res.status(200).jsonp(news)
     })
     .catch(erro => {
@@ -369,7 +359,6 @@ router.get('/news/:id', function(req, res){
 router.post('/news/add', function(req, res){
   News.addNews(req.body)
     .then(news => {
-      console.dir(news)
       res.status(200).jsonp(news)
     })
     .catch(erro => {
@@ -381,7 +370,6 @@ router.post('/news/add', function(req, res){
 router.post('/news/edit/:id', function(req, res){
   News.updateNews(req.body)
     .then(news => {
-      console.dir(news)
       res.status(200).jsonp(news)
     })
     .catch(erro => {
@@ -393,7 +381,6 @@ router.post('/news/edit/:id', function(req, res){
 router.delete('/news/:id', function(req, res){
   News.deleteNews(req.params.id)
     .then(news => {
-      console.dir(news)
       res.status(200).jsonp(news)
     })
     .catch(erro => {
