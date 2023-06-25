@@ -18,7 +18,7 @@ function verificaToken(req, res, next){
   if(req.cookies && req.cookies.token){
     jwt.verify(req.cookies.token, "PGDRE2023", function(e, payload){
       if(e){// Erro na validação do token
-        res.render('error', {error: "O token do pedido falhou na validação..."})
+        res.render('error', {error: "O token do pedido não é válido...", token: false})
       }
       else{ // Só avança se existir um token e se este for verificado com sucesso
         req.user = payload // Informações do user -> req.user
@@ -26,7 +26,7 @@ function verificaToken(req, res, next){
       }
     })
   }else{ // Não existe token
-    res.render('error', {error: "O pedido não tem um token..."})
+    res.render('error', {error: "O pedido não tem um token...", token: false})
   }
 }
 
