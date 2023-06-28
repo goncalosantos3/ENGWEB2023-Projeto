@@ -1,10 +1,10 @@
 extends layout
 
 block content
+    .modal(id="display")
     .w3-card-4
     header.w3-container.w3-blue
       h1 Página para ativação de um utilizador
-      h2 Escolha uma conta para ativar!
 
     .w3-container
       table.w3-table-all
@@ -16,10 +16,10 @@ block content
           th Ativar
         each u in us
           tr 
-              td= u.username
-              td= u.name 
-              td= u.email 
-              td= u.level
+              td(onclick='showUser(\"/profile/activate\", \"'+u.username+'\", \"'+u.level+'\", \"'+u.name+'\", \"'+u.email+'\", \"'+u.dateCreated+'\", \"'+u.lastAccess+'\", \"'+u.active+'\")')= u.username
+              td(onclick='showUser(\"/profile/activate\", \"'+u.username+'\", \"'+u.level+'\", \"'+u.name+'\", \"'+u.email+'\", \"'+u.dateCreated+'\", \"'+u.lastAccess+'\", \"'+u.active+'\")')= u.name 
+              td(onclick='showUser(\"/profile/activate\", \"'+u.username+'\", \"'+u.level+'\", \"'+u.name+'\", \"'+u.email+'\", \"'+u.dateCreated+'\", \"'+u.lastAccess+'\", \"'+u.active+'\")')= u.email 
+              td(onclick='showUser(\"/profile/activate\", \"'+u.username+'\", \"'+u.level+'\", \"'+u.name+'\", \"'+u.email+'\", \"'+u.dateCreated+'\", \"'+u.lastAccess+'\", \"'+u.active+'\")')= u.level
               td  
                 a(href="/profile/activate/" + u.username) 
                   img.w3-round-xlarge(src="/images/activate.png" alt="activate icon" width="30" height="30")

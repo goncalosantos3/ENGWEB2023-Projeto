@@ -67,3 +67,44 @@ function showComment(rn, pid, un, ti, desc, dt){
     $("#display").append(popup)
     $("#display").modal()
 }
+
+function showProfilePic(level, fname, username){
+    if(fname != "profile.png"){
+        var pic = $('<img src="/profilePics/' + level + '/' + fname + '" width="400px"/>')
+    }else{
+        var pic = $('<img src="/images/profile.png" width="400px"/>')
+    }
+
+    if(username == undefined){
+        // Fazer download da própria foto de perfil
+        var download = $('<div><a href="/profile/profilePic/download">Download</a></div>')
+    }else{
+        // Fazer download da foto de perfil de outro user
+        var download = $('<div><a href="/profile/profilePic/download/' + username + '">Download</a></div>')
+    }
+    
+    // Limpa tudo o que poderia ter no modal
+    $("#display").empty()
+    $("#display").append(pic, download)
+    $("#display").modal()
+}
+
+function showUser(route, un, le, na, email, dC, lA, active){
+    var popup = $(`<div>
+        <h1>Utilizador (`+ le + `)</h1>
+        <ul>
+            <li><b>Nome de utilizador:</b> ` + un + `</li>
+            <li><b>Nome:</b> ` + na + `</li>
+            <li><b>Email:</b> ` + email + `</li>
+            <li><b>Data de Criação da conta:</b> ` + dC + `</li>
+            <li><b>Data de último acesso à plataforma:</b> ` + lA + `</li>
+            <li><b>Ativo:</b> ` + active + `</li>
+        </ul>
+        <a href="` + route + `">Ok</a>
+    </div>`)
+
+    // Limpa tudo o que poderia ter no modal
+    $("#display").empty()
+    $("#display").append(popup)
+    $("#display").modal()
+}

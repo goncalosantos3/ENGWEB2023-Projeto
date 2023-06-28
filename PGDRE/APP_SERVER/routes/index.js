@@ -92,6 +92,36 @@ router.get('/profile/profilePic', verificaToken, function(req, res){
   res.render('addProfilePicForm', {d: data})
 })
 
+// Fazer download da própria foto de perfil
+router.get('/profile/profilePic/download', verificaToken, function(req, res){
+  axios.get('http://localhost:7778/users/get/' + req.user.username + "?token=" + req.cookies.token)
+    .then(dados => {
+      var path
+      if(req.user.profilePic == "profile.png"){
+        path = __dirname + '/../public/images/profile.png'
+      }else{
+        path = __dirname + '/../public/profilePics/' + req.user.level + "/" + dados.data.profilePic
+      }
+      res.download(path)
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
+// Fazer download da foto de perfil de outro user
+router.get('/profile/profilePic/download/:username', verificaToken, function(req, res){
+  axios.get('http://localhost:7778/users/get/' + req.params.username + "?token=" + req.cookies.token)
+    .then(dados => {
+      var path
+      if(dados.data.profilePic == "profile.png"){
+        path = __dirname + '/../public/images/profile.png'
+      }else{
+        path = __dirname + '/../public/profilePics/' + dados.data.level + "/" + dados.data.profilePic
+      }
+      res.download(path)
+    })
+    .catch(erro => res.render('error', {error: erro}))
+})
+
 // Pedido de desativação de conta
 router.get('/profile/deactivate', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
