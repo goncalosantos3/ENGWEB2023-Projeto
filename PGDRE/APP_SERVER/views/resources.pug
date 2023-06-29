@@ -7,6 +7,16 @@ block content
       h1 Recursos 
         if u.level == "admin" || u.level == "producer"
           a(href="/resources/add") #[img.w3-margin(src="/images/add.png" alt="add icon" width="30" height="30")]
+      
+        .w3-right
+          a.w3-margin.w3-large(href="/home") Home
+            img.w3-margin(src="/images/home.png" alt="home icon" width="40" height="40")
+          a.w3-margin.w3-large(href="/resources") Recursos
+            img.w3-margin(src="/images/resources.png" alt="resources icon" width="40" height="40")
+          a.w3-margin.w3-large(href="/profile") Perfil
+            img.w3-margin(src="/images/profile.png" alt="profile icon" width="40" height="40")
+          a.w3-margin.w3-large(href="/logout") Logout  
+            img.w3-margin(src="/images/logout.png" alt="logout icon" width="40" height="40")
 
     .w3-container
       .w3-container
@@ -19,8 +29,6 @@ block content
           input#search.w3-margin-bottom(type="text" name="search")        
           input.w3-margin-left(type="image" alt="search icon" src="/images/search.png" height="30" width="30") 
           
-          button#cancel.w3-btn.w3-round.w3-red.w3-margin
-            a(href="/home") Voltar para a página principal
       hr
 
       table.w3-table-all

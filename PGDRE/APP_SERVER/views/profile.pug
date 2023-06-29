@@ -6,8 +6,26 @@ block content
     header.w3-container.w3-blue
       if u.profilePic != undefined
         h1 Perfil #[img(src="/profilePics/" + u.level + "/" + u.profilePic alt="profile picture" height="50" width="50" onclick='showProfilePic(\"' + u.level + '\", \"' + u.profilePic + '\")')]
+          .w3-right
+            a.w3-margin.w3-large(href="/home") Home
+              img.w3-margin(src="/images/home.png" alt="home icon" width="40" height="40")
+            a.w3-margin.w3-large(href="/resources") Recursos
+              img.w3-margin(src="/images/resources.png" alt="resources icon" width="40" height="40")
+            a.w3-margin.w3-large(href="/profile") Perfil
+              img.w3-margin(src="/images/profile.png" alt="profile icon" width="40" height="40")
+            a.w3-margin.w3-large(href="/logout") Logout  
+              img.w3-margin(src="/images/logout.png" alt="logout icon" width="40" height="40")
       else 
         h1 Perfil #[img(src="/images/profile.png" alt="profile icon" height="50" width="50" onclick='showProfilePic(\"' + u.level + '\", \"profile.png\")')]
+          .w3-right
+            a.w3-margin.w3-large(href="/home") Home
+              img.w3-margin(src="/images/home.png" alt="home icon" width="40" height="40")
+            a.w3-margin.w3-large(href="/resources") Recursos
+              img.w3-margin(src="/images/resources.png" alt="resources icon" width="40" height="40")
+            a.w3-margin.w3-large(href="/profile") Perfil
+              img.w3-margin(src="/images/profile.png" alt="profile icon" width="40" height="40")
+            a.w3-margin.w3-large(href="/logout") Logout  
+              img.w3-margin(src="/images/logout.png" alt="logout icon" width="40" height="40")
 
     .w3-container  
       if u

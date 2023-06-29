@@ -4,7 +4,16 @@ block content
     .modal(id="display")
     .w3-card-4
     header.w3-container.w3-blue
-      h1 Postagem: #{p.title}
+      h1 Post: #{p.title}
+       .w3-right
+          a.w3-margin.w3-large(href="/home") Home
+            img.w3-margin(src="/images/home.png" alt="home icon" width="40" height="40")
+          a.w3-margin.w3-large(href="/resources") Recursos
+            img.w3-margin(src="/images/resources.png" alt="resources icon" width="40" height="40")
+          a.w3-margin.w3-large(href="/profile") Perfil
+            img.w3-margin(src="/images/profile.png" alt="profile icon" width="40" height="40")
+          a.w3-margin.w3-large(href="/logout") Logout  
+            img.w3-margin(src="/images/logout.png" alt="logout icon" width="40" height="40")
 
     .w3-container
         ul.w3-ul 
@@ -44,10 +53,12 @@ block content
                         td(onclick='showComment(\"' + p.resourceName + '\", \"' + p._id + '\", \"' + c.username + '\", \"' + c.title + '\", \"' + c.description + '\", \"' + c.date + '\")')= c.title
                         td(onclick='showComment(\"' + p.resourceName + '\", \"' + p._id + '\", \"' + c.username + '\", \"' + c.title + '\", \"' + c.description + '\", \"' + c.date + '\")')= c.description
                         td(onclick='showComment(\"' + p.resourceName + '\", \"' + p._id + '\", \"' + c.username + '\", \"' + c.title + '\", \"' + c.description + '\", \"' + c.date + '\")')= c.date
-                        td 
-                          if u.level == "admin" || u.username == c.username
+                        if u.level == "admin" || u.username == c.username
+                          td
                             a(href="/resources/" + p.resourceName + "/posts/" + p._id + "/comments/" + c._id + "/delete")
                               img.w3-round-large(src="/images/delete.png" alt="delete icon" width="30" height="30")
+                        else 
+                          td Indisponível!
 
     footer.w3-container.w3-blue
       address Generated in PGDRE at #{d} #[a#home(href="/home") Go back to home!]

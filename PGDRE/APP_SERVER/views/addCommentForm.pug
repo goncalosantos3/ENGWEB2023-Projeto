@@ -4,6 +4,15 @@ block content
   .w3-card-4
     header.w3-container.w3-blue
       h1 Formulário dos Comentários
+        .w3-right
+          a.w3-margin.w3-large(href="/home") Home
+            img.w3-margin(src="/images/home.png" alt="home icon" width="40" height="40")
+          a.w3-margin.w3-large(href="/resources") Recursos
+            img.w3-margin(src="/images/resources.png" alt="resources icon" width="40" height="40")
+          a.w3-margin.w3-large(href="/profile") Perfil
+            img.w3-margin(src="/images/profile.png" alt="profile icon" width="40" height="40")
+          a.w3-margin.w3-large(href="/logout") Logout  
+            img.w3-margin(src="/images/logout.png" alt="logout icon" width="40" height="40")
 
     .w3-container  
       .w3-container.w3-border.w3-margin
@@ -31,4 +40,4 @@ block content
           a(href="/resources/" + p.resourceName + "/posts/" + p._id) Cancelar 
 
     footer.w3-container.w3-blue
-      address Generated in PGDRE at #{d} | #[a(href="/home") Go back to home!]
+      address Generated in PGDRE at #{d} #[a#home(href="/home") Go back to home!]
