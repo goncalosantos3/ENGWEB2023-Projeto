@@ -2,3 +2,9 @@ PGDRE/APP_SERVER/node_modules
 PGDRE/API_SERVER/node_modules
 PGDRE/AUTH_SERVER/node_modules
 PGDRE/AUTH_SERVER/sessions
+PGDRE/APP_SERVER/uploads/Artigo
+PGDRE/APP_SERVER/uploads/Ficha
+PGDRE/APP_SERVER/uploads/Relatório
+PGDRE/APP_SERVER/uploads/Slides
+PGDRE/APP_SERVER/uploads/Tese
+PGDRE/APP_SERVER/uploads/Teste
