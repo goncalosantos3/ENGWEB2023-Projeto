@@ -126,6 +126,14 @@ router.post('/news/search', function(req, res){
       .catch(erro => {
         res.status(220).jsonp({message: "Erro na pesquisa da notícia por recurso: " + erro})
       })
+  }else if(req.body.filtro == 'event'){
+    News.evNews(req.body.search)
+      .then(recursos => {
+        res.status(200).jsonp(recursos)
+      })
+      .catch(erro => {
+        res.status(220).jsonp({message: "Erro na pesquisa da notícia por evento: " + erro})
+      })
   }
 })
 

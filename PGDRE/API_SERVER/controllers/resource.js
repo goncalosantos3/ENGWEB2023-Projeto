@@ -13,10 +13,10 @@ module.exports.list = () => {
         })
 }
 
-// List all resources of a certain type
+// Vai buscar os recursos por tipo
 module.exports.listType = t => {
     return Resource
-        .find({type: t})
+        .find({type: {$regex: t}})
         .sort({resourceName: 1})
         .then(resposta => {
             return resposta
@@ -41,7 +41,7 @@ module.exports.getResource = rname => {
 // Vai buscar todos os recursos públicos de um certo autor
 module.exports.getRAutor = a => {
     return Resource
-        .find({author: a})
+        .find({author: {$regex: a}})
         .sort({resourceName: 1})
         .then(resposta => {
             return resposta
@@ -51,9 +51,10 @@ module.exports.getRAutor = a => {
         })
 }
 
+// Vai buscar os recursos por titulo
 module.exports.getRTitle = t => {
     return Resource
-        .find({title: t})
+        .find({title: {$regex: t}})
         .sort({resourceName: 1})
         .then(resposta => {
             return resposta

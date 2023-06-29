@@ -617,7 +617,9 @@ router.post('/upload/resource', upload.single('resource'), verificaToken, verifi
           recurso.metadados.valid = false
         }
   
-        if(metadata.type != 'Ficha' && metadata.type != 'Teste' && metadata.type != 'Slides' && metadata.type != 'Tese'){
+        if(metadata.type != 'Artigo' && metadata.type != 'Ficha' 
+        && metadata.type != 'Relatório' && metadata.type != 'Teste' 
+        && metadata.type != 'Slides' && metadata.type != 'Tese'){
           recurso.metadados.valid = false
         }
 

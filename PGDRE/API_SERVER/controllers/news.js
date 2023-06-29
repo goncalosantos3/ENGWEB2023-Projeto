@@ -13,10 +13,10 @@ module.exports.newsList = () => {
         })
 }
 
-// List of all the news related to a resource
+// Lista todas as notícias relacionadas a um recurso
 module.exports.rNews = rname => {
     return News
-        .find({resourceName: rname})
+        .find({resourceName: {$regex: rname}})
         .sort({date: 1})
         .then(resposta => {
             return resposta
@@ -26,7 +26,7 @@ module.exports.rNews = rname => {
         })
 }
 
-// Get one news in particular
+// Vai buscar uma notícia em particular
 module.exports.news = id => {
     return News
         .findOne({_id: id})
@@ -41,7 +41,19 @@ module.exports.news = id => {
 // Lista das notícias de um utilizador
 module.exports.getnewsU = username => {
     return News 
-        .find({username: username})
+        .find({username: {$regex: username}})
+        .then(resposta => {
+            return resposta
+        })
+        .catch(erro => {
+            return erro
+        })
+}  
+
+// Lista todas as notícias por evento
+module.exports.evNews = ev => {
+    return News 
+        .find({event: {$regex: ev}})
         .then(resposta => {
             return resposta
         })

@@ -28,7 +28,7 @@ module.exports.getPost = id => {
 // Lista de posts com um determinado título
 module.exports.getPostsT = t => {
     return Post
-        .find({title: t})
+        .find({title: {$regex: t}})
         .then(resposta => {
             return resposta
         })
@@ -52,7 +52,7 @@ module.exports.getPostsL = l => {
 // Lista de posts de um utilizador
 module.exports.getPostsU = u => {
     return Post
-        .find({username: u})
+        .find({username: {$regex: u}})
         .then(resposta => {
             return resposta
         })
