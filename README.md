@@ -25,3 +25,32 @@ Nesta secção vamos passar a explicar melhor como os 3 servidores se relacionam
 para responder aos vários pedidos que um utilizador possa fazer. Analisemos o seguinte diagrama:
 
 ![estrutura](https://github.com/goncalosantos3/ENGWEB2023-Projeto/assets/73351929/14d9aca5-1ec0-4fda-9922-82161ce4fc0c)
+
+Tendo como refenrência o diagrama, vamos passar à explicação detalhada de cada servidor.
+
+#### APP_SERVER
+O APP_SERVER é o principal servidor na plataforma por ser o servidor que
+conecta todas as outras componentes e também por ser o servidor que comunica diretamente com o utilizador.
+
+Este servidor trata de todos os pedidos do utilizador e usa como suporte os outros dois servidores (AUTH_SERVER e API_SERVER) para dar resposta aos pedidos do utilizador.
+
+Mais concretamente, este servidor faz pedidos ao API_SERVER para obter informação sobre os recursos, as notícias e posts. Faz pedidos ao AUTH_SERVER para obter informação sobre os utilizadores para puder fazer várias coisas como autenticar utilizadores, editar os perfis e ter níveis de acesso diferentes para cada utilizador (admin, producer e consumer).
+
+#### API_SERVER
+O API_SERVER é o servidor responsável por gerir toda a informação sobre os
+recursos, os posts e as notícias. Gerir esta informação inclui: criar, editar, listar e remover recursos, notícias e posts. Para isso, foram criadas 3 coleções diferentes na base de dados da plataforma PGDRE cada uma para cada tipo de entidade.
+
+Ao contrário do APP_SERVER, este servidor não gera qualquer tipo de interface
+apenas responde aos pedidos deste servidor consultando a base de dados.
+
+#### AUTH_SERVER
+O AUTH_SERVER é o servidor responsável por gerir toda a informação sobre os
+utilizadores. Gerir esta informação inclui: criar, editar, listar, desativar e ativar utilizadores. Para isso, foi criada 1 coleção na base de dados da plataforma PGDRE para armazenar a informação dos diversos utilizadores.
+
+Para além disto, este servidor é responsável por gerar um jwt (Json Web Token)
+para cada utilizador que se autenticar com sucesso na plataforma. Este token é posteriormente passado para o APP_SERVER para que o cliente possa-o guardar nas suas cookies. Este token serve para todos os servidores verificarem se um dado utilizador está autenticado ou não e, para além disso, verificarem o seu username, o seu nível e se está ativo ou não (todos estes campos são guardados no payload do token). Desta forma, a autenticação de utilizadores e os diferentes níveis de acesso dos mesmos são implementados.
+
+Ao contrário do APP_SERVER, este servidor não gera qualquer tipo de interface
+apenas responde aos pedidos deste servidor consultando a base de dados.
+
+## Persistência de Dados
