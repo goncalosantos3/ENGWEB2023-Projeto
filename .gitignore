@@ -8,3 +8,6 @@ PGDRE/APP_SERVER/uploads/Relatório/*.zip
 PGDRE/APP_SERVER/uploads/Slides/*.zip
 PGDRE/APP_SERVER/uploads/Tese/*.zip
 PGDRE/APP_SERVER/uploads/Teste/*.zip
+PGDRE/APP_SERVER/public/profilePics/admin/*.png
+PGDRE/APP_SERVER/public/profilePics/producer/*.png
+PGDRE/APP_SERVER/public/profilePics/consumer/*.png
