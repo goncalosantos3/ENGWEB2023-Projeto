@@ -24,3 +24,4 @@ pretendida.
 Nesta secção vamos passar a explicar melhor como os 3 servidores se relacionam
 para responder aos vários pedidos que um utilizador possa fazer. Analisemos o seguinte diagrama:
 
+![estrutura](https://github.com/goncalosantos3/ENGWEB2023-Projeto/assets/73351929/14d9aca5-1ec0-4fda-9922-82161ce4fc0c)
