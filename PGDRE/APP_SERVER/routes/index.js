@@ -427,7 +427,7 @@ router.get('/news/delete/:id/confirm', verificaToken, function(req, res){
 // Criar um novo registo de utilizador
 // O utilizador não fica autenticado, apenas é inserido um novo utilizador na BD
 // Tem que se verificar se já existe algum user com o mesmo username
-router.post('/register', function(req,res){
+router.post('/register', verificaToken, function(req,res){
   var data = new Date().toISOString().substring(0,16)
   
   console.log("Level: " + req.body.level)
