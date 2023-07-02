@@ -267,6 +267,30 @@ router.get('/resource/:rname/posts/:id/like', function(req, res){
     })
 })
 
+// Remover um like a um post
+router.get('/resource/:rname/posts/:id/unlike', function(req, res){
+  Post.getPost(req.params.id)
+    .then(post => {
+      if(post.liked_by.includes(req.user.username)){
+        post.liked_by = post.liked_by.filter(function (user) {
+          return user !== req.user.username;
+        });
+        Post.updatePost(post)
+          .then(dados => {
+            res.status(200).jsonp(dados)
+          })
+          .catch(erro => {
+            res.status(516).jsonp({message: "Erro na edição do post " + req.params.id + "do recurso " + req.params.rname + ": " + erro})
+          })
+      }else{// O user não deu like
+        res.status(200).jsonp(post)
+      }
+    })
+    .catch(erro => {
+      res.status(517).jsonp({message: "Erro na obtenção do post" + req.params.id + "do recurso " + req.params.rname + ": " + erro})
+    })
+})
+
 // Adicionar um post a um recurso
 router.post('/resource/:rname/posts/add', function(req, res){
   Post.addPost(req.body)

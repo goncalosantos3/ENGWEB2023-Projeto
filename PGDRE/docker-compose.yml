@@ -14,7 +14,7 @@ services:
     build: ./API_SERVER
     restart: always
     environment:
-      - MONGODB_URL=mongodb://mongodb:27016/PGDRE
+      - MONGODB_URL=mongodb://mongodb:27017/PGDRE
     ports:
       - "7779:7779"
     depends_on:
@@ -27,7 +27,7 @@ services:
     image: mongo
     restart: always
     ports:
-      - '27016:27017'
+      - '27018:27017'
     volumes:
       - tpData:/data/db
     networks:
@@ -38,7 +38,7 @@ services:
     build: ./AUTH_SERVER
     restart: always
     environment:
-      - MONGODB_URL=mongodb://mongodb:27016/PGDRE
+      - MONGODB_URL=mongodb://mongodb:27017/PGDRE
     ports:
       - "7778:7778"
     depends_on:

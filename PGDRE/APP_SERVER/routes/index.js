@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var axios = require('axios'); // serve para fazer pedidos para os outros servidores
 var popups = require('../public/javascripts/popups')
+var env = require('../config/env')
 
 var fs = require('fs') // file system
 var multer = require('multer');
@@ -58,7 +59,7 @@ router.get('/logout', verificaToken, function(req, res){
 // Página inicial 
 router.get('/home', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/news/list?token=' + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/news/list?token=' + req.cookies.token)
     .then(dados => {
       console.dir(req.user)
       res.render('home', {u: req.user, news: dados.data, d: data})
@@ -70,7 +71,7 @@ router.get('/home', verificaToken, function(req, res){
 // Tem que se verificar se o utilizador já está autenticado ou não
 router.get('/profile', verificaToken, function(req, res){  
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7778/users/get/' + req.user.username + "?token=" + req.cookies.token)
+  axios.get(env.authAccessPoint + '/users/get/' + req.user.username + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('profile', {u: dados.data, d: data})
     })
@@ -79,7 +80,7 @@ router.get('/profile', verificaToken, function(req, res){
 
 router.get('/profile/edit', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7778/users/get/' + req.user.username + "?token=" + req.cookies.token)
+  axios.get(env.authAccessPoint + '/users/get/' + req.user.username + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('editProfileForm', {u: dados.data, d: data})
     })
@@ -94,7 +95,7 @@ router.get('/profile/profilePic', verificaToken, function(req, res){
 
 // Fazer download da própria foto de perfil
 router.get('/profile/profilePic/download', verificaToken, function(req, res){
-  axios.get('http://localhost:7778/users/get/' + req.user.username + "?token=" + req.cookies.token)
+  axios.get(env.authAccessPoint + '/users/get/' + req.user.username + "?token=" + req.cookies.token)
     .then(dados => {
       var path
       if(req.user.profilePic == "profile.png"){
@@ -109,7 +110,7 @@ router.get('/profile/profilePic/download', verificaToken, function(req, res){
 
 // Fazer download da foto de perfil de outro user
 router.get('/profile/profilePic/download/:username', verificaToken, function(req, res){
-  axios.get('http://localhost:7778/users/get/' + req.params.username + "?token=" + req.cookies.token)
+  axios.get(env.authAccessPoint + '/users/get/' + req.params.username + "?token=" + req.cookies.token)
     .then(dados => {
       var path
       if(dados.data.profilePic == "profile.png"){
@@ -125,7 +126,7 @@ router.get('/profile/profilePic/download/:username', verificaToken, function(req
 // Pedido de desativação de conta
 router.get('/profile/deactivate', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7778/users/get/' + req.user.username + "?token=" + req.cookies.token)
+  axios.get(env.authAccessPoint + '/users/get/' + req.user.username + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('confirmProfileDeactivation', {u: dados.data, d: data})
     })
@@ -138,7 +139,7 @@ router.get('/profile/deactivate', verificaToken, function(req, res){
 // 3. Fazer o logout da conta
 router.get('/profile/deactivate/confirm', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.put('http://localhost:7778/users/' + req.user.username + '/deactivate?token=' + req.cookies.token)
+  axios.put(env.authAccessPoint + '/users/' + req.user.username + '/deactivate?token=' + req.cookies.token)
     .then(dados => {
       res.redirect('/logout')
     })
@@ -148,7 +149,7 @@ router.get('/profile/deactivate/confirm', verificaToken, function(req, res){
 // (Admin) pedido de desativação de uma conta
 router.get('/profile/deactivate/admin', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7778/users/get/active?token=' + req.cookies.token)
+  axios.get(env.authAccessPoint + '/users/get/active?token=' + req.cookies.token)
     .then(dados => {
       res.render('deactivateProfile', {us: dados.data, d: data})
     })
@@ -158,7 +159,7 @@ router.get('/profile/deactivate/admin', verificaToken, function(req, res){
 // (Admin) desativação de uma conta
 router.get('/profile/deactivate/:username', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.put('http://localhost:7778/users/' + req.params.username + '/deactivate?token=' + req.cookies.token)
+  axios.put(env.authAccessPoint + '/users/' + req.params.username + '/deactivate?token=' + req.cookies.token)
     .then(dados => {
       res.redirect('/profile/deactivate/admin')
     })
@@ -167,7 +168,7 @@ router.get('/profile/deactivate/:username', verificaToken, function(req, res){
 
 router.get('/profile/activate', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7778/users/get/deactive?token=' + req.cookies.token)
+  axios.get(env.authAccessPoint + '/users/get/deactive?token=' + req.cookies.token)
     .then(dados => {
       res.render('activateProfile', {us: dados.data, d: data})
     })
@@ -178,7 +179,7 @@ router.get('/profile/activate', verificaToken, function(req, res){
 // Para ativar uma conta basta mudar o conta active do user
 router.get('/profile/activate/:username', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.put('http://localhost:7778/users/'+ req.params.username + '/activate?token=' + req.cookies.token)
+  axios.put(env.authAccessPoint + '/users/'+ req.params.username + '/activate?token=' + req.cookies.token)
     .then(dados => {
       res.redirect('/profile/activate')
     })
@@ -188,7 +189,7 @@ router.get('/profile/activate/:username', verificaToken, function(req, res){
 // Investigar uma conta
 router.get('/profile/admin/investigate', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7778/users/get?token=' + req.cookies.token)
+  axios.get(env.authAccessPoint + '/users/get?token=' + req.cookies.token)
     .then(dados => {
       res.render('investigateUser', {us: dados.data, d: data})
     })
@@ -198,7 +199,7 @@ router.get('/profile/admin/investigate', verificaToken, function(req, res){
 // Lista de todos os recursos
 router.get('/resources', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/list?token=' + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/list?token=' + req.cookies.token)
     .then(dados => {
       res.render('resources', {u: req.user, rs: dados.data, d: data})
     })
@@ -214,9 +215,9 @@ router.get('/resources/add', verificaToken, function(req, res){
 // Vai buscar um recurso em específico
 router.get('/resources/:rname', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(recurso => {
-      axios.get('http://localhost:7779/resource/' + req.params.rname + "/posts?token=" + req.cookies.token)
+      axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + "/posts?token=" + req.cookies.token)
         .then(posts => {
           res.render('resourceDetails', {u: req.user, r: recurso.data[0], ps: posts.data, d: data})
         })
@@ -229,7 +230,7 @@ router.get('/resources/:rname', verificaToken, function(req, res){
 
 router.get('/resources/edit/:rname', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(dados => {
       var files = ""
       for(let i=0; i<dados.data[0].files.length; i++){
@@ -247,7 +248,7 @@ router.get('/resources/edit/:rname', verificaToken, function(req, res){
 // Pedido de eliminação de um recurso
 router.get('/resources/delete/:rname', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('confirmDeleteResource', {r: dados.data[0], d: data})
     })
@@ -256,7 +257,7 @@ router.get('/resources/delete/:rname', verificaToken, function(req, res){
 
 // Eliminar um recurso
 router.get('/resources/delete/:rname/confirm', verificaToken, function(req, res){
-  axios.delete('http://localhost:7779/resource/' + req.params.rname + "/delete?token=" + req.cookies.token)
+  axios.delete(env.apiAccessPoint + '/resource/' + req.params.rname + "/delete?token=" + req.cookies.token)
     .then(dados => {
       res.redirect('/resources')
     })
@@ -265,7 +266,7 @@ router.get('/resources/delete/:rname/confirm', verificaToken, function(req, res)
 
 // Download de um recurso
 router.get('/resources/download/:rname', verificaToken, function(req, res){
-  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(dados => {
       console.dir(dados.data)
       let path = __dirname + '/../uploads/' + dados.data[0].type + "/" + req.params.rname
@@ -283,7 +284,7 @@ router.get('/upload/resource', verificaToken, function(req, res){
 // Pedido para avaliar um recurso
 router.get('/resources/:rname/evaluate', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('evaluateResource', {r: dados.data[0], d: data})
     })
@@ -293,7 +294,7 @@ router.get('/resources/:rname/evaluate', verificaToken, function(req, res){
 // Pedido para adicionar um post
 router.get('/resources/:rname/posts/add', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('addPostForm', {u: req.user, r: dados.data[0], d: data})
     })
@@ -303,7 +304,7 @@ router.get('/resources/:rname/posts/add', verificaToken, function(req, res){
 // Vai buscar a informação de um post em específico
 router.get('/resources/:rname/posts/:id', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + '/posts/' + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('postDetails', {u: req.user, p: dados.data, d: data})
     })
@@ -313,7 +314,7 @@ router.get('/resources/:rname/posts/:id', verificaToken, function(req, res){
 // Edição de um post
 router.get('/resources/:rname/posts/:id/edit', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + '/posts/' + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('editPostForm', {p: dados.data, d: data})
     })
@@ -323,7 +324,7 @@ router.get('/resources/:rname/posts/:id/edit', verificaToken, function(req, res)
 // Pedido para eliminar um post
 router.get('/resources/:rname/posts/:id/delete', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + "/posts/" + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('confirmDeletePost', {p: dados.data, d: data})
     })
@@ -333,7 +334,7 @@ router.get('/resources/:rname/posts/:id/delete', verificaToken, function(req, re
 // Confirmação da eliminação de um post
 router.get('/resources/:rname/posts/:id/delete/confirm', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.delete('http://localhost:7779/posts/' + req.params.id + "?token=" + req.cookies.token)
+  axios.delete(env.apiAccessPoint + '/posts/' + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
       res.redirect('/resources/' + req.params.rname)
     })
@@ -342,7 +343,16 @@ router.get('/resources/:rname/posts/:id/delete/confirm', verificaToken, function
 
 // Adicionar um like a um post
 router.get('/resources/:rname/posts/:id/like', verificaToken, function(req, res){
-  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id + '/like?token=' + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + '/posts/' + req.params.id + '/like?token=' + req.cookies.token)
+    .then(dados => {
+      res.redirect('/resources/' + req.params.rname + '/posts/' + req.params.id)
+    })
+    .catch(erro => {res.render('error', {error: erro})})
+})
+
+// Remover um like a um post
+router.get('/resources/:rname/posts/:id/unlike', verificaToken, function(req, res){
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + '/posts/' + req.params.id + '/unlike?token=' + req.cookies.token)
     .then(dados => {
       res.redirect('/resources/' + req.params.rname + '/posts/' + req.params.id)
     })
@@ -352,7 +362,7 @@ router.get('/resources/:rname/posts/:id/like', verificaToken, function(req, res)
 // Pedido para adicionar um comentário a um post
 router.get('/resources/:rname/posts/:id/comments/add', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + "/posts/" + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('addCommentForm', {u: req.user, p: dados.data, d: data})
     })
@@ -361,7 +371,7 @@ router.get('/resources/:rname/posts/:id/comments/add', verificaToken, function(r
 
 // Eliminar um comentário de um post
 router.get('/resources/:rname/posts/:p_id/comments/:c_id/delete', verificaToken, function(req, res){
-  axios.delete('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.p_id + "/comments/" + req.params.c_id + "?token=" + req.cookies.token)
+  axios.delete(env.apiAccessPoint + '/resource/' + req.params.rname + "/posts/" + req.params.p_id + "/comments/" + req.params.c_id + "?token=" + req.cookies.token)
     .then(dados => {
       res.redirect('/resources/' + req.params.rname + "/posts/" + req.params.p_id)
     })
@@ -372,7 +382,7 @@ router.get('/resources/:rname/posts/:p_id/comments/:c_id/delete', verificaToken,
 // Se o user for um producer este só pode adicionar notícias sobre os seus recursos
 router.get('/news/add', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/list?token=' + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/list?token=' + req.cookies.token)
     .then(dados => {
       res.render('addNewsForm', {u: req.user, rs: dados.data, d: data})
     })
@@ -382,10 +392,10 @@ router.get('/news/add', verificaToken, function(req, res){
 // Pedido para editar uma notícia
 router.get('/news/edit/:id', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/list?token=' + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/list?token=' + req.cookies.token)
     .then(dados => {
       var rs = dados.data
-      axios.get('http://localhost:7779/news/' + req.params.id + "?token=" + req.cookies.token)
+      axios.get(env.apiAccessPoint + '/news/' + req.params.id + "?token=" + req.cookies.token)
         .then(dados => {
           res.render('editNewsForm', {rs: rs, n: dados.data, d: data})
         })
@@ -397,7 +407,7 @@ router.get('/news/edit/:id', verificaToken, function(req, res){
 // Pedido para remover uma notícia
 router.get('/news/delete/:id', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/news/' + req.params.id + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/news/' + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('deleteNewsConfirm', {n: dados.data, d: data})
     })
@@ -406,7 +416,7 @@ router.get('/news/delete/:id', verificaToken, function(req, res){
 
 // Remover um notícia
 router.get('/news/delete/:id/confirm', verificaToken, function(req, res){
-  axios.delete('http://localhost:7779/news/' + req.params.id + "?token=" + req.cookies.token)
+  axios.delete(env.apiAccessPoint + '/news/' + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
       res.redirect('/home')
     })
@@ -417,7 +427,7 @@ router.get('/news/delete/:id/confirm', verificaToken, function(req, res){
 // Criar um novo registo de utilizador
 // O utilizador não fica autenticado, apenas é inserido um novo utilizador na BD
 // Tem que se verificar se já existe algum user com o mesmo username
-router.post('/register', verificaToken, function(req,res){
+router.post('/register', function(req,res){
   var data = new Date().toISOString().substring(0,16)
   
   console.log("Level: " + req.body.level)
@@ -427,14 +437,14 @@ router.post('/register', verificaToken, function(req,res){
   }else{
     req.body.profilePic = undefined
     // Verificar se não existe nenhum utilizador com o mesmo username
-    axios.get("http://localhost:7778/users/get/" + req.body.username + "?token=" + req.cookies.token)
+    axios.get(env.authAccessPoint + "/users/get/" + req.body.username + "?token=" + req.cookies.token)
       .then(dados => {
         if(dados.data != null){
           res.render('registerForm', {erro: "Já existe um utilizador com esse nome de utilizador! Por favor escolha outro."})
         }else{
-          axios.post("http://localhost:7778/users/register?token=" + req.cookies.token, req.body)
+          axios.post(env.authAccessPoint + "/users/register?token=" + req.cookies.token, req.body)
             .then(dados => {
-              axios.get("http://localhost:7778/users/get/" + req.body.username + "?token=" + req.cookies.token)
+              axios.get(env.authAccessPoint + "/users/get/" + req.body.username + "?token=" + req.cookies.token)
                 .then(dados => {
                   res.render('confirmRegister', {u: dados.data, d: data, popup: true})
                 })
@@ -449,7 +459,7 @@ router.post('/register', verificaToken, function(req,res){
 
 router.post('/login', function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.post("http://localhost:7778/users/login", req.body)
+  axios.post(env.authAccessPoint + "/users/login", req.body)
     // A resposta, em caso de sucesso, é associado o jwt ao user
     .then(dados => {
       if(dados.data.message != undefined){ // A conta está desativa
@@ -463,7 +473,7 @@ router.post('/login', function(req, res){
 })  
 
 router.post('/profile/edit', verificaToken, function(req, res){
-  axios.get("http://localhost:7778/users/get/" + req.body.username + "?token=" + req.cookies.token)
+  axios.get(env.authAccessPoint + "/users/get/" + req.body.username + "?token=" + req.cookies.token)
     .then(dados => {
       if(req.body.password == undefined){
         req.body.password = dados.data.password
@@ -475,7 +485,7 @@ router.post('/profile/edit', verificaToken, function(req, res){
       }
       req.body.profilePic = dados.data.profilePic // A foto de perfil não pode ser alterada neste formulário
 
-      axios.put("http://localhost:7778/users/edit/" + req.body.username + "?token=" + req.cookies.token, req.body)
+      axios.put(env.authAccessPoint + "/users/edit/" + req.body.username + "?token=" + req.cookies.token, req.body)
         .then(dados => {
           res.redirect('/profile')
         })
@@ -499,7 +509,7 @@ router.post('/profile/profilePic', verificaToken, upload.single('profilePic'), f
       var pic = {
         profilePic: req.file.originalname
       }
-      axios.put("http://localhost:7778/users/" + req.user.username + "/profile/profilePic?token=" + req.cookies.token, pic)
+      axios.put(env.authAccessPoint + "/users/" + req.user.username + "/profile/profilePic?token=" + req.cookies.token, pic)
         .then(user => {
           res.redirect('/profile')
         })
@@ -518,7 +528,7 @@ router.post('/profile/profilePic', verificaToken, upload.single('profilePic'), f
 
 router.post('/profile/admin/investigate', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get("http://localhost:7778/users/get/" + req.body.username + "?token=" + req.cookies.token)
+  axios.get(env.authAccessPoint + "/users/get/" + req.body.username + "?token=" + req.cookies.token)
     .then(dados => {
       res.render('investigateProfile', {u: dados.data, d: data})
     })
@@ -529,7 +539,7 @@ router.post('/profile/admin/investigate', verificaToken, function(req, res){
 // Se já existir, o recurso tem que ser rejeitado
 function verificaRName(req, res, next){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.file.originalname + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.file.originalname + "?token=" + req.cookies.token)
     .then(dados => {
       if(dados.data.length != 0){ // Já existe um recurso com este nome
         let path = __dirname + '/../' + req.file.path
@@ -670,7 +680,7 @@ router.post('/upload/resource', upload.single('resource'), verificaToken, verifi
         fs.rename(oldPath,newPath, erro =>{
           if(erro) res.render('error',{error:erro})
           else{
-            axios.post('http://localhost:7779/resource/add?token=' + req.cookies.token, r)
+            axios.post(env.apiAccessPoint + '/resource/add?token=' + req.cookies.token, r)
               .then(dados => {
                 var n = {
                   username: req.user.username,
@@ -680,7 +690,7 @@ router.post('/upload/resource', upload.single('resource'), verificaToken, verifi
                   visibility: r.visibility
                 }
 
-                axios.post('http://localhost:7779/news/add?token=' + req.cookies.token, n)
+                axios.post(env.apiAccessPoint + '/news/add?token=' + req.cookies.token, n)
                   .then(dados => {
                    res.redirect('/resources')
                   })
@@ -699,7 +709,7 @@ router.post('/upload/resource', upload.single('resource'), verificaToken, verifi
 
 // Editar um recurso
 router.post('/resources/:rname/edit', verificaToken, function(req, res){
-  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(dados => {
       var r = {
         resourceName: req.body.resourceName,
@@ -714,7 +724,7 @@ router.post('/resources/:rname/edit', verificaToken, function(req, res){
         submitter: req.body.submitter
       }
 
-      axios.post('http://localhost:7779/resource/' + req.params.rname + "/edit?token=" +req.cookies.token, r)
+      axios.post(env.apiAccessPoint + '/resource/' + req.params.rname + "/edit?token=" +req.cookies.token, r)
       .then(dados => {
         res.redirect('/resources')
       })
@@ -726,9 +736,9 @@ router.post('/resources/:rname/edit', verificaToken, function(req, res){
 // Avaliar um recurso
 router.post('/resources/:rname/evaluate', verificaToken, function(req, res){
   console.dir(req.body)
-  axios.post('http://localhost:7779/resource/' + req.params.rname + "/evaluate?token=" + req.cookies.token, {ev: req.body.ev})
+  axios.post(env.apiAccessPoint + '/resource/' + req.params.rname + "/evaluate?token=" + req.cookies.token, {ev: req.body.ev})
     .then(dados1 => {
-      axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
+      axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + "?token=" + req.cookies.token)
         .then(dados2 => {
           var n = {
             username: req.user.username,
@@ -738,7 +748,7 @@ router.post('/resources/:rname/evaluate', verificaToken, function(req, res){
             visibility: dados2.data[0].visibility // A mesma do recurso
           }
 
-          axios.post('http://localhost:7779/news/add?token=' + req.cookies.token, n)
+          axios.post(env.apiAccessPoint + '/news/add?token=' + req.cookies.token, n)
             .then(dados => {
               res.redirect('/resources/' + req.params.rname)
             })
@@ -761,7 +771,7 @@ router.post('/resources/:rname/posts/add', verificaToken, function(req, res){
     visibility: req.body.visibility,
     comments: []
   }
-  axios.post('http://localhost:7779/resource/' + req.params.rname + "/posts/add?token=" + req.cookies.token, p)
+  axios.post(env.apiAccessPoint + '/resource/' + req.params.rname + "/posts/add?token=" + req.cookies.token, p)
     .then(dados => {
       res.redirect('/resources/' + req.params.rname)
     })
@@ -770,7 +780,7 @@ router.post('/resources/:rname/posts/add', verificaToken, function(req, res){
 
 // Editar um post
 router.post('/resources/:rname/posts/:id/edit', verificaToken, function(req, res){
-  axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts/' + req.params.id + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + '/posts/' + req.params.id + "?token=" + req.cookies.token)
     .then(dados => {
       var p = {
         _id: dados.data._id,
@@ -783,7 +793,7 @@ router.post('/resources/:rname/posts/:id/edit', verificaToken, function(req, res
         visibility: req.body.visibility,
         comments: dados.data.comments
       }
-      axios.post('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id + "/edit?token=" + req.cookies.token, p)
+      axios.post(env.apiAccessPoint + '/resource/' + req.params.rname + "/posts/" + req.params.id + "/edit?token=" + req.cookies.token, p)
         .then(dados => {
           res.redirect('/resources/' + req.params.rname)
         })
@@ -802,7 +812,7 @@ router.post('/resources/:rname/posts/:id/comments/add', verificaToken, function(
     description: req.body.description,
     date: data
   }
-  axios.post('http://localhost:7779/resource/' + req.params.rname + "/posts/" + req.params.id + "/comments/add?token=" + req.cookies.token, c)
+  axios.post(env.apiAccessPoint + '/resource/' + req.params.rname + "/posts/" + req.params.id + "/comments/add?token=" + req.cookies.token, c)
     .then(dados => {
       res.redirect('/resources/' + req.params.rname + "/posts/" + req.params.id)
     })
@@ -813,14 +823,14 @@ router.post('/resources/:rname/posts/:id/comments/add', verificaToken, function(
 router.post('/resources/search', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
   if(req.body.search == ""){
-    axios.get('http://localhost:7779/resource/list?token=' + req.cookies.token)
+    axios.get(env.apiAccessPoint + '/resource/list?token=' + req.cookies.token)
       .then(dados => {
         res.render('resources', {u: req.user, rs: dados.data, d: data})
       })
       .catch(erro => res.render('error', {error: erro}))
   }
 
-  axios.post('http://localhost:7779/resource/search?token=' + req.cookies.token, req.body)
+  axios.post(env.apiAccessPoint + '/resource/search?token=' + req.cookies.token, req.body)
     .then(dados => {
       res.render('resources', {u: req.user, rs: dados.data, d: data})
     })
@@ -830,17 +840,17 @@ router.post('/resources/search', verificaToken, function(req, res){
 // Pesquisa nos posts
 router.post('/resources/:rname/posts/search', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
-  axios.get('http://localhost:7779/resource/' + req.params.rname + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + "?token=" + req.cookies.token)
     .then(dados => {
       var r = dados.data[0]
       if(req.body.search == ""){
-        axios.get('http://localhost:7779/resource/' + req.params.rname + '/posts?token=' + req.cookies.token)
+        axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + '/posts?token=' + req.cookies.token)
           .then(dados => {
             res.render('resourceDetails', {u: req.user, r: r, ps: dados.data, d: data})
           })
           .catch(erro => res.render('error', {error: erro}))
       }else{
-        axios.post('http://localhost:7779/resource/' + req.params.rname + '/posts/search?token=' + req.cookies.token, req.body)
+        axios.post(env.apiAccessPoint + '/resource/' + req.params.rname + '/posts/search?token=' + req.cookies.token, req.body)
           .then(dados => {
             res.render('resourceDetails', {u: req.user, r: r, ps: dados.data, d: data})
           })
@@ -854,13 +864,13 @@ router.post('/resources/:rname/posts/search', verificaToken, function(req, res){
 router.post('/news/search', verificaToken, function(req, res){
   var data = new Date().toISOString().substring(0,16)
   if(req.body.search == ""){
-    axios.get('http://localhost:7779/news/list?token=' + req.cookies.token)
+    axios.get(env.apiAccessPoint + '/news/list?token=' + req.cookies.token)
       .then(dados => {
         res.render('home', {u: req.user, news: dados.data, d: data})
       })
       .catch(erro => res.render('error', {error: erro}))
   }else{
-    axios.post('http://localhost:7779/news/search?token=' + req.cookies.token, req.body)
+    axios.post(env.apiAccessPoint + '/news/search?token=' + req.cookies.token, req.body)
     .then(dados => {
       res.render('home', {u: req.user, news: dados.data, d: data})
     })
@@ -870,7 +880,7 @@ router.post('/news/search', verificaToken, function(req, res){
 
 // Adicionar uma notícia
 router.post('/news/add', verificaToken, function(req, res){
-  axios.get('http://localhost:7779/resource/' + req.body.resourceName + "?token=" + req.cookies.token)
+  axios.get(env.apiAccessPoint + '/resource/' + req.body.resourceName + "?token=" + req.cookies.token)
     .then(dados => {
       var n = {
         username: req.body.username,
@@ -880,7 +890,7 @@ router.post('/news/add', verificaToken, function(req, res){
         visibility: dados.data[0].visibility // A mesma do recurso
       }
 
-      axios.post('http://localhost:7779/news/add?token=' + req.cookies.token, n)
+      axios.post(env.apiAccessPoint + '/news/add?token=' + req.cookies.token, n)
         .then(dados => {
           res.redirect('/home')
         })
@@ -900,7 +910,7 @@ router.post('/news/edit/:id', verificaToken, function(req, res){
     visibility: req.body.visibility,
   }
 
-  axios.post('http://localhost:7779/news/edit/' + req.params.id + "?token=" + req.cookies.token, n)
+  axios.post(env.apiAccessPoint + '/news/edit/' + req.params.id + "?token=" + req.cookies.token, n)
     .then(dados => {
       res.redirect('/home')
     })

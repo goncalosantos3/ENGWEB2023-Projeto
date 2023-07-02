@@ -35,7 +35,7 @@ router.get('/get/deactive', auth.verificaAcesso, function(req, res){
 })
 
 // Vai buscar um utilizador em específico
-router.get('/get/:username', auth.verificaAcesso, function(req, res){
+router.get('/get/:username', function(req, res){
   User.getUser(req.params.username)
     .then(user => {
       res.status(200).jsonp(user)
@@ -85,7 +85,7 @@ router.put('/:username/activate', auth.verificaAcesso, function(req, res){
 })
 
 // A rota do register tem que estar protegida
-router.post('/register', auth.verificaAcesso, function(req, res) {
+router.post('/register', function(req, res) {
   var d = new Date().toISOString().substring(0,19)
   userModel.register(new userModel({ email: req.body.email, name: req.body.name,
                                      username: req.body.username, level: req.body.level,
