@@ -6,9 +6,11 @@ block content
       h1 Erro #{error.status}
 
     .w3-container
-      center 
+      center  
         if error.status == 404
           h1#erro Página não encontrada
+        if error.status == 401
+          h1#erro Conta inexistente
         else if token == false
           h1#erro Erro na autenticação do utilizador
           h2= error 

@@ -539,21 +539,25 @@ router.post('/profile/admin/investigate', verificaToken, function(req, res){
 // Se já existir, o recurso tem que ser rejeitado
 function verificaRName(req, res, next){
   var data = new Date().toISOString().substring(0,16)
-  axios.get(env.apiAccessPoint + '/resource/' + req.file.originalname + "?token=" + req.cookies.token)
-    .then(dados => {
-      if(dados.data.length != 0){ // Já existe um recurso com este nome
-        let path = __dirname + '/../' + req.file.path
-        try{
-          fs.unlinkSync(path)
-        }catch(e){
-          console.log(e)
+  if(req.file != undefined){
+    axios.get(env.apiAccessPoint + '/resource/' + req.file.originalname + "?token=" + req.cookies.token)
+      .then(dados => {
+        if(dados.data.length != 0){ // Já existe um recurso com este nome
+          let path = __dirname + '/../' + req.file.path
+          try{
+            fs.unlinkSync(path)
+          }catch(e){
+            console.log(e)
+          }
+          res.render('addResourceForm', {erros: ["O nome do recurso já existe. Por favor altere-o!"], d:data})
+        }else{
+          next() // Continua com o upload do recurso
         }
-        res.render('addResourceForm', {erros: ["O nome do recurso já existe. Por favor altere-o!"], d:data})
-      }else{
-        next() // Continua com o upload do recurso
-      }
-    })
-    .catch(erro => {res.render('error', {error: erro})})
+      })
+      .catch(erro => {res.render('error', {error: erro})})
+  }else{
+    next()
+  }
 }
 
 // Upload de um novo recurso educacional
@@ -575,9 +579,10 @@ router.post('/upload/resource', upload.single('resource'), verificaToken, verifi
       valido: true
     }
   }
+
   // 1. Verificar se o manifesto bate certo com o conteúdo do zip
   // 2. Verificar se o ficheiro SIP json está correto
-  if(req.file.mimetype == 'application/zip' || req.file.mimetype == "application/x-zip-compressed"){
+  if(req.file != undefined && (req.file.mimetype == 'application/zip' || req.file.mimetype == "application/x-zip-compressed")){
     var zip = new StreamZip({
       file: req.file.path,
       storeEntries: true
