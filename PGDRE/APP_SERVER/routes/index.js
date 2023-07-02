@@ -475,6 +475,7 @@ router.post('/login', function(req, res){
 router.post('/profile/edit', verificaToken, function(req, res){
   axios.get(env.authAccessPoint + "/users/get/" + req.body.username + "?token=" + req.cookies.token)
     .then(dados => {
+      
       if(req.body.password == undefined){
         req.body.password = dados.data.password
       }
@@ -776,9 +777,22 @@ router.post('/resources/:rname/posts/add', verificaToken, function(req, res){
     visibility: req.body.visibility,
     comments: []
   }
+
   axios.post(env.apiAccessPoint + '/resource/' + req.params.rname + "/posts/add?token=" + req.cookies.token, p)
     .then(dados => {
-      res.redirect('/resources/' + req.params.rname)
+      var n = {
+        username: req.body.username,
+        resourceName: req.body.resourceName,
+        event: "O utilizador " + req.body.username + " postou sobre o recurso " + req.body.resourceName + "!",
+        date: new Date().toISOString().slice(0, 19).split('T').join(' '),
+        visibility: req.body.visibility,
+      }
+
+      axios.post(env.apiAccessPoint + '/news/add?token=' + req.cookies.token, n)
+        .then(dados => {
+          res.redirect('/resources/' + req.params.rname)
+        })
+        .catch(erro => {res.render('error', {error: erro})})
     })
     .catch(erro => {res.render('error', {error: erro})})
 })
@@ -817,9 +831,27 @@ router.post('/resources/:rname/posts/:id/comments/add', verificaToken, function(
     description: req.body.description,
     date: data
   }
-  axios.post(env.apiAccessPoint + '/resource/' + req.params.rname + "/posts/" + req.params.id + "/comments/add?token=" + req.cookies.token, c)
+
+  axios.get(env.apiAccessPoint + '/resource/' + req.params.rname + '?token=' + req.cookies.token)
     .then(dados => {
-      res.redirect('/resources/' + req.params.rname + "/posts/" + req.params.id)
+
+      axios.post(env.apiAccessPoint + '/resource/' + req.params.rname + "/posts/" + req.params.id + "/comments/add?token=" + req.cookies.token, c)
+        .then(dados2 => {
+          var n = {
+            username: req.body.username,
+            resourceName: req.params.rname,
+            event: "O utilizador " + req.body.username + " comentou um post do recurso " + req.params.rname + "!",
+            date: new Date().toISOString().slice(0, 19).split('T').join(' '),
+            visibility: dados.data[0].visibility
+          }
+          console.dir(n)
+          axios.post(env.apiAccessPoint + '/news/add?token=' + req.cookies.token, n)
+            .then(dados => {
+              res.redirect('/resources/' + req.params.rname + "/posts/" + req.params.id)
+            })
+            .catch(erro => {res.render('error', {error: erro})})
+        })
+        .catch(erro => {res.render('error', {error: erro})})
     })
     .catch(erro => {res.render('error', {error: erro})})
 })

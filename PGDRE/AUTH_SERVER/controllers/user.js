@@ -70,8 +70,8 @@ module.exports.loginUser = (username, data) => {
 }
 
 // Evitar mudar o username (pode causar problemas porque é considerado um id)
-module.exports.updateUser = newUser => {
-    return User.updateOne({username: newUser.username}, newUser)  
+module.exports.updateUser = nu => {
+    return User.updateOne({username: nu.username}, newUser)  
         .then(resposta => {
             return resposta
         })
